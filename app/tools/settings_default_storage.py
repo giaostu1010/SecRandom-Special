@@ -154,6 +154,15 @@ DEFAULT_SETTINGS = {
         "animation_music_fade_out": {"default_value": 300},
         "result_music_fade_out": {"default_value": 300},
     },
+    "roll_call_list_specific_settings": {
+        "overrides": {"default_value": {}},
+    },
+    "quick_draw_list_specific_settings": {
+        "overrides": {"default_value": {}},
+    },
+    "lottery_list_specific_settings": {
+        "overrides": {"default_value": {}},
+    },
     "face_detector_settings": {
         "detector_type": {"default_value": "version-RFB-640.onnx"},
         "camera_source": {"default_value": None},

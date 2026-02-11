@@ -19,7 +19,6 @@ from app.tools.variable import (
 )
 from app.tools.path_utils import get_data_path
 from app.tools.personalised import get_theme_icon
-from app.tools.settings_access import get_safe_font_size
 from app.tools.config import clear_temp_draw_records
 from app.Language.obtain_language import (
     get_content_name_async,
@@ -28,6 +27,10 @@ from app.Language.obtain_language import (
 )
 from app.common.safety.verify_ops import require_and_run
 from app.view.main.quick_draw_animation import QuickDrawAnimation
+from app.tools.list_specific_settings_access import (
+    read_quick_draw_setting,
+    get_safe_font_size_list_specific,
+)
 from app.view.main.camera_preview import CameraPreview
 from app.page_building.main_window_page import (
     roll_call_page,
@@ -923,30 +926,28 @@ class MainWindow(FluentWindow):
         Args:
             roll_call_widget: 点名组件对象
         """
+        list_name = readme_settings_async("quick_draw_settings", "default_class")
         quick_draw_settings = {
-            "draw_mode": readme_settings_async("quick_draw_settings", "draw_mode"),
-            "half_repeat": readme_settings_async("quick_draw_settings", "half_repeat"),
-            "font_size": get_safe_font_size("quick_draw_settings", "font_size"),
-            "display_format": readme_settings_async(
-                "quick_draw_settings", "display_format"
+            "draw_mode": read_quick_draw_setting(list_name, "draw_mode"),
+            "half_repeat": read_quick_draw_setting(list_name, "half_repeat"),
+            "font_size": get_safe_font_size_list_specific(
+                "quick_draw_settings",
+                "quick_draw_list_specific_settings",
+                list_name,
+                "font_size",
             ),
-            "animation": readme_settings_async("quick_draw_settings", "animation"),
-            "animation_interval": readme_settings_async(
-                "quick_draw_settings", "animation_interval"
+            "display_format": read_quick_draw_setting(list_name, "display_format"),
+            "animation": read_quick_draw_setting(list_name, "animation"),
+            "animation_interval": read_quick_draw_setting(
+                list_name, "animation_interval"
             ),
-            "autoplay_count": readme_settings_async(
-                "quick_draw_settings", "autoplay_count"
+            "autoplay_count": read_quick_draw_setting(list_name, "autoplay_count"),
+            "animation_color_theme": read_quick_draw_setting(
+                list_name, "animation_color_theme"
             ),
-            "animation_color_theme": readme_settings_async(
-                "quick_draw_settings", "animation_color_theme"
-            ),
-            "student_image": readme_settings_async(
-                "quick_draw_settings", "student_image"
-            ),
-            "show_random": readme_settings_async("quick_draw_settings", "show_random"),
-            "default_class": readme_settings_async(
-                "quick_draw_settings", "default_class"
-            ),
+            "student_image": read_quick_draw_setting(list_name, "student_image"),
+            "show_random": read_quick_draw_setting(list_name, "show_random"),
+            "default_class": list_name,
         }
 
         quick_draw_animation = QuickDrawAnimation(roll_call_widget)

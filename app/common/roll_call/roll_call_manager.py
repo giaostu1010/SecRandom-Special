@@ -29,7 +29,8 @@ from app.common.extraction.extract import _is_non_class_time
 from app.common.safety.verify_ops import require_and_run
 from app.page_building.another_window import create_remaining_list_window
 from app.tools.config import remove_record
-from app.tools.settings_access import readme_settings_async, readme_settings
+from app.tools.settings_access import readme_settings_async
+from app.tools.list_specific_settings_access import read_roll_call_setting
 from app.tools.personalised import load_custom_font
 from app.Language.obtain_language import (
     get_content_pushbutton_name_async,
@@ -117,13 +118,13 @@ class RollCallManager(QObject):
             context.half_repeat,
         )
 
-        animation = readme_settings_async("roll_call_settings", "animation")
-        autoplay_count = readme_settings_async("roll_call_settings", "autoplay_count")
-        animation_interval = readme_settings_async(
-            "roll_call_settings", "animation_interval"
+        animation = read_roll_call_setting(context.class_name, "animation")
+        autoplay_count = read_roll_call_setting(context.class_name, "autoplay_count")
+        animation_interval = read_roll_call_setting(
+            context.class_name, "animation_interval"
         )
-        animation_music = readme_settings_async("roll_call_settings", "animation_music")
-        result_music = readme_settings_async("roll_call_settings", "result_music")
+        animation_music = read_roll_call_setting(context.class_name, "animation_music")
+        result_music = read_roll_call_setting(context.class_name, "result_music")
 
         try:
             animation = int(animation or 0)
@@ -395,7 +396,7 @@ def start_roll_call_draw(widget):
     gender_filter = widget.gender_combobox.currentText()
     group_index = widget.range_combobox.currentIndex()
     gender_index = widget.gender_combobox.currentIndex()
-    half_repeat = readme_settings_async("roll_call_settings", "half_repeat")
+    half_repeat = read_roll_call_setting(class_name, "half_repeat")
 
     context = manager.build_draw_context(
         class_name,
@@ -771,7 +772,7 @@ def do_reset_count(widget):
     class_name = widget.list_combobox.currentText()
     gender = widget.gender_combobox.currentText()
     group = widget.range_combobox.currentText()
-    half_repeat = readme_settings_async("roll_call_settings", "half_repeat")
+    half_repeat = read_roll_call_setting(class_name, "half_repeat")
     context = widget.manager.build_draw_context(
         class_name,
         group,
@@ -841,7 +842,7 @@ def update_many_count_label(widget):
             widget.range_combobox.currentIndex(),
             widget.range_combobox.currentText(),
             widget.gender_combobox.currentText(),
-            readme_settings_async("roll_call_settings", "half_repeat"),
+            read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
         )
     )
 
@@ -861,7 +862,7 @@ def update_remaining_list_window(widget):
             gender_filter = widget.gender_combobox.currentText()
             group_index = widget.range_combobox.currentIndex()
             gender_index = widget.gender_combobox.currentIndex()
-            half_repeat = readme_settings_async("roll_call_settings", "half_repeat")
+            half_repeat = read_roll_call_setting(class_name, "half_repeat")
 
             if hasattr(widget.remaining_list_page, "update_remaining_list"):
                 widget.remaining_list_page.update_remaining_list(
@@ -898,7 +899,7 @@ def show_remaining_list(widget):
     gender_filter = widget.gender_combobox.currentText()
     group_index = widget.range_combobox.currentIndex()
     gender_index = widget.gender_combobox.currentIndex()
-    half_repeat = readme_settings_async("roll_call_settings", "half_repeat")
+    half_repeat = read_roll_call_setting(class_name, "half_repeat")
 
     window, get_page = create_remaining_list_window(
         class_name,
@@ -1027,7 +1028,7 @@ def _update_count_label(widget):
             widget.range_combobox.currentIndex(),
             widget.range_combobox.currentText(),
             widget.gender_combobox.currentText(),
-            readme_settings("roll_call_settings", "half_repeat"),
+            read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
         )
     )
 

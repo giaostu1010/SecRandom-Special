@@ -699,3 +699,108 @@ def create_backup_manager_window():
     except Exception:
         pass
     return
+
+
+# ==================================================
+# 点名独立名单配置窗口
+# ==================================================
+class roll_call_list_specific_settings_window_template(PageTemplate):
+    def __init__(self, parent=None):
+        def factory(parent):
+            from app.view.settings.extraction_settings.roll_call_settings import (
+                RollCallListSpecificSettingsWindow,
+            )
+
+            return RollCallListSpecificSettingsWindow(parent=parent)
+
+        factory.__name__ = "RollCallListSpecificSettingsWindow"
+        super().__init__(content_widget_class=factory, parent=parent)
+
+
+def create_roll_call_list_specific_settings_window(parent=None):
+    window, _ = _create_reusable_window(
+        "roll_call_list_specific_settings",
+        ("roll_call_settings", "list_specific_settings_window"),
+        roll_call_list_specific_settings_window_template,
+        900,
+        700,
+        parent=parent,
+    )
+    try:
+        if hasattr(window, "enable_close_guard"):
+            window.enable_close_guard(True)
+        else:
+            window.setProperty("srCloseGuard", True)
+    except Exception:
+        pass
+    return
+
+
+# ==================================================
+# 闪抽独立名单配置窗口
+# ==================================================
+class quick_draw_list_specific_settings_window_template(PageTemplate):
+    def __init__(self, parent=None):
+        def factory(parent):
+            from app.view.settings.extraction_settings.quick_draw_settings import (
+                QuickDrawListSpecificSettingsWindow,
+            )
+
+            return QuickDrawListSpecificSettingsWindow(parent=parent)
+
+        factory.__name__ = "QuickDrawListSpecificSettingsWindow"
+        super().__init__(content_widget_class=factory, parent=parent)
+
+
+def create_quick_draw_list_specific_settings_window(parent=None):
+    window, _ = _create_reusable_window(
+        "quick_draw_list_specific_settings",
+        ("quick_draw_settings", "list_specific_settings_window"),
+        quick_draw_list_specific_settings_window_template,
+        900,
+        700,
+        parent=parent,
+    )
+    try:
+        if hasattr(window, "enable_close_guard"):
+            window.enable_close_guard(True)
+        else:
+            window.setProperty("srCloseGuard", True)
+    except Exception:
+        pass
+    return
+
+
+# ==================================================
+# 抽奖独立名单配置窗口
+# ==================================================
+class lottery_list_specific_settings_window_template(PageTemplate):
+    def __init__(self, parent=None):
+        def factory(parent):
+            from app.view.settings.extraction_settings.lottery_settings import (
+                LotteryListSpecificSettingsWindow,
+            )
+
+            return LotteryListSpecificSettingsWindow(parent=parent)
+
+        factory.__name__ = "LotteryListSpecificSettingsWindow"
+        super().__init__(content_widget_class=factory, parent=parent)
+
+
+def create_lottery_list_specific_settings_window(parent=None):
+    window, _ = _create_reusable_window(
+        "lottery_list_specific_settings",
+        ("lottery_settings", "list_specific_settings_window"),
+        lottery_list_specific_settings_window_template,
+        900,
+        700,
+        parent=parent,
+    )
+    try:
+        if hasattr(window, "enable_close_guard"):
+            window.enable_close_guard(True)
+        else:
+            window.setProperty("srCloseGuard", True)
+    except Exception:
+        pass
+    return

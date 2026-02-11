@@ -9,6 +9,24 @@ extraction_settings = {
 roll_call_settings = {
     "ZH_CN": {
         "title": {"name": "点名设置", "description": "点名功能设置"},
+        "list_specific_settings_entry": {
+            "name": "独立名单配置",
+            "description": "按名单覆盖点名设置（优先于全局设置）",
+            "pushbutton_name": "打开",
+        },
+        "list_specific_settings_window": {
+            "name": "独立名单配置",
+            "description": "按名单覆盖点名设置",
+        },
+        "list_specific_settings_select_list": {
+            "name": "选择名单",
+            "description": "选择要配置的抽取名单",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "同步主设置",
+            "description": "清除该名单的独立覆盖设置，恢复跟随全局",
+            "pushbutton_name": "同步主设置",
+        },
         "extraction_function": {
             "name": "抽取功能",
             "description": "设置点名抽取功能",
@@ -124,6 +142,24 @@ roll_call_settings = {
     },
     "EN_US": {
         "title": {"name": "Picking settings", "description": "Picking settings"},
+        "list_specific_settings_entry": {
+            "name": "Per-list overrides",
+            "description": "Override Roll Call settings per list (higher priority than global)",
+            "pushbutton_name": "Open",
+        },
+        "list_specific_settings_window": {
+            "name": "Per-list overrides",
+            "description": "Override Roll Call settings per list",
+        },
+        "list_specific_settings_select_list": {
+            "name": "Select list",
+            "description": "Select the list to configure",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "Sync with global",
+            "description": "Clear per-list overrides and follow global settings",
+            "pushbutton_name": "Sync with global",
+        },
         "extraction_function": {
             "name": "Picking function",
             "description": "Set picking function",
@@ -263,6 +299,24 @@ roll_call_settings = {
     },
     "JA_JP": {
         "title": {"name": "点呼設定", "description": "点呼機能設定"},
+        "list_specific_settings_entry": {
+            "name": "リスト別上書き",
+            "description": "リストごとに点呼設定を上書き（グローバルより優先）",
+            "pushbutton_name": "開く",
+        },
+        "list_specific_settings_window": {
+            "name": "リスト別上書き",
+            "description": "リストごとに点呼設定を上書き",
+        },
+        "list_specific_settings_select_list": {
+            "name": "リストを選択",
+            "description": "設定する抽選リストを選択",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "全体設定に同期",
+            "description": "リスト別上書きをクリアして全体設定に従う",
+            "pushbutton_name": "全体設定に同期",
+        },
         "extraction_function": {
             "name": "抽選機能",
             "description": "点呼抽選機能を設定",
@@ -405,6 +459,24 @@ roll_call_settings = {
 quick_draw_settings = {
     "ZH_CN": {
         "title": {"name": "闪抽设置", "description": "闪抽功能设置"},
+        "list_specific_settings_entry": {
+            "name": "独立名单配置",
+            "description": "按名单覆盖闪抽设置（优先于全局设置）",
+            "pushbutton_name": "打开",
+        },
+        "list_specific_settings_window": {
+            "name": "独立名单配置",
+            "description": "按名单覆盖闪抽设置",
+        },
+        "list_specific_settings_select_list": {
+            "name": "选择名单",
+            "description": "选择要配置的抽取名单",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "同步主设置",
+            "description": "清除该名单的独立覆盖设置，恢复跟随全局",
+            "pushbutton_name": "同步主设置",
+        },
         "extraction_function": {
             "name": "抽取功能",
             "description": "设置闪抽抽取功能",
@@ -508,6 +580,24 @@ quick_draw_settings = {
     },
     "EN_US": {
         "title": {"name": "Quick Pick settings", "description": "Quick Pick settings"},
+        "list_specific_settings_entry": {
+            "name": "Per-list overrides",
+            "description": "Override Quick Pick settings per list (higher priority than global)",
+            "pushbutton_name": "Open",
+        },
+        "list_specific_settings_window": {
+            "name": "Per-list overrides",
+            "description": "Override Quick Pick settings per list",
+        },
+        "list_specific_settings_select_list": {
+            "name": "Select list",
+            "description": "Select the student list to configure",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "Sync with global",
+            "description": "Clear per-list overrides and follow global settings",
+            "pushbutton_name": "Sync with global",
+        },
         "extraction_function": {
             "name": "Picking function",
             "description": "Set Quick Pick function",
@@ -636,6 +726,24 @@ quick_draw_settings = {
     },
     "JA_JP": {
         "title": {"name": "クイック抽選設定", "description": "クイック抽選設定"},
+        "list_specific_settings_entry": {
+            "name": "リスト別設定",
+            "description": "リストごとにクイック抽選設定を上書き（全体設定より優先）",
+            "pushbutton_name": "開く",
+        },
+        "list_specific_settings_window": {
+            "name": "リスト別設定",
+            "description": "リストごとにクイック抽選設定を上書き",
+        },
+        "list_specific_settings_select_list": {
+            "name": "リスト選択",
+            "description": "設定する学生リストを選択",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "全体設定に同期",
+            "description": "リスト別上書きをクリアして全体設定に従う",
+            "pushbutton_name": "全体設定に同期",
+        },
         "extraction_function": {
             "name": "抽選機能",
             "description": "クイック抽選機能を設定",
@@ -767,6 +875,24 @@ quick_draw_settings = {
 lottery_settings = {
     "ZH_CN": {
         "title": {"name": "抽奖设置", "description": "抽奖功能设置"},
+        "list_specific_settings_entry": {
+            "name": "独立名单配置",
+            "description": "按奖池覆盖抽奖设置（优先于全局设置）",
+            "pushbutton_name": "打开",
+        },
+        "list_specific_settings_window": {
+            "name": "独立名单配置",
+            "description": "按奖池覆盖抽奖设置",
+        },
+        "list_specific_settings_select_pool": {
+            "name": "选择奖池",
+            "description": "选择要配置的奖池名单",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "同步主设置",
+            "description": "清除该奖池的独立覆盖设置，恢复跟随全局",
+            "pushbutton_name": "同步主设置",
+        },
         "extraction_function": {
             "name": "抽取功能",
             "description": "设置抽奖抽取功能",
@@ -885,6 +1011,24 @@ lottery_settings = {
     },
     "EN_US": {
         "title": {"name": "Lottery settings", "description": "Lottery settings"},
+        "list_specific_settings_entry": {
+            "name": "Per-pool overrides",
+            "description": "Override Lottery settings per pool (higher priority than global)",
+            "pushbutton_name": "Open",
+        },
+        "list_specific_settings_window": {
+            "name": "Per-pool overrides",
+            "description": "Override Lottery settings per pool",
+        },
+        "list_specific_settings_select_pool": {
+            "name": "Select pool",
+            "description": "Select the prize pool to configure",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "Sync with global",
+            "description": "Clear per-pool overrides and follow global settings",
+            "pushbutton_name": "Sync with global",
+        },
         "extraction_function": {
             "name": "Picking function",
             "description": "Set lottery function",
@@ -1042,6 +1186,24 @@ lottery_settings = {
     },
     "JA_JP": {
         "title": {"name": "抽選設定", "description": "抽選機能設定"},
+        "list_specific_settings_entry": {
+            "name": "プール別設定",
+            "description": "プールごとに抽選設定を上書き（全体設定より優先）",
+            "pushbutton_name": "開く",
+        },
+        "list_specific_settings_window": {
+            "name": "プール別設定",
+            "description": "プールごとに抽選設定を上書き",
+        },
+        "list_specific_settings_select_pool": {
+            "name": "プール選択",
+            "description": "設定する賞品プールを選択",
+        },
+        "list_specific_settings_sync_button": {
+            "name": "全体設定に同期",
+            "description": "プール別上書きをクリアして全体設定に従う",
+            "pushbutton_name": "全体設定に同期",
+        },
         "extraction_function": {
             "name": "抽選機能",
             "description": "抽選抽選機能を設定",

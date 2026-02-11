@@ -26,7 +26,11 @@ from app.tools.config import (
     record_drawn_prize,
     reset_drawn_prize_record,
 )
-from app.tools.settings_access import readme_settings_async, get_safe_font_size
+from app.tools.settings_access import readme_settings_async
+from app.tools.list_specific_settings_access import (
+    read_lottery_setting,
+    get_safe_font_size_list_specific,
+)
 from app.Language.obtain_language import (
     get_content_combo_name_async,
     get_content_name_async,
@@ -73,7 +77,9 @@ class LotteryManager(QObject):
         self.enable_student_assignment = False
         self._total_count_cache_pool = None
         self._total_count_cache_value = None
+        self._render_settings_cache_pool = None
         self._render_settings_cache = None
+        self._notification_settings_cache_pool = None
         self._notification_settings_cache = None
 
     def _format_prize_student_text(self, prize_name, group_name, student_name, mode):
@@ -168,7 +174,9 @@ class LotteryManager(QObject):
             return False
 
     def invalidate_settings_cache(self):
+        self._render_settings_cache_pool = None
         self._render_settings_cache = None
+        self._notification_settings_cache_pool = None
         self._notification_settings_cache = None
 
     def invalidate_total_count_cache(self):
@@ -193,33 +201,45 @@ class LotteryManager(QObject):
         self._total_count_cache_value = int(total_count or 0)
         return self._total_count_cache_value
 
-    def get_render_settings(self, refresh: bool = False):
-        if refresh or self._render_settings_cache is None:
+    def get_render_settings(self, pool_name: str | None = None, refresh: bool = False):
+        if pool_name is None:
+            pool_name = self.current_pool_name
+
+        if (
+            refresh
+            or self._render_settings_cache is None
+            or self._render_settings_cache_pool != pool_name
+        ):
+            self._render_settings_cache_pool = pool_name
             self._render_settings_cache = {
-                "font_size": get_safe_font_size("lottery_settings", "font_size"),
-                "animation_color": readme_settings_async(
-                    "lottery_settings", "animation_color_theme"
+                "font_size": get_safe_font_size_list_specific(
+                    "lottery_settings",
+                    "lottery_list_specific_settings",
+                    pool_name,
+                    "font_size",
                 ),
-                "display_format": readme_settings_async(
-                    "lottery_settings", "display_format"
+                "animation_color": read_lottery_setting(
+                    pool_name, "animation_color_theme"
                 ),
-                "display_style": readme_settings_async(
-                    "lottery_settings", "display_style"
+                "display_format": read_lottery_setting(pool_name, "display_format"),
+                "display_style": read_lottery_setting(pool_name, "display_style"),
+                "show_student_image": read_lottery_setting(pool_name, "lottery_image"),
+                "image_position": read_lottery_setting(
+                    pool_name, "lottery_image_position"
                 ),
-                "show_student_image": readme_settings_async(
-                    "lottery_settings", "student_image"
-                ),
-                "image_position": readme_settings_async(
-                    "lottery_settings", "lottery_image_position"
-                ),
-                "show_random": readme_settings_async("lottery_settings", "show_random"),
+                "show_random": read_lottery_setting(pool_name, "show_random"),
             }
 
         return self._render_settings_cache
 
-    def get_notification_settings(self, refresh: bool = False):
+    def get_notification_settings(
+        self, pool_name: str | None = None, refresh: bool = False
+    ):
         if refresh:
             self._notification_settings_cache = None
+
+        if pool_name is None:
+            pool_name = self.current_pool_name
 
         call_notification_service = readme_settings_async(
             "lottery_notification_settings", "call_notification_service"
@@ -228,9 +248,13 @@ class LotteryManager(QObject):
             self._notification_settings_cache = None
             return None
 
-        if self._notification_settings_cache is None:
+        if (
+            self._notification_settings_cache is None
+            or self._notification_settings_cache_pool != pool_name
+        ):
+            self._notification_settings_cache_pool = pool_name
             self._notification_settings_cache = (
-                LotteryUtils.prepare_notification_settings()
+                LotteryUtils.prepare_notification_settings(pool_name)
             )
 
         return self._notification_settings_cache
@@ -274,17 +298,16 @@ class LotteryManager(QObject):
             context.gender_index,
             invalid_class_options=invalid_class_options,
         )
-        self.get_render_settings(refresh=refresh_settings)
-        self.get_notification_settings(refresh=refresh_settings)
+        self.get_render_settings(context.pool_name, refresh=refresh_settings)
+        self.get_notification_settings(context.pool_name, refresh=refresh_settings)
         self.get_pool_total_count(context.pool_name, refresh=refresh_total_count)
 
-        animation = readme_settings_async("lottery_settings", "animation")
-        autoplay_count = readme_settings_async("lottery_settings", "autoplay_count")
-        animation_interval = readme_settings_async(
-            "lottery_settings", "animation_interval"
-        )
-        animation_music = readme_settings_async("lottery_settings", "animation_music")
-        result_music = readme_settings_async("lottery_settings", "result_music")
+        pool_name = context.pool_name
+        animation = read_lottery_setting(pool_name, "animation")
+        autoplay_count = read_lottery_setting(pool_name, "autoplay_count")
+        animation_interval = read_lottery_setting(pool_name, "animation_interval")
+        animation_music = read_lottery_setting(pool_name, "animation_music")
+        result_music = read_lottery_setting(pool_name, "result_music")
 
         try:
             animation = int(animation or 0)
@@ -339,7 +362,7 @@ class LotteryManager(QObject):
             or []
         )
 
-        threshold = LotteryUtils._get_prize_draw_threshold()
+        threshold = LotteryUtils._get_prize_draw_threshold(self.current_pool_name)
         save_temp = threshold is not None
 
         self.save_result(
@@ -397,7 +420,7 @@ class LotteryManager(QObject):
             if not candidates:
                 return selected_prizes
 
-            show_random = readme_settings_async("lottery_settings", "show_random")
+            show_random = read_lottery_setting(self.current_pool_name, "show_random")
             try:
                 show_random = int(show_random or 0)
             except Exception:
@@ -472,7 +495,7 @@ class LotteryManager(QObject):
         if draw_count <= 0:
             return result
 
-        threshold = LotteryUtils._get_prize_draw_threshold()
+        threshold = LotteryUtils._get_prize_draw_threshold(self.current_pool_name)
         if threshold is None:
             half_repeat = 0
         else:
@@ -509,7 +532,7 @@ class LotteryManager(QObject):
 
         selected_prizes_with_students = []
         updated_prizes_dict = []
-        show_random = readme_settings_async("lottery_settings", "show_random")
+        show_random = read_lottery_setting(self.current_pool_name, "show_random")
         try:
             show_random = int(show_random or 0)
         except Exception:
@@ -628,7 +651,7 @@ class LotteryManager(QObject):
             selected_names = [
                 s.get("name", "") for s in student_dicts if isinstance(s, dict)
             ]
-            threshold = LotteryUtils._get_prize_draw_threshold()
+            threshold = LotteryUtils._get_prize_draw_threshold(self.current_pool_name)
             if save_temp and threshold is not None:
                 try:
                     half_repeat = int(threshold)
@@ -963,12 +986,20 @@ def stop_animation(widget):
             draw_count=actual_draw_count,
         )
 
-        settings = widget.manager.get_notification_settings(refresh=True)
+        settings = widget.manager.get_notification_settings(
+            widget.final_pool_name, refresh=True
+        )
         if settings is not None:
             settings_for_notify = (
                 dict(settings) if isinstance(settings, dict) else settings
             )
-            show_random = readme_settings_async("lottery_settings", "show_random")
+            show_random = None
+            if isinstance(settings_for_notify, dict):
+                show_random = settings_for_notify.get("show_random")
+            if show_random is None:
+                show_random = read_lottery_setting(
+                    widget.final_pool_name, "show_random"
+                )
             try:
                 show_random = int(show_random or 0)
             except Exception:
@@ -1103,7 +1134,7 @@ def draw_random(widget):
 
 
 def display_result(widget, selected_students, pool_name, draw_count=None):
-    render_settings = widget.manager.get_render_settings(refresh=True)
+    render_settings = widget.manager.get_render_settings(pool_name, refresh=True)
     if draw_count is None:
         draw_count = widget.current_count
     student_labels = ResultDisplayUtils.create_student_label(
@@ -1138,7 +1169,7 @@ def display_result(widget, selected_students, pool_name, draw_count=None):
 def display_result_animated(
     widget, selected_students, pool_name, draw_count=None, ipc_selected_students=None
 ):
-    render_settings = widget.manager.get_render_settings(refresh=False)
+    render_settings = widget.manager.get_render_settings(pool_name, refresh=False)
     if draw_count is None:
         draw_count = widget.current_count
 
@@ -1170,7 +1201,7 @@ def display_result_animated(
     else:
         ResultDisplayUtils.display_results_in_grid(widget.result_grid, student_labels)
 
-    settings = widget.manager.get_notification_settings(refresh=False)
+    settings = widget.manager.get_notification_settings(pool_name, refresh=False)
     if settings is not None:
         settings_for_notify = dict(settings) if isinstance(settings, dict) else settings
         if (
@@ -1481,16 +1512,17 @@ def on_settings_changed(widget, first_level_key, second_level_key, value):
     ):
         try:
             if hasattr(widget, "result_grid") and widget.result_grid is not None:
+                pool_name = ""
+                try:
+                    pool_name = widget.pool_list_combobox.currentText()
+                except Exception:
+                    pool_name = ""
                 widget.result_grid.setAnimation(
-                    readme_settings_async(
-                        "lottery_settings", "result_flow_animation_duration"
-                    ),
+                    read_lottery_setting(pool_name, "result_flow_animation_duration"),
                     QEasingCurve.OutQuad,
                 )
                 widget.result_grid.setAnimationStyle(
-                    readme_settings_async(
-                        "lottery_settings", "result_flow_animation_style"
-                    )
+                    read_lottery_setting(pool_name, "result_flow_animation_style")
                 )
         except Exception as e:
             logger.exception(f"更新结果布局动画设置失败: {e}")

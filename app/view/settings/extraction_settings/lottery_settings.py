@@ -16,6 +16,12 @@ from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.tools.settings_access import get_safe_font_size
+from app.tools.list_specific_settings_access import (
+    read_lottery_setting,
+    set_lottery_setting_override,
+    get_safe_font_size_list_specific,
+    clear_list_specific_overrides,
+)
 from app.Language.obtain_language import *
 from app.common.data.list import *
 
@@ -31,6 +37,9 @@ class lottery_settings(QWidget):
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.setSpacing(10)
 
+        self.list_specific_entry_widget = lottery_list_specific_entry(self)
+        self.vBoxLayout.addWidget(self.list_specific_entry_widget)
+
         # 添加抽取功能设置组件
         self.extraction_function_widget = lottery_extraction_function(self)
         self.vBoxLayout.addWidget(self.extraction_function_widget)
@@ -44,9 +53,54 @@ class lottery_settings(QWidget):
         self.vBoxLayout.addWidget(self.animation_settings_widget)
 
 
-class lottery_extraction_function(GroupHeaderCardWidget):
+class lottery_list_specific_entry(GroupHeaderCardWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setTitle(
+            get_content_name_async("lottery_settings", "list_specific_settings_entry")
+        )
+        self.setBorderRadius(8)
+
+        self.open_button = PushButton(
+            get_content_pushbutton_name_async(
+                "lottery_settings", "list_specific_settings_entry"
+            )
+        )
+        self.open_button.clicked.connect(self._open_window)
+
+        self.addGroup(
+            get_theme_icon("ic_fluent_settings_20_filled"),
+            get_content_name_async("lottery_settings", "list_specific_settings_entry"),
+            get_content_description_async(
+                "lottery_settings", "list_specific_settings_entry"
+            ),
+            self.open_button,
+        )
+
+    def _open_window(self):
+        try:
+            from app.page_building.another_window import (
+                create_lottery_list_specific_settings_window,
+            )
+
+            create_lottery_list_specific_settings_window()
+        except Exception as e:
+            logger.exception(f"打开独立名单配置窗口失败: {e}")
+
+
+class lottery_extraction_function(GroupHeaderCardWidget):
+    def __init__(
+        self,
+        parent=None,
+        pool_name: str | None = None,
+        *,
+        show_default_pool: bool = True,
+        enable_file_watcher: bool = True,
+    ):
+        super().__init__(parent)
+        self._pool_name = pool_name
+        self._show_default_pool = show_default_pool
+        self._enable_file_watcher = enable_file_watcher
         self.setTitle(get_content_name_async("lottery_settings", "extraction_function"))
         self.setBorderRadius(8)
 
@@ -57,10 +111,8 @@ class lottery_extraction_function(GroupHeaderCardWidget):
         # 清除记录下拉框
         self.clear_record_combo = ComboBox()
         self.clear_record_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "clear_record",
-                self.clear_record_combo.currentIndex(),
+            lambda: self._write_setting(
+                "clear_record", self.clear_record_combo.currentIndex()
             )
         )
 
@@ -68,35 +120,31 @@ class lottery_extraction_function(GroupHeaderCardWidget):
         self.half_repeat_spin = SpinBox()
         self.half_repeat_spin.setFixedWidth(WIDTH_SPINBOX)
         self.half_repeat_spin.setRange(0, 100)
-        self.half_repeat_spin.setValue(
-            readme_settings_async("lottery_settings", "half_repeat")
-        )
+        self.half_repeat_spin.setValue(self._read_setting("half_repeat"))
         self.half_repeat_spin.valueChanged.connect(
-            lambda: update_settings(
-                "lottery_settings", "half_repeat", self.half_repeat_spin.value()
-            )
+            lambda: self._write_setting("half_repeat", self.half_repeat_spin.value())
         )
 
-        # 默认抽取奖池下拉框
-        self.default_pool_combo = ComboBox()
-        # 初始化奖池列表（在所有组件都创建后）
-        self.refresh_pool_list()
-        if not get_pool_name_list():
-            self.default_pool_combo.setCurrentIndex(-1)
-            self.default_pool_combo.setPlaceholderText(
-                get_content_name_async("lottery_settings", "default_pool")
+        self.default_pool_combo = None
+        if self._show_default_pool:
+            self.default_pool_combo = ComboBox()
+            self.refresh_pool_list()
+            if not get_pool_name_list():
+                self.default_pool_combo.setCurrentIndex(-1)
+                self.default_pool_combo.setPlaceholderText(
+                    get_content_name_async("lottery_settings", "default_pool")
+                )
+            else:
+                self.default_pool_combo.setCurrentText(
+                    readme_settings_async("lottery_settings", "default_pool")
+                )
+            self.default_pool_combo.currentIndexChanged.connect(
+                lambda: update_settings(
+                    "lottery_settings",
+                    "default_pool",
+                    self.default_pool_combo.currentText(),
+                )
             )
-        else:
-            self.default_pool_combo.setCurrentText(
-                readme_settings_async("lottery_settings", "default_pool")
-            )
-        self.default_pool_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "default_pool",
-                self.default_pool_combo.currentText(),
-            )
-        )
 
         # 添加设置项到分组
         self.addGroup(
@@ -117,15 +165,16 @@ class lottery_extraction_function(GroupHeaderCardWidget):
             get_content_description_async("lottery_settings", "half_repeat"),
             self.half_repeat_spin,
         )
-        self.addGroup(
-            get_theme_icon("ic_fluent_class_20_filled"),
-            get_content_name_async("lottery_settings", "default_pool"),
-            get_content_description_async("lottery_settings", "default_pool"),
-            self.default_pool_combo,
-        )
+        if self._show_default_pool and self.default_pool_combo is not None:
+            self.addGroup(
+                get_theme_icon("ic_fluent_class_20_filled"),
+                get_content_name_async("lottery_settings", "default_pool"),
+                get_content_description_async("lottery_settings", "default_pool"),
+                self.default_pool_combo,
+            )
 
-        # 设置文件系统监视器，监控奖池名单文件夹的变化
-        self.setup_file_watcher()
+        if self._enable_file_watcher:
+            self.setup_file_watcher()
 
         # 初始化时在后台加载选项并回填
         QTimer.singleShot(0, self._start_background_load)
@@ -153,18 +202,12 @@ class lottery_extraction_function(GroupHeaderCardWidget):
                 data["draw_mode_items"] = get_content_combo_name_async(
                     "lottery_settings", "draw_mode"
                 )
-                data["draw_mode_index"] = readme_settings_async(
-                    "lottery_settings", "draw_mode"
-                )
+                data["draw_mode_index"] = self._read_setting("draw_mode")
                 data["clear_record_items"] = get_content_combo_name_async(
                     "lottery_settings", "clear_record"
                 )
-                data["clear_record_index"] = readme_settings_async(
-                    "lottery_settings", "clear_record"
-                )
-                data["half_repeat_value"] = readme_settings_async(
-                    "lottery_settings", "half_repeat"
-                )
+                data["clear_record_index"] = self._read_setting("clear_record")
+                data["half_repeat_value"] = self._read_setting("half_repeat")
             except Exception as e:
                 logger.exception(f"收集 lottery_settings 初始数据失败: {e}")
             return data
@@ -218,6 +261,9 @@ class lottery_extraction_function(GroupHeaderCardWidget):
         """刷新奖池下拉框列表"""
         from app.common.data.list import get_pool_name_list
 
+        if self.default_pool_combo is None:
+            return
+
         # 从设置文件中读取默认奖池
         default_pool = readme_settings_async("lottery_settings", "default_pool")
 
@@ -240,9 +286,7 @@ class lottery_extraction_function(GroupHeaderCardWidget):
     def on_draw_mode_changed(self):
         """当抽取模式改变时的处理逻辑"""
         # 更新设置值
-        update_settings(
-            "lottery_settings", "draw_mode", self.draw_mode_combo.currentIndex()
-        )
+        self._write_setting("draw_mode", self.draw_mode_combo.currentIndex())
 
         # 获取当前抽取模式索引
         draw_mode_index = self.draw_mode_combo.currentIndex()
@@ -268,14 +312,14 @@ class lottery_extraction_function(GroupHeaderCardWidget):
             self.clear_record_combo.blockSignals(False)
 
             # 更新设置
-            update_settings("lottery_settings", "clear_record", 2)
+            self._write_setting("clear_record", 2)
 
             # 设置half_repeat_spin为0并禁用
             self.half_repeat_spin.setEnabled(False)
             self.half_repeat_spin.setRange(0, 0)
             self.half_repeat_spin.setValue(0)
             # 更新设置
-            update_settings("lottery_settings", "half_repeat", 0)
+            self._write_setting("half_repeat", 0)
 
         else:  # 不重复抽取模式或半重复抽取模式
             # 启用清除抽取记录方式下拉框
@@ -293,16 +337,14 @@ class lottery_extraction_function(GroupHeaderCardWidget):
             )
 
             # 读取保存的设置
-            saved_clear_record = readme_settings_async(
-                "lottery_settings", "clear_record"
-            )
+            saved_clear_record = self._read_setting("clear_record")
 
             # 检查保存的设置是否有效
             if 0 <= saved_clear_record < self.clear_record_combo.count():
                 self.clear_record_combo.setCurrentIndex(saved_clear_record)
             else:
                 self.clear_record_combo.setCurrentIndex(0)
-                update_settings("lottery_settings", "clear_record", 0)
+                self._write_setting("clear_record", 0)
 
             # 恢复信号
             self.clear_record_combo.blockSignals(False)
@@ -314,7 +356,7 @@ class lottery_extraction_function(GroupHeaderCardWidget):
                 self.half_repeat_spin.setRange(1, 1)
                 self.half_repeat_spin.setValue(1)
                 # 更新设置
-                update_settings("lottery_settings", "half_repeat", 1)
+                self._write_setting("half_repeat", 1)
             else:  # 半重复抽取模式（索引2）
                 # 设置half_repeat_spin为2-100范围并启用
                 self.half_repeat_spin.setEnabled(True)
@@ -323,12 +365,24 @@ class lottery_extraction_function(GroupHeaderCardWidget):
                 if self.half_repeat_spin.value() < 2:
                     self.half_repeat_spin.setValue(2)
                     # 更新设置
-                    update_settings("lottery_settings", "half_repeat", 2)
+                    self._write_setting("half_repeat", 2)
+
+    def _read_setting(self, key: str, default=None):
+        if self._pool_name:
+            return read_lottery_setting(self._pool_name, key, default)
+        return readme_settings_async("lottery_settings", key, default)
+
+    def _write_setting(self, key: str, value):
+        if self._pool_name:
+            set_lottery_setting_override(self._pool_name, key, value)
+            return
+        update_settings("lottery_settings", key, value)
 
 
 class lottery_display_settings(GroupHeaderCardWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, pool_name: str | None = None):
         super().__init__(parent)
+        self._pool_name = pool_name
         self.setTitle(get_content_name_async("lottery_settings", "display_settings"))
         self.setBorderRadius(8)
 
@@ -337,13 +391,21 @@ class lottery_display_settings(GroupHeaderCardWidget):
         self.font_size_spin.setFixedWidth(WIDTH_SPINBOX)
         self.font_size_spin.setRange(10, 1000)
         self.font_size_spin.setSuffix("px")
-        self.font_size_spin.setValue(
-            get_safe_font_size("lottery_settings", "font_size")
-        )
-        self.font_size_spin.valueChanged.connect(
-            lambda: update_settings(
-                "lottery_settings", "font_size", self.font_size_spin.value()
+        if self._pool_name:
+            self.font_size_spin.setValue(
+                get_safe_font_size_list_specific(
+                    "lottery_settings",
+                    "lottery_list_specific_settings",
+                    self._pool_name,
+                    "font_size",
+                )
             )
+        else:
+            self.font_size_spin.setValue(
+                get_safe_font_size("lottery_settings", "font_size")
+            )
+        self.font_size_spin.valueChanged.connect(
+            lambda: self._write_setting("font_size", self.font_size_spin.value())
         )
 
         # 是否使用全局字体下拉框
@@ -352,30 +414,26 @@ class lottery_display_settings(GroupHeaderCardWidget):
             get_content_combo_name_async("lottery_settings", "use_global_font")
         )
         self.use_global_font_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "use_global_font")
+            self._read_setting("use_global_font")
         )
         self.use_global_font_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "use_global_font",
-                self.use_global_font_combo.currentIndex(),
+            lambda: self._write_setting(
+                "use_global_font", self.use_global_font_combo.currentIndex()
             )
         )
 
         # 自定义字体下拉框
         self.custom_font_combo = ComboBox()
         self.custom_font_combo.addItems(QFontDatabase.families())
-        current_custom_font = readme_settings_async("lottery_settings", "custom_font")
+        current_custom_font = self._read_setting("custom_font")
         current_font_index = self.custom_font_combo.findText(current_custom_font)
         if current_font_index >= 0:
             self.custom_font_combo.setCurrentIndex(current_font_index)
         else:
             self.custom_font_combo.setCurrentText(current_custom_font)
         self.custom_font_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "custom_font",
-                self.custom_font_combo.currentText(),
+            lambda: self._write_setting(
+                "custom_font", self.custom_font_combo.currentText()
             )
         )
 
@@ -384,14 +442,10 @@ class lottery_display_settings(GroupHeaderCardWidget):
         self.display_format_combo.addItems(
             get_content_combo_name_async("lottery_settings", "display_format")
         )
-        self.display_format_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "display_format")
-        )
+        self.display_format_combo.setCurrentIndex(self._read_setting("display_format"))
         self.display_format_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "display_format",
-                self.display_format_combo.currentIndex(),
+            lambda: self._write_setting(
+                "display_format", self.display_format_combo.currentIndex()
             )
         )
 
@@ -400,14 +454,10 @@ class lottery_display_settings(GroupHeaderCardWidget):
         self.display_style_combo.addItems(
             get_content_combo_name_async("lottery_settings", "display_style")
         )
-        self.display_style_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "display_style")
-        )
+        self.display_style_combo.setCurrentIndex(self._read_setting("display_style"))
         self.display_style_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "display_style",
-                self.display_style_combo.currentIndex(),
+            lambda: self._write_setting(
+                "display_style", self.display_style_combo.currentIndex()
             )
         )
 
@@ -417,13 +467,11 @@ class lottery_display_settings(GroupHeaderCardWidget):
             get_content_combo_name_async("lottery_settings", "show_random")
         )
         self.random_student_format_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "show_random")
+            self._read_setting("show_random")
         )
         self.random_student_format_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "show_random",
-                self.random_student_format_combo.currentIndex(),
+            lambda: self._write_setting(
+                "show_random", self.random_student_format_combo.currentIndex()
             )
         )
 
@@ -465,31 +513,50 @@ class lottery_display_settings(GroupHeaderCardWidget):
             self.random_student_format_combo,
         )
 
+    def _read_setting(self, key: str, default=None):
+        if self._pool_name:
+            return read_lottery_setting(self._pool_name, key, default)
+        return readme_settings_async("lottery_settings", key, default)
+
+    def _write_setting(self, key: str, value):
+        if self._pool_name:
+            set_lottery_setting_override(self._pool_name, key, value)
+            return
+        update_settings("lottery_settings", key, value)
+
 
 class lottery_animation_settings(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, pool_name: str | None = None):
         super().__init__(parent)
+        self._pool_name = pool_name
         # 创建垂直布局
         self.vBoxLayout = QVBoxLayout(self)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.setSpacing(10)
 
         # 添加基础动画设置组件
-        self.basic_animation_widget = lottery_basic_animation_settings(self)
+        self.basic_animation_widget = lottery_basic_animation_settings(
+            self, pool_name=self._pool_name
+        )
         self.vBoxLayout.addWidget(self.basic_animation_widget)
 
         # 添加颜色主题设置组件
-        self.color_theme_widget = lottery_color_theme_settings(self)
+        self.color_theme_widget = lottery_color_theme_settings(
+            self, pool_name=self._pool_name
+        )
         self.vBoxLayout.addWidget(self.color_theme_widget)
 
         # 添加奖品图片设置组件
-        self.lottery_image_widget = lottery_lottery_image_settings(self)
+        self.lottery_image_widget = lottery_lottery_image_settings(
+            self, pool_name=self._pool_name
+        )
         self.vBoxLayout.addWidget(self.lottery_image_widget)
 
 
 class lottery_basic_animation_settings(GroupHeaderCardWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, pool_name: str | None = None):
         super().__init__(parent)
+        self._pool_name = pool_name
         self.setTitle(
             get_content_name_async("lottery_settings", "basic_animation_settings")
         )
@@ -500,12 +567,10 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
         self.animation_combo.addItems(
             get_content_combo_name_async("lottery_settings", "animation")
         )
-        self.animation_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "animation")
-        )
+        self.animation_combo.setCurrentIndex(self._read_setting("animation"))
         self.animation_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings", "animation", self.animation_combo.currentIndex()
+            lambda: self._write_setting(
+                "animation", self.animation_combo.currentIndex()
             )
         )
 
@@ -514,14 +579,10 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
         self.animation_interval_spin.setFixedWidth(WIDTH_SPINBOX)
         self.animation_interval_spin.setRange(1, 1000)
         self.animation_interval_spin.setSuffix("ms")
-        self.animation_interval_spin.setValue(
-            readme_settings_async("lottery_settings", "animation_interval")
-        )
+        self.animation_interval_spin.setValue(self._read_setting("animation_interval"))
         self.animation_interval_spin.valueChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "animation_interval",
-                self.animation_interval_spin.value(),
+            lambda: self._write_setting(
+                "animation_interval", self.animation_interval_spin.value()
             )
         )
 
@@ -529,12 +590,10 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
         self.autoplay_count_spin = SpinBox()
         self.autoplay_count_spin.setFixedWidth(WIDTH_SPINBOX)
         self.autoplay_count_spin.setRange(1, 1000)
-        self.autoplay_count_spin.setValue(
-            readme_settings_async("lottery_settings", "autoplay_count")
-        )
+        self.autoplay_count_spin.setValue(self._read_setting("autoplay_count"))
         self.autoplay_count_spin.valueChanged.connect(
-            lambda: update_settings(
-                "lottery_settings", "autoplay_count", self.autoplay_count_spin.value()
+            lambda: self._write_setting(
+                "autoplay_count", self.autoplay_count_spin.value()
             )
         )
 
@@ -549,13 +608,10 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
                 "lottery_settings", "result_flow_animation_style", "enable"
             )
         )
-        result_flow_animation_style = readme_settings_async(
-            "lottery_settings", "result_flow_animation_style"
-        )
+        result_flow_animation_style = self._read_setting("result_flow_animation_style")
         self.result_flow_animation_style_switch.setChecked(result_flow_animation_style)
         self.result_flow_animation_style_switch.checkedChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
+            lambda: self._write_setting(
                 "result_flow_animation_style",
                 self.result_flow_animation_style_switch.isChecked(),
             )
@@ -566,11 +622,10 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
         self.result_flow_animation_duration_spin.setRange(0, 2000)
         self.result_flow_animation_duration_spin.setSuffix("ms")
         self.result_flow_animation_duration_spin.setValue(
-            readme_settings_async("lottery_settings", "result_flow_animation_duration")
+            self._read_setting("result_flow_animation_duration")
         )
         self.result_flow_animation_duration_spin.valueChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
+            lambda: self._write_setting(
                 "result_flow_animation_duration",
                 self.result_flow_animation_duration_spin.value(),
             )
@@ -614,10 +669,22 @@ class lottery_basic_animation_settings(GroupHeaderCardWidget):
             self.result_flow_animation_duration_spin,
         )
 
+    def _read_setting(self, key: str, default=None):
+        if self._pool_name:
+            return read_lottery_setting(self._pool_name, key, default)
+        return readme_settings_async("lottery_settings", key, default)
+
+    def _write_setting(self, key: str, value):
+        if self._pool_name:
+            set_lottery_setting_override(self._pool_name, key, value)
+            return
+        update_settings("lottery_settings", key, value)
+
 
 class lottery_color_theme_settings(GroupHeaderCardWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, pool_name: str | None = None):
         super().__init__(parent)
+        self._pool_name = pool_name
         self.setTitle(
             get_content_name_async("lottery_settings", "color_theme_settings")
         )
@@ -629,13 +696,11 @@ class lottery_color_theme_settings(GroupHeaderCardWidget):
             get_content_combo_name_async("lottery_settings", "animation_color_theme")
         )
         self.animation_color_theme_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "animation_color_theme")
+            self._read_setting("animation_color_theme")
         )
         self.animation_color_theme_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "animation_color_theme",
-                self.animation_color_theme_combo.currentIndex(),
+            lambda: self._write_setting(
+                "animation_color_theme", self.animation_color_theme_combo.currentIndex()
             )
         )
 
@@ -643,12 +708,10 @@ class lottery_color_theme_settings(GroupHeaderCardWidget):
         self.animation_fixed_color_button = ColorConfigItem(
             "Theme",
             "Color",
-            readme_settings_async("lottery_settings", "animation_fixed_color"),
+            self._read_setting("animation_fixed_color"),
         )
         self.animation_fixed_color_button.valueChanged.connect(
-            lambda color: update_settings(
-                "lottery_settings", "animation_fixed_color", color.name()
-            )
+            lambda color: self._write_setting("animation_fixed_color", color.name())
         )
 
         # 添加设置项到分组
@@ -675,10 +738,22 @@ class lottery_color_theme_settings(GroupHeaderCardWidget):
 
         self.vBoxLayout.addWidget(self.animationColorCard)
 
+    def _read_setting(self, key: str, default=None):
+        if self._pool_name:
+            return read_lottery_setting(self._pool_name, key, default)
+        return readme_settings_async("lottery_settings", key, default)
+
+    def _write_setting(self, key: str, value):
+        if self._pool_name:
+            set_lottery_setting_override(self._pool_name, key, value)
+            return
+        update_settings("lottery_settings", key, value)
+
 
 class lottery_lottery_image_settings(GroupHeaderCardWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, pool_name: str | None = None):
         super().__init__(parent)
+        self._pool_name = pool_name
         self.setTitle(
             get_content_name_async("lottery_settings", "lottery_image_settings")
         )
@@ -696,14 +771,10 @@ class lottery_lottery_image_settings(GroupHeaderCardWidget):
                 "lottery_settings", "lottery_image", "enable"
             )
         )
-        self.lottery_image_switch.setChecked(
-            readme_settings_async("lottery_settings", "lottery_image")
-        )
+        self.lottery_image_switch.setChecked(self._read_setting("lottery_image"))
         self.lottery_image_switch.checkedChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
-                "lottery_image",
-                self.lottery_image_switch.isChecked(),
+            lambda: self._write_setting(
+                "lottery_image", self.lottery_image_switch.isChecked()
             )
         )
 
@@ -712,11 +783,10 @@ class lottery_lottery_image_settings(GroupHeaderCardWidget):
             get_content_combo_name_async("lottery_settings", "lottery_image_position")
         )
         self.lottery_image_position_combo.setCurrentIndex(
-            readme_settings_async("lottery_settings", "lottery_image_position")
+            self._read_setting("lottery_image_position")
         )
         self.lottery_image_position_combo.currentIndexChanged.connect(
-            lambda: update_settings(
-                "lottery_settings",
+            lambda: self._write_setting(
                 "lottery_image_position",
                 self.lottery_image_position_combo.currentIndex(),
             )
@@ -752,6 +822,17 @@ class lottery_lottery_image_settings(GroupHeaderCardWidget):
             self.open_lottery_image_folder_button,
         )
 
+    def _read_setting(self, key: str, default=None):
+        if self._pool_name:
+            return read_lottery_setting(self._pool_name, key, default)
+        return readme_settings_async("lottery_settings", key, default)
+
+    def _write_setting(self, key: str, value):
+        if self._pool_name:
+            set_lottery_setting_override(self._pool_name, key, value)
+            return
+        update_settings("lottery_settings", key, value)
+
     def open_lottery_image_folder(self):
         """打开奖品图片文件夹"""
         folder_path = get_data_path(PRIZE_IMAGE_FOLDER)
@@ -761,3 +842,163 @@ class lottery_lottery_image_settings(GroupHeaderCardWidget):
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
         else:
             logger.exception("无法获取奖品图片文件夹路径")
+
+
+class LotteryListSpecificSettingsWindow(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        from app.tools.settings_access import get_settings_signals
+
+        self._dirty = False
+        self._suppress_dirty = False
+        self._last_overrides_map = None
+
+        self.vBoxLayout = QVBoxLayout(self)
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.setSpacing(10)
+
+        self.select_pool_card = GroupHeaderCardWidget(self)
+        self.select_pool_card.setTitle(
+            get_content_name_async(
+                "lottery_settings", "list_specific_settings_select_pool"
+            )
+        )
+        self.select_pool_card.setBorderRadius(8)
+
+        self.pool_combo = ComboBox()
+        self._refresh_pool_combo()
+        self.pool_combo.currentTextChanged.connect(self._on_pool_changed)
+
+        self.sync_button = PushButton(
+            get_content_pushbutton_name_async(
+                "lottery_settings", "list_specific_settings_sync_button"
+            )
+        )
+        self.sync_button.setEnabled(False)
+        self.sync_button.clicked.connect(self._sync_to_global)
+
+        self.select_pool_card.addGroup(
+            get_theme_icon("ic_fluent_class_20_filled"),
+            get_content_name_async(
+                "lottery_settings", "list_specific_settings_select_pool"
+            ),
+            get_content_description_async(
+                "lottery_settings", "list_specific_settings_select_pool"
+            ),
+            self.pool_combo,
+        )
+        self.select_pool_card.addGroup(
+            get_theme_icon("ic_fluent_arrow_sync_circle_20_filled"),
+            get_content_name_async(
+                "lottery_settings", "list_specific_settings_sync_button"
+            ),
+            get_content_description_async(
+                "lottery_settings", "list_specific_settings_sync_button"
+            ),
+            self.sync_button,
+        )
+        self.vBoxLayout.addWidget(self.select_pool_card)
+
+        self.content_widget = QWidget(self)
+        self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.content_layout.setSpacing(10)
+        self.vBoxLayout.addWidget(self.content_widget)
+
+        settings_signals = get_settings_signals()
+        settings_signals.settingChanged.connect(self._on_setting_changed)
+
+        self._rebuild_content()
+
+    def _refresh_pool_combo(self):
+        current = self.pool_combo.currentText() if hasattr(self, "pool_combo") else ""
+        self.pool_combo.blockSignals(True)
+        self.pool_combo.clear()
+        pool_list = get_pool_name_list()
+        self.pool_combo.addItems(pool_list)
+        if current and current in pool_list:
+            self.pool_combo.setCurrentText(current)
+        elif pool_list:
+            self.pool_combo.setCurrentIndex(0)
+        else:
+            self.pool_combo.setCurrentIndex(-1)
+            self.pool_combo.setPlaceholderText(
+                get_content_name_async("lottery_settings", "default_pool")
+            )
+        self.pool_combo.blockSignals(False)
+
+    def _on_pool_changed(self, _text: str):
+        self._rebuild_content()
+
+    def _on_setting_changed(self, first_level_key, second_level_key, value):
+        if self._suppress_dirty:
+            return
+        if first_level_key != "lottery_list_specific_settings":
+            return
+        if second_level_key != "overrides":
+            return
+
+        pool_name = (self.pool_combo.currentText() or "").strip()
+        if not pool_name:
+            return
+
+        new_map = value if isinstance(value, dict) else {}
+        current_overrides = new_map.get(pool_name)
+        self.sync_button.setEnabled(
+            isinstance(current_overrides, dict) and len(current_overrides) > 0
+        )
+        self._last_overrides_map = new_map
+
+    def _sync_to_global(self):
+        pool_name = (self.pool_combo.currentText() or "").strip()
+        if not pool_name:
+            return
+
+        self._suppress_dirty = True
+        try:
+            clear_list_specific_overrides("lottery_list_specific_settings", pool_name)
+        finally:
+            self._suppress_dirty = False
+
+        self._dirty = False
+        self.sync_button.setEnabled(False)
+        self._rebuild_content()
+
+    def _rebuild_content(self):
+        while self.content_layout.count():
+            item = self.content_layout.takeAt(0)
+            w = item.widget()
+            if w is not None:
+                w.deleteLater()
+
+        pool_name = (self.pool_combo.currentText() or "").strip()
+        self._dirty = False
+        self.sync_button.setEnabled(False)
+        self._last_overrides_map = readme_settings_async(
+            "lottery_list_specific_settings", "overrides", {}
+        )
+        if not pool_name:
+            return
+        current_overrides = (
+            self._last_overrides_map.get(pool_name)
+            if isinstance(self._last_overrides_map, dict)
+            else None
+        )
+        self.sync_button.setEnabled(
+            isinstance(current_overrides, dict) and len(current_overrides) > 0
+        )
+
+        self.content_layout.addWidget(
+            lottery_extraction_function(
+                self,
+                pool_name=pool_name,
+                show_default_pool=False,
+                enable_file_watcher=False,
+            )
+        )
+        self.content_layout.addWidget(
+            lottery_display_settings(self, pool_name=pool_name)
+        )
+        self.content_layout.addWidget(
+            lottery_animation_settings(self, pool_name=pool_name)
+        )

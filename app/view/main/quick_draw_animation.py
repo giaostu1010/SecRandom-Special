@@ -15,6 +15,7 @@ from app.Language.obtain_language import get_content_combo_name_async
 from qfluentwidgets import FluentIcon
 from app.tools.config import show_notification, NotificationType, NotificationConfig
 from app.tools.personalised import get_theme_icon
+from app.tools.list_specific_settings_access import read_quick_draw_setting
 
 
 # ==================================================
@@ -42,6 +43,7 @@ class QuickDrawAnimation(QObject):
         self.final_ipc_selected_students = None
         self.final_group_filter = None
         self.final_gender_filter = None
+        self.active_class_name = None
 
     def _get_default_filters(self):
         class_name = readme_settings_async("quick_draw_settings", "default_class")
@@ -66,6 +68,8 @@ class QuickDrawAnimation(QObject):
             )
             if saved_class_name and saved_class_name in get_class_name_list():
                 class_name = saved_class_name
+
+        self.active_class_name = class_name
 
         base_group_items = get_content_combo_name_async("roll_call", "range_combobox")
         group_items = base_group_items
@@ -187,8 +191,8 @@ class QuickDrawAnimation(QObject):
         class_name, group_index, group_filter, gender_index, gender_filter = (
             self._get_default_filters()
         )
-        current_count = readme_settings_async("quick_draw_settings", "draw_count")
-        half_repeat = readme_settings_async("quick_draw_settings", "half_repeat")
+        current_count = read_quick_draw_setting(class_name, "draw_count")
+        half_repeat = read_quick_draw_setting(class_name, "half_repeat")
 
         # 加载数据到管理器
         self.roll_call_widget.manager.load_data(
@@ -200,9 +204,7 @@ class QuickDrawAnimation(QObject):
             half_repeat,
         )
 
-        animation_music = readme_settings_async(
-            "quick_draw_settings", "animation_music"
-        )
+        animation_music = read_quick_draw_setting(class_name, "animation_music")
         if animation_music:
             music_player.play_music(
                 music_file=animation_music,
@@ -245,12 +247,15 @@ class QuickDrawAnimation(QObject):
         self.roll_call_widget.is_quick_draw = False
 
         # 执行最终抽取
-        current_count = readme_settings_async("quick_draw_settings", "draw_count")
+        class_name = self.active_class_name
+        current_count = read_quick_draw_setting(class_name, "draw_count")
         result = self.roll_call_widget.manager.draw_final_students(current_count)
 
         if result.get("reset_required"):
-            class_name = readme_settings_async("quick_draw_settings", "default_class")
-            self._reset_records(class_name)
+            self._reset_records(
+                class_name
+                or readme_settings_async("quick_draw_settings", "default_class")
+            )
             self.final_selected_students = []
         else:
             self._set_final_result(result)
@@ -262,7 +267,7 @@ class QuickDrawAnimation(QObject):
 
         music_player.stop_music(fade_out=True)
 
-        result_music = readme_settings_async("quick_draw_settings", "result_music")
+        result_music = read_quick_draw_setting(class_name, "result_music")
         if result_music:
             music_player.play_music(
                 music_file=result_music,
@@ -279,7 +284,7 @@ class QuickDrawAnimation(QObject):
             and len(self.final_selected_students) > 0
             and self.final_class_name
         ):
-            draw_count = readme_settings_async("quick_draw_settings", "draw_count")
+            draw_count = read_quick_draw_setting(class_name, "draw_count")
             RollCallUtils.show_notification_if_enabled(
                 class_name=self.final_class_name,
                 selected_students=self.final_selected_students,
@@ -306,7 +311,8 @@ class QuickDrawAnimation(QObject):
             self.stop_animation()
             return
 
-        draw_count = readme_settings_async("quick_draw_settings", "draw_count")
+        class_name = self.active_class_name
+        draw_count = read_quick_draw_setting(class_name, "draw_count")
         self.display_result_animated(
             self.final_selected_students,
             self.final_class_name,
@@ -327,7 +333,9 @@ class QuickDrawAnimation(QObject):
 
     def draw_random_students(self):
         """独立的随机学生抽取逻辑，不依赖roll_call_widget的状态"""
-        class_name = readme_settings_async("quick_draw_settings", "default_class")
+        class_name = self.active_class_name or readme_settings_async(
+            "quick_draw_settings", "default_class"
+        )
         if not class_name:
             # 未设置默认班级，初始化为空结果并停止动画
             logger.warning(
@@ -341,7 +349,7 @@ class QuickDrawAnimation(QObject):
             self.stop_animation()
             return False
 
-        current_count = readme_settings_async("quick_draw_settings", "draw_count")
+        current_count = read_quick_draw_setting(class_name, "draw_count")
 
         if self.is_animating:
             # 动画过程中，使用管理器快速获取随机学生
@@ -369,6 +377,8 @@ class QuickDrawAnimation(QObject):
             quick_draw_settings: 闪抽设置字典
         """
         logger.debug("execute_quick_draw: 执行完整闪抽流程")
+
+        self._get_default_filters()
 
         # 保存闪抽设置，用于动画过程中更新显示和浮窗通知
         self.quick_draw_settings = quick_draw_settings
@@ -411,7 +421,9 @@ class QuickDrawAnimation(QObject):
         """
         try:
             if self.final_selected_students and self.final_class_name:
-                draw_count = readme_settings_async("quick_draw_settings", "draw_count")
+                draw_count = read_quick_draw_setting(
+                    self.active_class_name, "draw_count"
+                )
 
                 RollCallUtils.display_result(
                     result_grid=self.roll_call_widget.result_grid,
@@ -479,7 +491,9 @@ class QuickDrawAnimation(QObject):
         """
         try:
             if self.final_selected_students and self.final_class_name:
-                draw_count = readme_settings_async("quick_draw_settings", "draw_count")
+                draw_count = read_quick_draw_setting(
+                    self.active_class_name, "draw_count"
+                )
 
                 RollCallUtils.show_notification_if_enabled(
                     class_name=self.final_class_name,

@@ -18,7 +18,11 @@ from app.tools.config import (
     read_drawn_record_simple,
     reset_drawn_record,
 )
-from app.tools.settings_access import readme_settings_async, get_safe_font_size
+from app.tools.settings_access import readme_settings_async
+from app.tools.list_specific_settings_access import (
+    read_lottery_setting,
+    get_safe_font_size_list_specific,
+)
 
 from app.Language.obtain_language import get_any_position_value
 
@@ -430,7 +434,7 @@ class LotteryUtils:
                     "selected_prizes_dict": [],
                 }
             # 非重复/半重复处理：根据 TEMP 记录过滤已达阈值的奖品（与 roll_call 一致）
-            threshold = LotteryUtils._get_prize_draw_threshold()
+            threshold = LotteryUtils._get_prize_draw_threshold(pool_name)
             if threshold is not None:
                 drawn_records = read_drawn_record_simple(pool_name)
                 drawn_counts = {name: cnt for name, cnt in drawn_records}
@@ -516,14 +520,14 @@ class LotteryUtils:
             }
 
     @staticmethod
-    def _get_prize_draw_threshold():
+    def _get_prize_draw_threshold(pool_name: str | None = None):
         """获取奖品抽取阈值：None 表示可重复；1 表示不重复；半重复返回次数阈值"""
         try:
-            mode = readme_settings_async("lottery_settings", "draw_mode")
+            mode = read_lottery_setting(pool_name, "draw_mode")
             if mode == 1:
                 return 1
             elif mode == 2:
-                hr = readme_settings_async("lottery_settings", "half_repeat")
+                hr = read_lottery_setting(pool_name, "half_repeat")
                 try:
                     return int(hr) if hr else 1
                 except Exception:
@@ -539,7 +543,7 @@ class LotteryUtils:
         try:
             from app.common.data.list import get_pool_list
 
-            threshold = LotteryUtils._get_prize_draw_threshold()
+            threshold = LotteryUtils._get_prize_draw_threshold(pool_name)
             items = [
                 item for item in get_pool_list(pool_name) if item.get("exist", True)
             ]
@@ -580,7 +584,7 @@ class LotteryUtils:
         return selected_groups
 
     @staticmethod
-    def prepare_notification_settings():
+    def prepare_notification_settings(pool_name: str | None = None):
         """
         准备通知设置参数
 
@@ -590,19 +594,20 @@ class LotteryUtils:
         # 读取所有相关设置并传递给通知服务
         settings = {
             # 点名设置
-            "font_size": get_safe_font_size("lottery_settings", "font_size"),
-            "animation_color_theme": readme_settings_async(
-                "lottery_settings", "animation_color_theme"
+            "font_size": get_safe_font_size_list_specific(
+                "lottery_settings",
+                "lottery_list_specific_settings",
+                pool_name,
+                "font_size",
             ),
-            "display_format": readme_settings_async(
-                "lottery_settings", "display_format"
+            "animation_color_theme": read_lottery_setting(
+                pool_name, "animation_color_theme"
             ),
-            "display_style": readme_settings_async("lottery_settings", "display_style"),
-            "student_image": readme_settings_async("lottery_settings", "student_image"),
-            "image_position": readme_settings_async(
-                "lottery_settings", "lottery_image_position"
-            ),
-            "show_random": readme_settings_async("lottery_settings", "show_random"),
+            "display_format": read_lottery_setting(pool_name, "display_format"),
+            "display_style": read_lottery_setting(pool_name, "display_style"),
+            "student_image": read_lottery_setting(pool_name, "lottery_image"),
+            "image_position": read_lottery_setting(pool_name, "lottery_image_position"),
+            "show_random": read_lottery_setting(pool_name, "show_random"),
             # 浮窗设置
             "animation": readme_settings_async(
                 "lottery_notification_settings", "animation"

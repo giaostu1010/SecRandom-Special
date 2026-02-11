@@ -14,6 +14,7 @@ from app.tools.config import (
     record_drawn_student,
 )
 from app.tools.settings_access import readme_settings_async, get_safe_font_size
+from app.tools.list_specific_settings_access import read_roll_call_setting
 from app.common.display.result_display import ResultDisplayUtils
 from app.common.history import save_roll_call_history
 from app.common.extraction.extract import (
@@ -287,11 +288,11 @@ class RollCallUtils:
 
         # 3. 如果是小组模式，直接抽取小组
         if group_index == 1:
-            draw_type = readme_settings_async("roll_call_settings", "draw_type")
+            draw_type = read_roll_call_setting(class_name, "draw_type")
             selected_groups = RollCallUtils.draw_random_groups(
                 students_dict_list, current_count, draw_type
             )
-            show_random = readme_settings_async("roll_call_settings", "show_random")
+            show_random = read_roll_call_setting(class_name, "show_random")
             selected_groups, ipc_selected_students = (
                 RollCallUtils.render_group_display_students_and_ipc(
                     class_name, selected_groups, show_random
@@ -361,7 +362,7 @@ class RollCallUtils:
             }
 
         # 8. 计算最终权重
-        draw_type = readme_settings_async("roll_call_settings", "draw_type")
+        draw_type = read_roll_call_setting(class_name, "draw_type")
         weights = []
         if draw_type == 1:
             students_with_weight = calculate_weight(
