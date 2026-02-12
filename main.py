@@ -7,6 +7,7 @@ import platform
 
 import sentry_sdk
 from sentry_sdk.integrations.loguru import LoguruIntegration, LoggingLevels
+from posthog import Posthog
 from PySide6.QtCore import Qt, QTimer, qInstallMessageHandler
 from PySide6.QtWidgets import QApplication
 from loguru import logger
@@ -25,6 +26,8 @@ from app.tools.variable import (
     DEV_HINT_DELAY_MS,
     UPDATE_CHECK_THREAD_TIMEOUT_MS,
     PROCESS_EXIT_WAIT_SECONDS,
+    POSTHOG_API_KEY,
+    POSTHOG_HOST,
 )
 from app.core.single_instance import (
     check_single_instance,
@@ -128,6 +131,21 @@ def initialize_sentry():
     sentry_sdk.set_user({"id": user_id, "ip_address": "{{auto}}"})
 
 
+def initialize_posthog():
+    """初始化 PostHog 产品分析系统"""
+    posthog = Posthog(
+        project_api_key=POSTHOG_API_KEY,
+        host=POSTHOG_HOST,
+    )
+    user_id = get_or_create_user_id()
+    logger.debug(f"PostHog 初始化: user_id={user_id}, host={POSTHOG_HOST}")
+    posthog.capture(
+        distinct_id=user_id,
+        event='app_started',
+    )
+    return posthog
+
+
 # ==================================================
 # 开发提示相关函数
 # ==================================================
@@ -229,6 +247,7 @@ def initialize_application():
 
     if DEV_VERSION not in VERSION:
         initialize_sentry()
+        initialize_posthog()
 
     wm.app_start_time = time.perf_counter()
 

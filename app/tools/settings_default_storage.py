@@ -38,6 +38,7 @@ DEFAULT_SETTINGS = {
         "theme_color": {"default_value": DEFAULT_THEME_COLOR},
         "language": {"default_value": "ZH_CN"},
         "guide_completed": {"default_value": False},
+        "offline_user_id": {"default_value": ""},
     },
     "backup": {
         "auto_backup_enabled": {"default_value": True},
