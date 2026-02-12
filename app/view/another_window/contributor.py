@@ -144,6 +144,16 @@ class contributor_page(QWidget):
                 ),
             },
             {
+                "name": "WSXYT",
+                "role": get_any_position_value_async(
+                    "about", "contributor", "contributor_role_11"
+                ),
+                "github": "https://github.com/WSXYT",
+                "avatar": str(
+                    get_data_path("assets/contribution", "contributor11.png")
+                ),
+            },
+            {
                 "name": "LHGS-github",
                 "role": get_any_position_value_async(
                     "about", "contributor", "contributor_role_8"
