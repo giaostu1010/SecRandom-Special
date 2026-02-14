@@ -202,9 +202,9 @@ def initialize_application():
     logger.remove()
     configure_logging()
 
-    # if DEV_VERSION not in VERSION:
-    initialize_sentry()
-    initialize_posthog()
+    if DEV_VERSION not in VERSION:
+        initialize_sentry()
+        initialize_posthog()
 
     wm.app_start_time = time.perf_counter()
 
