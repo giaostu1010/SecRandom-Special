@@ -17,6 +17,7 @@ from app.tools.config import (
     configure_logging,
     set_posthog_client,
     create_sentry_before_send_filter,
+    get_geoip_properties_zh_cn,
 )
 from app.tools.settings_default import manage_settings_file
 from app.tools.settings_access import readme_settings_async, get_or_create_user_id
@@ -85,16 +86,19 @@ def initialize_posthog():
     )
     set_posthog_client(posthog)
     user_id = get_or_create_user_id()
-    posthog.capture(distinct_id=user_id, event="app_started")
-
+    geoip_properties = get_geoip_properties_zh_cn()
     total_draw_count, roll_call_total, lottery_total = calculate_total_draw_counts()
 
-    posthog.set(
+    posthog.capture(
         distinct_id=user_id,
+        event="app_started",
         properties={
-            "total_draw_count": total_draw_count,
-            "roll_call_total_count": roll_call_total,
-            "lottery_total_count": lottery_total,
+            "location": geoip_properties,
+            "$set": {
+                "total_draw_count": total_draw_count,
+                "roll_call_total_count": roll_call_total,
+                "lottery_total_count": lottery_total,
+            },
         },
     )
 
@@ -198,9 +202,9 @@ def initialize_application():
     logger.remove()
     configure_logging()
 
-    if DEV_VERSION not in VERSION:
-        initialize_sentry()
-        initialize_posthog()
+    # if DEV_VERSION not in VERSION:
+    initialize_sentry()
+    initialize_posthog()
 
     wm.app_start_time = time.perf_counter()
 
