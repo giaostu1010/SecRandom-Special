@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -32,6 +33,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Langs.Resources.Culture = new CultureInfo("en-US");
         BuildHost();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

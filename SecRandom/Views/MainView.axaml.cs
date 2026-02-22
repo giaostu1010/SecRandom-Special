@@ -78,7 +78,7 @@ public partial class MainView : UserControl, INavigationPageFactory
         ViewModel.NavigationViewFooterItems.Add(
             new PageInfo(true, PageLocation.Bottom).ToNavigationViewItemBase());
         ViewModel.NavigationViewFooterItems.Add(
-            new PageInfo("设置", "settings", "\uEF27", PageLocation.Bottom).ToNavigationViewItemBase());
+            new PageInfo(Langs.Resources.Settings, "settings", "\uEF27", PageLocation.Bottom).ToNavigationViewItemBase());
     }
 
     public void SelectNavigationItemById(string id)
