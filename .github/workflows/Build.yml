@@ -1,18 +1,20 @@
-name: Release
+name: Build
 
 on:
   push:
+    branches:
+      - "**"
     tags:
       - "v*"
   pull_request:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version (default: VERSION file)"
+        description: "发布版本（默认：VERSION 文件）"
         required: false
         default: ""
       create_release:
-        description: "Create GitHub Release (true/false, default: false)"
+        description: "创建 GitHub Release（true/false，默认：false）"
         required: false
         default: "false"
 
@@ -20,8 +22,78 @@ permissions:
   contents: write
 
 jobs:
+  check-trigger:
+    name: 检查触发条件
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+      - name: 检查
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          should_build="false"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            should_build="true"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            should_build="true"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+              should_build="true"
+            elif [ -n "${{ github.event.head_commit.message }}" ]; then
+              if echo "${{ github.event.head_commit.message }}" | grep -q "开始构建"; then
+                should_build="true"
+              fi
+            fi
+          fi
+          echo "should_build=${should_build}" >> "$GITHUB_OUTPUT"
+
+  ci:
+    name: 持续集成（${{ matrix.os }}）
+    needs: [check-trigger]
+    if: needs.check-trigger.outputs.should_build == 'true'
+    runs-on: ${{ matrix.os }}
+    concurrency:
+      group: ci-${{ github.ref }}-${{ matrix.os }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+          dotnet-quality: preview
+
+      - name: 还原依赖
+        run: dotnet restore SecRandom.slnx
+
+      - name: 构建
+        run: dotnet build SecRandom.slnx -c Release --no-restore
+
+      - name: 检测测试项目
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find . -type f \( -name '*Test*.csproj' -o -name '*Tests*.csproj' \) | grep -q .; then
+            echo "HAS_TESTS=true" >> "$GITHUB_ENV"
+          else
+            echo "HAS_TESTS=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: 运行测试
+        if: env.HAS_TESTS == 'true'
+        run: dotnet test SecRandom.slnx -c Release --no-build
+
   version:
-    name: Resolve version
+    name: 解析版本
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
@@ -29,10 +101,10 @@ jobs:
       changelog: ${{ steps.v.outputs.changelog }}
       create_release: ${{ steps.v.outputs.create_release }}
     steps:
-      - name: Checkout
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Resolve
+      - name: 解析
         id: v
         shell: bash
         run: |
@@ -68,7 +140,7 @@ jobs:
           echo "create_release=${create_release}" >> "$GITHUB_OUTPUT"
 
   publish:
-    name: Publish (${{ matrix.rid }})
+    name: 发布构建（${{ matrix.rid }}）
     needs: [version]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -77,24 +149,30 @@ jobs:
         include:
           - os: windows-latest
             rid: win-x64
+          - os: windows-latest
+            rid: win-x86
+          - os: windows-latest
+            rid: win-arm64
           - os: ubuntu-latest
             rid: linux-x64
+          - os: ubuntu-latest
+            rid: linux-arm64
           - os: macos-latest
             rid: osx-x64
           - os: macos-latest
             rid: osx-arm64
 
     steps:
-      - name: Checkout
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: 安装 .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
           dotnet-quality: preview
 
-      - name: Publish
+      - name: 发布
         run: >
           dotnet publish src/SecRandom.Avalonia/SecRandom.Avalonia.csproj
           -c Release
@@ -104,7 +182,7 @@ jobs:
           /p:PublishSingleFile=true
           /p:IncludeNativeLibrariesForSelfExtract=true
 
-      - name: Package (Windows zip)
+      - name: 打包（Windows zip）
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -113,7 +191,7 @@ jobs:
           $outFile = "dist/SecRandom-${versionNoV}-${{ matrix.rid }}.zip"
           Compress-Archive -Path "artifacts/SecRandom-${{ matrix.rid }}/*" -DestinationPath $outFile -Force
 
-      - name: Package (Linux deb)
+      - name: 打包（Linux deb）
         if: runner.os == 'Linux'
         shell: bash
         run: |
@@ -121,6 +199,12 @@ jobs:
 
           version_no_v="${{ needs.version.outputs.version_no_v }}"
           mkdir -p dist
+
+          deb_arch="amd64"
+          case "${{ matrix.rid }}" in
+            linux-x64) deb_arch="amd64" ;;
+            linux-arm64) deb_arch="arm64" ;;
+          esac
 
           pkgroot="$(pwd)/pkgroot"
           rm -rf "$pkgroot"
@@ -158,14 +242,14 @@ jobs:
           Version: ${version_no_v}
           Section: utils
           Priority: optional
-          Architecture: amd64
+          Architecture: ${deb_arch}
           Maintainer: SECTL
           Description: SecRandom
           EOF
 
           dpkg-deb --build "$pkgroot" "dist/SecRandom-${version_no_v}-${{ matrix.rid }}.deb"
 
-      - name: Package (macOS pkg)
+      - name: 打包（macOS pkg）
         if: runner.os == 'macOS'
         shell: bash
         run: |
@@ -225,26 +309,26 @@ jobs:
             --install-location "/" \
             "dist/SecRandom-${version_no_v}-${{ matrix.rid }}.pkg"
 
-      - name: Upload artifact
+      - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: SecRandom-${{ matrix.rid }}
           path: dist/*
 
   notes:
-    name: Generate notes
+    name: 生成发布说明
     needs: [version, publish]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Download artifacts
+      - name: 下载产物
         uses: actions/download-artifact@v4
         with:
           path: dist
 
-      - name: Collect files
+      - name: 收集文件
         shell: bash
         run: |
           set -euo pipefail
@@ -252,7 +336,7 @@ jobs:
           find dist -type f \( -name '*.zip' -o -name '*.deb' -o -name '*.pkg' \) -print -exec cp -f {} release/ \;
           ls -la release
 
-      - name: Generate release notes with SHA512
+      - name: 生成说明与 SHA512
         shell: bash
         run: |
           set -euo pipefail
@@ -301,7 +385,7 @@ jobs:
             done
           fi
 
-      - name: Upload notes artifact
+      - name: 上传说明产物
         uses: actions/upload-artifact@v4
         with:
           name: release-notes
@@ -310,17 +394,17 @@ jobs:
             release/SHA512SUMS.txt
 
   release:
-    name: Create GitHub Release
+    name: 创建 GitHub Release
     if: needs.version.outputs.create_release == 'true'
     needs: [version, publish, notes]
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifacts
+      - name: 下载产物
         uses: actions/download-artifact@v4
         with:
           path: dist
 
-      - name: Collect files
+      - name: 收集文件
         shell: bash
         run: |
           set -euo pipefail
@@ -328,13 +412,13 @@ jobs:
           find dist -type f \( -name '*.zip' -o -name '*.deb' -o -name '*.pkg' -o -name 'SHA512SUMS.txt' \) -print -exec cp -f {} release/ \;
           ls -la release
 
-      - name: Download release notes
+      - name: 下载发布说明
         uses: actions/download-artifact@v4
         with:
           name: release-notes
           path: notes
 
-      - name: Publish release
+      - name: 发布 Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.version.outputs.version }}
