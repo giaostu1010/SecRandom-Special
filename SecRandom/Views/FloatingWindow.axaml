@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="using:FluentAvalonia.UI.Controls"
+        xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SecRandom.Views.FloatingWindow"
+        Title="SecRandom"
+        ShowActivated="False"
+        Background="Black">
+    <Grid x:Name="RootGrid">
+        <Border Background="{StaticResource SmokeFillColorDefaultBrush}" Opacity="0.6" CornerRadius="24" ClipToBounds="True" />
+        
+        <StackPanel>
+            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xECAB;}" Label="点名" Click="OpenMainWindowButton_OnClick"></fa:CommandBarButton>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -21,6 +21,7 @@ namespace SecRandom;
 
 public partial class App : Application
 {
+    public static FloatingWindow? FloatingWindow;
     public static MainWindow? MainWindow;
     public static MainWindow? SettingsWindow;
     
@@ -39,12 +40,8 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
-            MainWindow = new MainWindow
-            {
-                Content = IAppHost.GetService<MainView>(),
-                Title="SecRandom"
-            };
-            desktop.MainWindow = MainWindow;
+            FloatingWindow = new FloatingWindow();
+            desktop.MainWindow = FloatingWindow;
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
@@ -91,10 +88,10 @@ public partial class App : Application
                 // 服务
                 
                 // 窗口
-                services.AddSingleton<MainView>();
+                services.AddTransient<MainView>();
                 services.AddTransient<MainViewModel>();
                 
-                services.AddSingleton<SettingsView>();
+                services.AddTransient<SettingsView>();
                 services.AddTransient<SettingsViewModel>();
                 
                 // 界面 Views
@@ -113,6 +110,21 @@ public partial class App : Application
         IAppHost.GetService<MainConfigHandler>();
     }
 
+    public static void ShowMainWindow()
+    {
+        if (MainWindow is not { IsLoaded: true })
+        {
+            MainWindow = new MainWindow
+            {
+                Content = IAppHost.GetService<MainView>(),
+                Title = "SecRandom"
+            };
+        }
+
+        MainWindow.Show();
+        MainWindow.Activate();
+    }
+    
     public static void ShowSettingsWindow()
     {
         if (SettingsWindow is not { IsLoaded: true })
@@ -125,5 +137,6 @@ public partial class App : Application
         }
 
         SettingsWindow.Show();
+        SettingsWindow.Activate();
     }
 }
