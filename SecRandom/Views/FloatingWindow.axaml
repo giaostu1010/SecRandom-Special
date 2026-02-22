@@ -4,16 +4,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="using:FluentAvalonia.UI.Controls"
         xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
+        xmlns:langs="clr-namespace:SecRandom.Langs"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SecRandom.Views.FloatingWindow"
         Title="SecRandom"
         ShowActivated="False"
-        Background="Black">
-    <Grid x:Name="RootGrid">
-        <Border Background="{StaticResource SmokeFillColorDefaultBrush}" Opacity="0.6" CornerRadius="24" ClipToBounds="True" />
+        Background="Transparent"
+        Loaded="Control_OnLoaded">
+    <Grid>
+        <Border Background="{StaticResource SmokeFillColorDefaultBrush}"
+                CornerRadius="24" ClipToBounds="True" />
         
-        <StackPanel>
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xECAB;}" Label="点名" Click="OpenMainWindowButton_OnClick"></fa:CommandBarButton>
+        <StackPanel x:Name="RootStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xECAB;}"
+                                 Label="{x:Static langs:Resources.RollCall}"
+                                 Click="OpenMainWindowButton_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

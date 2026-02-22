@@ -8,8 +8,8 @@ namespace SecRandom.Core.Attributes;
 public class PageInfo : Attribute
 {
     public bool IsSeparator { get; }
-    
-    public string Name { get; }
+
+    public string Name { get; set; } = string.Empty;
     public string Id { get; }
     public string IconGlyph { get; }
     
@@ -23,7 +23,6 @@ public class PageInfo : Attribute
         {
             IsSeparator = true;
             
-            Name = "分割线";
             Id = "separator";
             IconGlyph = "";
 
@@ -37,10 +36,25 @@ public class PageInfo : Attribute
         }
     }
     
-    public PageInfo(string name, string id, string iconGlyph = "\uE06F", PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
+    /// <summary>
+    /// 尽量使用这个，在注册时本地化。
+    /// </summary>
+    public PageInfo(string id, string iconGlyph, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
     {
         IsSeparator = false;
         
+        Id = id;
+        IconGlyph = iconGlyph;
+
+        Location = location;
+        UseFullWidth = useFullWidth;
+        HidePageTitle = hidePageTitle;
+    }
+    
+    public PageInfo(string name, string id, string iconGlyph, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
+    {
+        IsSeparator = false;
+
         Name = name;
         Id = id;
         IconGlyph = iconGlyph;

@@ -19,13 +19,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
 
-    <data name="Settings" xml:space="preserve">
-        <value>Settings</value>
-    </data>
-    <data name="RollCall" xml:space="preserve">
-        <value>Roll Call</value>
-    </data>
-    <data name="About" xml:space="preserve">
-        <value>About</value>
+    <data name="Welcome" xml:space="preserve">
+        <value>欢迎来到 Avalonia！点名</value>
     </data>
 </root>

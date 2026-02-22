@@ -33,7 +33,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        Langs.Resources.Culture = new CultureInfo("en-US");
+        InitializeLanguages(new CultureInfo("zh-hans"));
         BuildHost();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -66,6 +66,12 @@ public partial class App : Application
         }
     }
 
+    private void InitializeLanguages(CultureInfo cultureInfo)
+    {
+        Langs.Resources.Culture = cultureInfo;
+        Langs.RollCallPage.Resources.Culture = cultureInfo;
+    }
+    
     private void BuildHost()
     {
         IAppHost.Host = Host
@@ -97,9 +103,9 @@ public partial class App : Application
                 services.AddTransient<SettingsViewModel>();
                 
                 // 界面 Views
-                services.AddMainPage<RollCallPage>();
+                services.AddMainPage<RollCallPage>(Langs.Resources.RollCall);
                 
-                services.AddSettingsPage<AboutPage>();
+                services.AddSettingsPage<AboutPage>(Langs.Resources.About);
 
                 // 界面 ViewModels
             })

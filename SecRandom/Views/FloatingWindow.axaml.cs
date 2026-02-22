@@ -14,13 +14,16 @@ public partial class FloatingWindow : Window
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.Antialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
         RenderOptions.SetEdgeMode(this, EdgeMode.Antialias);
-
-        Height = RootGrid.Height;
-        Width = RootGrid.Width;
     }
 
     private void OpenMainWindowButton_OnClick(object? sender, RoutedEventArgs e)
     {
         App.ShowMainWindow();
+    }
+
+    private void Control_OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        Height = RootStackPanel.Height + 24 * 2;
+        Width = RootStackPanel.Width + 24*2;
     }
 }

@@ -22,4 +22,10 @@
     <data name="Settings" xml:space="preserve">
         <value>设置</value>
     </data>
+    <data name="RollCall" xml:space="preserve">
+        <value>点名</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>关于</value>
+    </data>
 </root>
