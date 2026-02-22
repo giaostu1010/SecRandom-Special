@@ -1,1 +1,0 @@
-"""SecRandom application package."""

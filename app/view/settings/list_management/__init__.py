@@ -1,1 +1,0 @@
-"""List management settings pages."""

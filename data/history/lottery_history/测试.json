@@ -1,0 +1,171 @@
+{
+    "lotterys": {
+        "阳光奖": {
+            "total_count": 2,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:48:41",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:35:27",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T17:48:41",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "幸运奖": {
+            "total_count": 2,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:35:51",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:35:42",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T17:35:51",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "三等奖": {
+            "total_count": 2,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:48:40",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:35:48",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T17:48:40",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "电影票": {
+            "total_count": 3,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T18:07:00",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:36:23",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T17:48:31",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T18:07:00",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "一等奖": {
+            "total_count": 1,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:48:40",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:48:40",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "二等奖": {
+            "total_count": 1,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:51:30",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:51:30",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "纪念品": {
+            "total_count": 1,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:51:34",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:51:34",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "咖啡券": {
+            "total_count": 1,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:51:35",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:51:35",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "定制礼盒": {
+            "total_count": 1,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T17:51:36",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:51:36",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        },
+        "特等奖": {
+            "total_count": 4,
+            "rounds_missed": 0,
+            "last_drawn_time": "2025-11-24T18:39:43",
+            "history": [
+                {
+                    "draw_time": "2025-11-24T17:51:37",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T18:39:41",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T18:39:42",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                },
+                {
+                    "draw_time": "2025-11-24T18:39:43",
+                    "draw_group": "抽取全部学生",
+                    "draw_gender": "抽取全部性别"
+                }
+            ]
+        }
+    },
+    "group_stats": {
+        "抽取全部学生": 18
+    },
+    "gender_stats": {
+        "抽取全部性别": 18
+    },
+    "total_stats": 18
+}

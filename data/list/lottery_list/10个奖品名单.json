@@ -1,0 +1,53 @@
+{
+    "奖品01": {
+        "id": 1,
+        "weight": 1.0,
+        "exist": true,
+        "count": 1
+    },
+    "奖品02": {
+        "id": 2,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品03": {
+        "id": 3,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品04": {
+        "id": 4,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品05": {
+        "id": 5,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品06": {
+        "id": 6,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品07": {
+        "id": 7,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品08": {
+        "id": 8,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品09": {
+        "id": 9,
+        "weight": 1.0,
+        "exist": true
+    },
+    "奖品10": {
+        "id": 10,
+        "weight": 1.0,
+        "exist": true
+    }
+}

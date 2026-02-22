@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SecRandom.Core/SecRandom.Core.csproj" />
+    <Project Path="src/SecRandom.Platform/SecRandom.Platform.csproj" />
+    <Project Path="src/SecRandom.Avalonia/SecRandom.Avalonia.csproj" />
+  </Folder>
+</Solution>

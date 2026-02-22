@@ -1,0 +1,47 @@
+{
+    "1": {
+        "id": 1,
+        "gender": "",
+        "group": "",
+        "exist": true,
+        "tags": [
+            "qwq"
+        ]
+    },
+    "2": {
+        "id": 2,
+        "gender": "",
+        "group": "",
+        "exist": true,
+        "tags": [
+            "wow"
+        ]
+    },
+    "3": {
+        "id": 3,
+        "gender": "",
+        "group": "",
+        "exist": true,
+        "tags": [
+            "az"
+        ]
+    },
+    "4": {
+        "id": 4,
+        "gender": "",
+        "group": "",
+        "exist": true,
+        "tags": [
+            "SOS"
+        ]
+    },
+    "5": {
+        "id": 5,
+        "gender": "",
+        "group": "",
+        "exist": true,
+        "tags": [
+            "O"
+        ]
+    }
+}
