@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should_build: ${{ steps.check.outputs.should_build }}
+      should_publish: ${{ steps.check.outputs.should_publish }}
     steps:
       - name: 检查
         id: check
@@ -34,20 +35,25 @@ jobs:
         run: |
           set -euo pipefail
           should_build="false"
+          should_publish="false"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             should_build="true"
+            should_publish="true"
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
             should_build="true"
           elif [ "${{ github.event_name }}" = "push" ]; then
             if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
               should_build="true"
+              should_publish="true"
             elif [ -n "${{ github.event.head_commit.message }}" ]; then
               if echo "${{ github.event.head_commit.message }}" | grep -q "开始构建"; then
                 should_build="true"
+                should_publish="true"
               fi
             fi
           fi
           echo "should_build=${should_build}" >> "$GITHUB_OUTPUT"
+          echo "should_publish=${should_publish}" >> "$GITHUB_OUTPUT"
 
   ci:
     name: 持续集成（${{ matrix.os }}）
@@ -93,7 +99,8 @@ jobs:
 
   version:
     name: 解析版本
-    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v') }}
+    needs: [check-trigger]
+    if: needs.check-trigger.outputs.should_publish == 'true'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
