@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -21,6 +22,7 @@ namespace SecRandom;
 
 public partial class App : Application
 {
+    public static FloatingWindow? FloatingWindow;
     public static MainWindow? MainWindow;
     public static MainWindow? SettingsWindow;
     
@@ -31,6 +33,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        InitializeLanguages(new CultureInfo("zh-hans"));
         BuildHost();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -39,12 +42,8 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
-            MainWindow = new MainWindow
-            {
-                Content = IAppHost.GetService<MainView>(),
-                Title="SecRandom"
-            };
-            desktop.MainWindow = MainWindow;
+            FloatingWindow = new FloatingWindow();
+            desktop.MainWindow = FloatingWindow;
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
@@ -67,6 +66,12 @@ public partial class App : Application
         }
     }
 
+    private void InitializeLanguages(CultureInfo cultureInfo)
+    {
+        Langs.Resources.Culture = cultureInfo;
+        Langs.RollCallPage.Resources.Culture = cultureInfo;
+    }
+    
     private void BuildHost()
     {
         IAppHost.Host = Host
@@ -91,16 +96,16 @@ public partial class App : Application
                 // 服务
                 
                 // 窗口
-                services.AddSingleton<MainView>();
+                services.AddTransient<MainView>();
                 services.AddTransient<MainViewModel>();
                 
                 services.AddTransient<SettingsView>();
                 services.AddTransient<SettingsViewModel>();
                 
                 // 界面 Views
-                services.AddMainPage<RollCallPage>();
+                services.AddMainPage<RollCallPage>(Langs.Resources.RollCall);
                 
-                services.AddSettingsPage<AboutPage>();
+                services.AddSettingsPage<AboutPage>(Langs.Resources.About);
 
                 // 界面 ViewModels
             })
@@ -113,6 +118,21 @@ public partial class App : Application
         IAppHost.GetService<MainConfigHandler>();
     }
 
+    public static void ShowMainWindow()
+    {
+        if (MainWindow is not { IsLoaded: true })
+        {
+            MainWindow = new MainWindow
+            {
+                Content = IAppHost.GetService<MainView>(),
+                Title = "SecRandom"
+            };
+        }
+
+        MainWindow.Show();
+        MainWindow.Activate();
+    }
+    
     public static void ShowSettingsWindow()
     {
         if (SettingsWindow is { IsVisible: true })

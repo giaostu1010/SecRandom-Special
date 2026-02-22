@@ -8,9 +8,9 @@ namespace SecRandom.Core.Extensions.Registry;
 
 public static class PagesRegistryExtensions
 {
-    public static IServiceCollection AddMainPage<T>(this IServiceCollection services) where T : UserControl
+    public static IServiceCollection AddMainPage<T>(this IServiceCollection services, string name) where T : UserControl
     {
-        return services.AddPageTo<T>(PagesRegistryService.MainItems);
+        return services.AddPageTo<T>(PagesRegistryService.MainItems, name);
     }
     
     public static IServiceCollection AddMainPageSeparator(this IServiceCollection services, PageLocation location = PageLocation.Top)
@@ -19,9 +19,9 @@ public static class PagesRegistryExtensions
         return services;
     }
     
-    public static IServiceCollection AddSettingsPage<T>(this IServiceCollection services) where T : UserControl
+    public static IServiceCollection AddSettingsPage<T>(this IServiceCollection services, string name) where T : UserControl
     {
-        return services.AddPageTo<T>(PagesRegistryService.SettingsItems);
+        return services.AddPageTo<T>(PagesRegistryService.SettingsItems, name);
     }
     
     public static IServiceCollection AddSettingsPageSeparator(this IServiceCollection services, PageLocation location = PageLocation.Top)
@@ -30,7 +30,7 @@ public static class PagesRegistryExtensions
         return services;
     }
 
-    private static IServiceCollection AddPageTo<T>(this IServiceCollection services, IList<PageInfo> list) where T : UserControl
+    private static IServiceCollection AddPageTo<T>(this IServiceCollection services, IList<PageInfo> list, string name) where T : UserControl
     {
         var type = typeof(T);
         if (type.GetCustomAttributes(false).FirstOrDefault(x => x is PageInfo) is not PageInfo info)
@@ -42,7 +42,8 @@ public static class PagesRegistryExtensions
         {
             throw new ArgumentException($"此设置页面id {info.Id} 已经被占用。");
         }
-        
+
+        info.Name = name;
         services.AddKeyedTransient<UserControl, T>(info.Id);
         list.Add(info);
         return services;
