@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,15 +18,15 @@ using SecRandom.ViewModels;
 
 namespace SecRandom.Views;
 
-public partial class MainView : UserControl, INavigationPageFactory
+public partial class SettingsView : UserControl, INavigationPageFactory
 {
-    public MainViewModel ViewModel { get; } = IAppHost.GetService<MainViewModel>();
-    private const string DefaultMainPageId = "main.rollCall";
+    public SettingsViewModel ViewModel { get; } = IAppHost.GetService<SettingsViewModel>();
+    private const string DefaultMainPageId = "settings.about";
     
     private AppToastAdorner? _appToastAdorner;
     private bool _isAdornerAdded;
     
-    public MainView()
+    public SettingsView()
     {
         DataContext = this;
         InitializeComponent();
@@ -66,24 +66,19 @@ public partial class MainView : UserControl, INavigationPageFactory
         ViewModel.NavigationViewFooterItems.Clear();
         
         ViewModel.NavigationViewItems
-            .AddRange(PagesRegistryService.MainItems
+            .AddRange(PagesRegistryService.SettingsItems
                 .Where(info => info.Location == PageLocation.Top)
                 .Select(info => info.ToNavigationViewItemBase()));
         
         ViewModel.NavigationViewFooterItems
-            .AddRange(PagesRegistryService.MainItems
+            .AddRange(PagesRegistryService.SettingsItems
                 .Where(info => info.Location == PageLocation.Bottom)
                 .Select(info => info.ToNavigationViewItemBase()));
-        
-        ViewModel.NavigationViewFooterItems.Add(
-            new PageInfo(true, PageLocation.Bottom).ToNavigationViewItemBase());
-        ViewModel.NavigationViewFooterItems.Add(
-            new PageInfo("设置", "settings", "\uEF27", PageLocation.Bottom).ToNavigationViewItemBase());
     }
 
     public void SelectNavigationItemById(string id)
     {
-        var info = PagesRegistryService.MainItems.FirstOrDefault(info => info.Id == id);
+        var info = PagesRegistryService.SettingsItems.FirstOrDefault(info => info.Id == id);
         
         if (info != null)
         {
@@ -100,12 +95,6 @@ public partial class MainView : UserControl, INavigationPageFactory
 
     private void CoreNavigate(PageInfo info)
     {
-        if (info.Id == "settings")
-        {
-            App.ShowSettingsWindow();
-            return;
-        }
-        
         ViewModel.FrameContent = null;
         SelectNavigationItem(info);
         ViewModel.SelectedPageInfo = info;

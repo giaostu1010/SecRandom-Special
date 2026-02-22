@@ -1,10 +1,17 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:faWindowing="using:FluentAvalonia.UI.Windowing"
              x:Class="SecRandom.App"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-  
     <Application.Styles>
-        <FluentTheme />
+        <StyleInclude Source="/Styles.axaml"/>
+
+        <Style Selector=":is(faWindowing|AppWindow)">
+            <Setter Property="Icon" Value="/Assets/AppLogo.png"/>
+        </Style>
     </Application.Styles>
+    
+    <Application.Resources>
+        <FontFamily x:Key="FluentSystemIconsResizeable">avares://SecRandom/Assets/Fonts/#FluentSystemIcons-Resizable</FontFamily>
+    </Application.Resources>
 </Application>

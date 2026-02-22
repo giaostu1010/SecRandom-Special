@@ -5,7 +5,7 @@ using SecRandom.Core.Attributes;
 
 namespace SecRandom.ViewModels;
 
-public partial class MainViewModel : ObservableRecipient
+public partial class SettingsViewModel : ObservableRecipient
 {
     [ObservableProperty] private object? _frameContent;
     [ObservableProperty] private PageInfo? _selectedPageInfo = null;
