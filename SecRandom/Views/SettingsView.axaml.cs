@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -33,6 +33,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
 
         NavigationFrame.NavigationPageFactory = this;
         BuildNavigationMenuItems();
+        SelectNavigationItemById(DefaultMainPageId);
         
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.Antialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
@@ -41,7 +42,10 @@ public partial class SettingsView : UserControl, INavigationPageFactory
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        SelectNavigationItemById(DefaultMainPageId);
+        if (ViewModel.SelectedPageInfo is null)
+        {
+            SelectNavigationItemById(DefaultMainPageId);
+        }
         
         if (Content is not Control element || _isAdornerAdded)
         {

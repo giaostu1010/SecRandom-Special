@@ -135,6 +135,12 @@ public partial class App : Application
     
     public static void ShowSettingsWindow()
     {
+        if (SettingsWindow is { IsVisible: true })
+        {
+            SettingsWindow.Activate();
+            return;
+        }
+        
         if (SettingsWindow is not { IsLoaded: true })
         {
             SettingsWindow = new MainWindow
@@ -142,6 +148,7 @@ public partial class App : Application
                 Content = IAppHost.GetService<SettingsView>(),
                 Title = "SecRandom"
             };
+            SettingsWindow.Closed += (_, _) => SettingsWindow = null;
         }
 
         SettingsWindow.Show();
