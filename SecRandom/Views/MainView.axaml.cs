@@ -33,6 +33,7 @@ public partial class MainView : UserControl, INavigationPageFactory
 
         NavigationFrame.NavigationPageFactory = this;
         BuildNavigationMenuItems();
+        SelectNavigationItemById(DefaultMainPageId);
         
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.Antialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
@@ -41,7 +42,10 @@ public partial class MainView : UserControl, INavigationPageFactory
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        SelectNavigationItemById(DefaultMainPageId);
+        if (ViewModel.SelectedPageInfo is null)
+        {
+            SelectNavigationItemById(DefaultMainPageId);
+        }
         
         if (Content is not Control element || _isAdornerAdded)
         {

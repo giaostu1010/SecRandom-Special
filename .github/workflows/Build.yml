@@ -78,10 +78,10 @@ jobs:
           dotnet-quality: preview
 
       - name: 还原依赖
-        run: dotnet restore SecRandom.slnx
+        run: dotnet restore SecRandom.sln
 
       - name: 构建
-        run: dotnet build SecRandom.slnx -c Release --no-restore
+        run: dotnet build SecRandom.sln -c Release --no-restore
 
       - name: 检测测试项目
         shell: bash
@@ -95,7 +95,7 @@ jobs:
 
       - name: 运行测试
         if: env.HAS_TESTS == 'true'
-        run: dotnet test SecRandom.slnx -c Release --no-build
+        run: dotnet test SecRandom.sln -c Release --no-build
 
   version:
     name: 解析版本
@@ -181,7 +181,7 @@ jobs:
 
       - name: 发布
         run: >
-          dotnet publish src/SecRandom.Avalonia/SecRandom.Avalonia.csproj
+          dotnet publish SecRandom.Desktop/SecRandom.Desktop.csproj
           -c Release
           -r ${{ matrix.rid }}
           --self-contained true
@@ -222,11 +222,11 @@ jobs:
           mkdir -p "$pkgroot/usr/share/icons/hicolor/256x256/apps"
 
           cp -a "artifacts/SecRandom-${{ matrix.rid }}/." "$pkgroot/usr/lib/secrandom/"
-          chmod +x "$pkgroot/usr/lib/secrandom/SecRandom" || true
+          chmod +x "$pkgroot/usr/lib/secrandom/SecRandom.Desktop" || true
 
           cat > "$pkgroot/usr/bin/secrandom" << 'EOF'
           #!/bin/sh
-          exec /usr/lib/secrandom/SecRandom "$@"
+          exec /usr/lib/secrandom/SecRandom.Desktop "$@"
           EOF
           chmod +x "$pkgroot/usr/bin/secrandom"
 
@@ -240,8 +240,8 @@ jobs:
           Terminal=false
           EOF
 
-          if [ -f "src/SecRandom.Avalonia/Assets/icon/secrandom-icon-paper.png" ]; then
-            cp "src/SecRandom.Avalonia/Assets/icon/secrandom-icon-paper.png" "$pkgroot/usr/share/icons/hicolor/256x256/apps/secrandom.png"
+          if [ -f "resources/secrandom-icon-paper.png" ]; then
+            cp "resources/secrandom-icon-paper.png" "$pkgroot/usr/share/icons/hicolor/256x256/apps/secrandom.png"
           fi
 
           cat > "$pkgroot/DEBIAN/control" << EOF
@@ -271,7 +271,7 @@ jobs:
           mkdir -p "$work/bundle/SecRandom.app/Contents/Resources"
 
           cp -a "artifacts/SecRandom-${{ matrix.rid }}/." "$work/bundle/SecRandom.app/Contents/MacOS/"
-          chmod +x "$work/bundle/SecRandom.app/Contents/MacOS/SecRandom" || true
+          chmod +x "$work/bundle/SecRandom.app/Contents/MacOS/SecRandom.Desktop" || true
 
           cat > "$work/bundle/SecRandom.app/Contents/Info.plist" << EOF
           <?xml version="1.0" encoding="UTF-8"?>
@@ -283,7 +283,7 @@ jobs:
             <key>CFBundleIdentifier</key><string>top.sectl.secrandom</string>
             <key>CFBundleVersion</key><string>${version_no_v}</string>
             <key>CFBundleShortVersionString</key><string>${version_no_v}</string>
-            <key>CFBundleExecutable</key><string>SecRandom</string>
+            <key>CFBundleExecutable</key><string>SecRandom.Desktop</string>
             <key>CFBundlePackageType</key><string>APPL</string>
             <key>LSMinimumSystemVersion</key><string>11.0</string>
             <key>CFBundleIconFile</key><string>AppIcon</string>
@@ -291,7 +291,7 @@ jobs:
           </plist>
           EOF
 
-          icon_png="src/SecRandom.Avalonia/Assets/icon/secrandom-icon-paper.png"
+          icon_png="resources/secrandom-icon-paper.png"
           if [ -f "$icon_png" ]; then
             iconset="$work/AppIcon.iconset"
             mkdir -p "$iconset"
