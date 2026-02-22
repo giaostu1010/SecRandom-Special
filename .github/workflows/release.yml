@@ -1,19 +1,20 @@
 name: Release
 
-"on":
+on:
   push:
-    tags: ["v*"]
+    tags:
+      - "v*"
+  pull_request:
   workflow_dispatch:
     inputs:
       version:
-        description: Release version (default: VERSION file)
+        description: "Release version (default: VERSION file)"
         required: false
-        type: string
+        default: ""
       create_release:
-        description: Create GitHub Release (default: false)
+        description: "Create GitHub Release (true/false, default: false)"
         required: false
-        type: boolean
-        default: false
+        default: "false"
 
 permissions:
   contents: write
@@ -38,7 +39,7 @@ jobs:
           set -euo pipefail
 
           create_release_input="${{ inputs.create_release }}"
-          create_release="${create_release_input:-false}"
+          create_release="$(printf '%s' "${create_release_input:-false}" | tr '[:upper:]' '[:lower:]')"
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             create_release=true
           fi
