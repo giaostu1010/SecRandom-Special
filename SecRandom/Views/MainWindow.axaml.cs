@@ -12,7 +12,6 @@ public partial class MainWindow : AppWindow
 {
     public MainWindow()
     {
-        SplashScreen = new EmptySplashScreen();
         InitializeComponent();
 
         TitleBar.Height = 48;
