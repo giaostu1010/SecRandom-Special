@@ -14,7 +14,6 @@ using SecRandom.Core.Controls;
 using SecRandom.Core.Enums;
 using SecRandom.Core.Extensions;
 using SecRandom.Core.Services;
-using SecRandom.Services.Config;
 using SecRandom.ViewModels;
 
 namespace SecRandom.Views;

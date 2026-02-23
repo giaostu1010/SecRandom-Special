@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
-using SecRandom.Core.Controls;
 using SecRandom.Helpers;
 
 namespace SecRandom.Views;

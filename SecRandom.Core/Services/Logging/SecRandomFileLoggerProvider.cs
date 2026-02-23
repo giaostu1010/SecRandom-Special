@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
 using System.Text;
 
 namespace SecRandom.Core.Services.Logging;

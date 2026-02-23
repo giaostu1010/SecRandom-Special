@@ -5,14 +5,12 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Media.Fonts;
 using Avalonia.VisualTree;
 using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
 using SecRandom.Core.Helpers.UI;
 using SecRandom.Models.Config;
 using SecRandom.Services.Config;
-using SecRandom.Views;
 
 namespace SecRandom.Views.SettingsPages;
 
