@@ -80,9 +80,7 @@ public partial class MainView : UserControl, INavigationPageFactory
                 .Select(info => info.ToNavigationViewItemBase()));
         
         ViewModel.NavigationViewFooterItems.Add(
-            new PageInfo(true, PageLocation.Bottom).ToNavigationViewItemBase());
-        ViewModel.NavigationViewFooterItems.Add(
-            new PageInfo(Langs.Resources.Settings, "settings", "\uEF27", PageLocation.Bottom).ToNavigationViewItemBase());
+            new PageInfo(Langs.Common.Resources.Settings, "settings", "\uef26", PageLocation.Bottom).ToNavigationViewItemBase());
     }
 
     public void SelectNavigationItemById(string id)

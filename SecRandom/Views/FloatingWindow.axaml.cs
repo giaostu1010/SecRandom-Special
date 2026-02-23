@@ -23,7 +23,8 @@ public partial class FloatingWindow : Window
 
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
-        Height = RootStackPanel.Height + 24 * 2;
-        Width = RootStackPanel.Width + 24*2;
+        var bounds = RootStackPanel.Bounds;
+        Height = bounds.Height + 24 * 2;
+        Width = bounds.Width + 24 * 2;
     }
 }

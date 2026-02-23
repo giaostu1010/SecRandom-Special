@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.DrawSettingsPage"
+             xmlns:configModels="using:SecRandom.Models.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SecRandom.Views.SettingsPages.LotterySettingsSubPage"
+             x:DataType="configModels:LotterySettingsConfig">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="12">
+            <TextBlock Text="{x:Static pageLangs:Resources.LotteryExtractionFunction}"
+                       FontSize="14"
+                       FontWeight="SemiBold" />
+
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DrawMode}"
+                                         Description="{x:Static pageLangs:Resources.DrawModeDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8D4;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding DrawMode}"
+                                  MinWidth="160">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DrawModeRepeat}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DrawModeNoRepeat}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DrawModeSemiRepeat}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ClearRecord}"
+                                         Description="{x:Static pageLangs:Resources.ClearRecordDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE74D;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding ClearRecord}"
+                                  MinWidth="160">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.ClearRecordRestart}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.ClearRecordAll}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HalfRepeat}"
+                                         Description="{x:Static pageLangs:Resources.HalfRepeatDesc}"
+                                         IconSource="{controls:FluentIconSource &#xF187;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <NumericUpDown Value="{Binding HalfRepeat}"
+                                       Minimum="1"
+                                       Maximum="20"
+                                       Increment="1"
+                                       MinWidth="160" />
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DrawType}"
+                                         Description="{x:Static pageLangs:Resources.DrawTypeDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE97C;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding DrawType}"
+                                  MinWidth="160">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DrawTypeRandom}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DrawTypeFair}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DefaultPool}"
+                                         Description="{x:Static pageLangs:Resources.DefaultPoolDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A1;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <TextBox Text="{Binding DefaultPool}"
+                                 Watermark="{x:Static pageLangs:Resources.DefaultPoolPlaceholder}"
+                                 MinWidth="160" />
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

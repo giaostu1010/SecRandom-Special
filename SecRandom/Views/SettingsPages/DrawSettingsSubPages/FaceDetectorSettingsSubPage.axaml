@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.DrawSettingsPage"
+             xmlns:configModels="using:SecRandom.Models.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SecRandom.Views.SettingsPages.FaceDetectorSettingsSubPage"
+             x:DataType="configModels:FaceDetectorSettingsConfig">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Spacing="12">
+            <TextBlock Text="{x:Static pageLangs:Resources.FaceDetectorExtractionFunction}"
+                       FontSize="14"
+                       FontWeight="SemiBold" />
+
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CameraSource}"
+                                         Description="{x:Static pageLangs:Resources.CameraSourceDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A7;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <NumericUpDown Value="{Binding CameraSourceIndex}"
+                                       Minimum="0"
+                                       Maximum="10"
+                                       Increment="1"
+                                       MinWidth="160" />
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DetectorType}"
+                                         Description="{x:Static pageLangs:Resources.DetectorTypeDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE9CE;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <TextBox Text="{Binding DetectorType}"
+                                 Watermark="{x:Static pageLangs:Resources.DetectorTypePlaceholder}"
+                                 MinWidth="160" />
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PickingDurationSeconds}"
+                                         Description="{x:Static pageLangs:Resources.PickingDurationSecondsDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE823;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <NumericUpDown Value="{Binding PickingDurationSeconds}"
+                                       Minimum="1"
+                                       Maximum="60"
+                                       Increment="1"
+                                       MinWidth="160" />
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

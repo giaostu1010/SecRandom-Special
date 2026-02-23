@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -19,13 +19,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
 
-    <data name="Settings" xml:space="preserve">
-        <value>设置</value>
-    </data>
-    <data name="RollCall" xml:space="preserve">
-        <value>点名</value>
-    </data>
-    <data name="About" xml:space="preserve">
-        <value>关于</value>
+    <data name="Welcome" xml:space="preserve">
+        <value>欢迎来到 Avalonia！点名</value>
     </data>
 </root>

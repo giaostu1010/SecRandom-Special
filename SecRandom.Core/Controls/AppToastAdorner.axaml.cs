@@ -9,7 +9,7 @@ namespace SecRandom.Core.Controls;
 
 public partial class AppToastAdorner : UserControl
 {
-    private Control Control { get; }
+    private Control? _control;
     public ObservableCollection<ToastMessage> Messages { get; } = [];
     
     public static readonly RoutedEvent<ShowToastEventArgs> ShowToastEvent =
@@ -22,18 +22,40 @@ public partial class AppToastAdorner : UserControl
         remove => RemoveHandler(ShowToastEvent, value);
     }
     
+    public AppToastAdorner()
+    {
+        InitializeComponent();
+    }
+
     public AppToastAdorner(Control control)
     {
-        Control = control;
+        InitializeComponent();
+        Attach(control);
+    }
+
+    public void Attach(Control control)
+    {
+        if (_control is not null)
+        {
+            _control.Unloaded -= ControlOnUnloaded;
+            _control.RemoveHandler(ShowToastEvent, OnShowToast);
+        }
+
+        _control = control;
         control.AddHandler(ShowToastEvent, OnShowToast);
         control.Unloaded += ControlOnUnloaded;
-        InitializeComponent();
     }
 
     private void ControlOnUnloaded(object? sender, EventArgs e)
     {
-        Control.Unloaded -= ControlOnUnloaded;
-        Control.RemoveHandler(ShowToastEvent, OnShowToast);
+        if (_control is null)
+        {
+            return;
+        }
+
+        _control.Unloaded -= ControlOnUnloaded;
+        _control.RemoveHandler(ShowToastEvent, OnShowToast);
+        _control = null;
     }
 
     private void OnShowToast(object? sender, ShowToastEventArgs e)
@@ -52,6 +74,11 @@ public partial class AppToastAdorner : UserControl
     [RelayCommand]
     private void CloseToast(ToastMessage message)
     {
+        if (!Messages.Contains(message))
+        {
+            return;
+        }
+
         message.Close();
     }
 }

@@ -1,0 +1,255 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
+             xmlns:langs="using:SecRandom.Langs.Common"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.BasicSettingsPage"
+             xmlns:media="using:Avalonia.Media"
+             xmlns:configModels="using:SecRandom.Models.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SecRandom.Views.SettingsPages.BasicSettingsPage"
+             x:DataType="configModels:BasicSettingsConfig">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
+            <TextBlock Text="{x:Static pageLangs:Resources.BasicFeatures}"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+            
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AutoStart}"
+                                         Description="{x:Static pageLangs:Resources.AutoStartDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE945;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsAutoStartEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowMainWindowOnStartup}"
+                                         Description="{x:Static pageLangs:Resources.ShowMainWindowOnStartupDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A7;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsShowMainWindowOnStartupEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AutoSaveWindowSize}"
+                                         Description="{x:Static pageLangs:Resources.AutoSaveWindowSizeDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE74D;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsAutoSaveWindowSizeEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.MainWindowTopmost}"
+                                         Description="{x:Static pageLangs:Resources.MainWindowTopmostDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE840;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding MainWindowTopmostMode}"
+                                  MinWidth="140">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.MainWindowTopmostOff}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.MainWindowTopmostWindow}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.MainWindowTopmostUia}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BackgroundResident}"
+                                         Description="{x:Static pageLangs:Resources.BackgroundResidentDesc}"
+                                         IconSource="{controls:FluentIconSource &#xECCE;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsBackgroundResidentEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.RegisterUrlProtocolAndIpc}"
+                                         Description="{x:Static pageLangs:Resources.RegisterUrlProtocolAndIpcDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE71B;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsUrlProtocolAndIpcEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+            
+            <TextBlock Text="{x:Static pageLangs:Resources.Personalised}"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Margin="0 8 0 0"/>
+            
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Theme}"
+                                         Description="{x:Static pageLangs:Resources.ThemeDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE790;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding UiThemeModeIndex}"
+                                  MinWidth="140">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.ThemeFollowSystem}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.ThemeLight}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.ThemeDark}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OpenThemeManagement}"
+                                         Description="{x:Static pageLangs:Resources.OpenThemeManagementDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE790;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.Open}"
+                                MinWidth="140"
+                                Click="OpenThemeManagement_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Language}"
+                                         Description="{x:Static pageLangs:Resources.LanguageDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE774;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding UiLanguageModeIndex}"
+                                  MinWidth="140">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.LanguageFollowSystem}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.LanguageEnglish}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.LanguageChineseSimplified}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Font}"
+                                         Description="{x:Static pageLangs:Resources.FontDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8D2;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox Name="FontFamilyComboBox"
+                                  MinWidth="140"
+                                  MaxDropDownHeight="320"
+                                  AutoScrollToSelectedItem="True"
+                                  IsTextSearchEnabled="True"
+                                  SelectionChanged="FontFamilyComboBox_OnSelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="media:FontFamily">
+                                    <TextBlock Text="{Binding Name}" FontFamily="{Binding}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FontWeight}"
+                                         Description="{x:Static pageLangs:Resources.FontWeightDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8D2;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding UiFontWeightIndex}"
+                                  MinWidth="140">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightRegular}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightSemiBold}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightBold}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DpiScale}"
+                                         Description="{x:Static pageLangs:Resources.DpiScaleDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE7B5;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding UiDpiScaleIndex}"
+                                  MinWidth="140">
+                            <ComboBoxItem Content="100%" />
+                            <ComboBoxItem Content="125%" />
+                            <ComboBoxItem Content="150%" />
+                            <ComboBoxItem Content="175%" />
+                            <ComboBoxItem Content="200%" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.DpiScaleAuto}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+            
+            <TextBlock Text="{x:Static pageLangs:Resources.DataManagement}"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Margin="0 8 0 0"/>
+            
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.LogViewer}"
+                                         Description="{x:Static pageLangs:Resources.LogViewerDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE9F9;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.LogViewerButton}"
+                                MinWidth="140"
+                                Click="OpenLogViewer_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BackupManager}"
+                                         Description="{x:Static pageLangs:Resources.BackupManagerDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE74D;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.BackupManagerButton}"
+                                MinWidth="140"
+                                Click="OpenBackupManager_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportDiagnosticData}"
+                                         Description="{x:Static pageLangs:Resources.ExportDiagnosticDataDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A5;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.ExportDiagnosticDataButton}"
+                                MinWidth="140"
+                                Click="ExportDiagnosticData_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportSettings}"
+                                         Description="{x:Static pageLangs:Resources.ExportSettingsDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A5;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.ExportSettingsButton}"
+                                MinWidth="140"
+                                Click="ExportSettings_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportSettings}"
+                                         Description="{x:Static pageLangs:Resources.ImportSettingsDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8A5;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.ImportSettingsButton}"
+                                MinWidth="140"
+                                Click="ImportSettings_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportAllData}"
+                                         Description="{x:Static pageLangs:Resources.ExportAllDataDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE7C3;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.ExportAllDataButton}"
+                                MinWidth="140"
+                                Click="ExportAllData_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+                
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportAllData}"
+                                         Description="{x:Static pageLangs:Resources.ImportAllDataDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE7C3;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.ImportAllDataButton}"
+                                MinWidth="140"
+                                Click="ImportAllData_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

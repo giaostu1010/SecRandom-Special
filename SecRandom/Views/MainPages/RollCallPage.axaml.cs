@@ -3,7 +3,7 @@ using SecRandom.Core.Attributes;
 
 namespace SecRandom.Views.MainPages;
 
-[PageInfo("main.rollCall", "\uECAB")]
+[PageInfo("main.rollCall", "\uecaa")]
 public partial class RollCallPage : UserControl
 {
     public RollCallPage()

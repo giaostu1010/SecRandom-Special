@@ -1,9 +1,14 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
+<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:faStyling="using:FluentAvalonia.Styling"
         xmlns:asyncImageLoader="using:AsyncImageLoader"
         xmlns:controls="using:SecRandom.Core.Controls">
     <faStyling:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+    
+    <Style Selector="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>
+        <Setter Property="FontWeight" Value="{DynamicResource AppFontWeight}"/>
+    </Style>
     
     <StyleInclude Source="/Themes/TabStrip.axaml"/>
     

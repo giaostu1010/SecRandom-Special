@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+
+    <data name="RollCallSettings" xml:space="preserve">
+        <value>Roll Call Settings</value>
+    </data>
+    <data name="QuickDrawSettings" xml:space="preserve">
+        <value>Quick Draw Settings</value>
+    </data>
+    <data name="LotterySettings" xml:space="preserve">
+        <value>Lottery Settings</value>
+    </data>
+    <data name="FaceDetectorSettings" xml:space="preserve">
+        <value>Face Detector Settings</value>
+    </data>
+    <data name="DrawSettingsNavHint" xml:space="preserve">
+        <value>Select a settings entry from the left sidebar</value>
+    </data>
+    <data name="RollCallExtractionFunction" xml:space="preserve">
+        <value>Picking Function</value>
+    </data>
+    <data name="QuickDrawExtractionFunction" xml:space="preserve">
+        <value>Picking Function</value>
+    </data>
+    <data name="LotteryExtractionFunction" xml:space="preserve">
+        <value>Picking Function</value>
+    </data>
+    <data name="FaceDetectorExtractionFunction" xml:space="preserve">
+        <value>Picking Function</value>
+    </data>
+    <data name="CameraSource" xml:space="preserve">
+        <value>Camera</value>
+    </data>
+    <data name="CameraSourceDesc" xml:space="preserve">
+        <value>Select the camera device for face picking</value>
+    </data>
+    <data name="DetectorType" xml:space="preserve">
+        <value>Detector Model</value>
+    </data>
+    <data name="DetectorTypeDesc" xml:space="preserve">
+        <value>Set the face detector model file</value>
+    </data>
+    <data name="DetectorTypePlaceholder" xml:space="preserve">
+        <value>version-RFB-640.onnx</value>
+    </data>
+    <data name="PickingDurationSeconds" xml:space="preserve">
+        <value>Duration</value>
+    </data>
+    <data name="PickingDurationSecondsDesc" xml:space="preserve">
+        <value>Face picking animation duration (seconds)</value>
+    </data>
+    <data name="DrawMode" xml:space="preserve">
+        <value>Picking Mode</value>
+    </data>
+    <data name="DrawModeDesc" xml:space="preserve">
+        <value>Set picking mode</value>
+    </data>
+    <data name="DrawModeRepeat" xml:space="preserve">
+        <value>Pick with repeating</value>
+    </data>
+    <data name="DrawModeNoRepeat" xml:space="preserve">
+        <value>Pick without repeating</value>
+    </data>
+    <data name="DrawModeSemiRepeat" xml:space="preserve">
+        <value>Semi-repeatedly pick</value>
+    </data>
+    <data name="ClearRecord" xml:space="preserve">
+        <value>Clear History Method</value>
+    </data>
+    <data name="ClearRecordDesc" xml:space="preserve">
+        <value>Set the time to clean picking history</value>
+    </data>
+    <data name="ClearRecordRestart" xml:space="preserve">
+        <value>Clear on restart</value>
+    </data>
+    <data name="ClearRecordAll" xml:space="preserve">
+        <value>Until all have been picked</value>
+    </data>
+    <data name="HalfRepeat" xml:space="preserve">
+        <value>Semi-repeated Pick Count</value>
+    </data>
+    <data name="HalfRepeatDesc" xml:space="preserve">
+        <value>Set the maximum picked times of each person to clean history</value>
+    </data>
+    <data name="DrawType" xml:space="preserve">
+        <value>Picking Method</value>
+    </data>
+    <data name="DrawTypeDesc" xml:space="preserve">
+        <value>Set picking method</value>
+    </data>
+    <data name="DrawTypeRandom" xml:space="preserve">
+        <value>Random pick</value>
+    </data>
+    <data name="DrawTypeFair" xml:space="preserve">
+        <value>Fair pick</value>
+    </data>
+    <data name="DefaultClass" xml:space="preserve">
+        <value>Default Class</value>
+    </data>
+    <data name="DefaultClassDesc" xml:space="preserve">
+        <value>Set the default class to use for drawing</value>
+    </data>
+    <data name="DefaultClassPlaceholder" xml:space="preserve">
+        <value>Select class</value>
+    </data>
+    <data name="DefaultPool" xml:space="preserve">
+        <value>Default Pool</value>
+    </data>
+    <data name="DefaultPoolDesc" xml:space="preserve">
+        <value>Set the default pool to use for drawing</value>
+    </data>
+    <data name="DefaultPoolPlaceholder" xml:space="preserve">
+        <value>Select pool</value>
+    </data>
+    <data name="DrawCount" xml:space="preserve">
+        <value>Draw Count</value>
+    </data>
+    <data name="DrawCountDesc" xml:space="preserve">
+        <value>Set the number of people to draw each time</value>
+    </data>
+    <data name="DisableAfterClick" xml:space="preserve">
+        <value>Disable Time After Click</value>
+    </data>
+    <data name="DisableAfterClickDesc" xml:space="preserve">
+        <value>Set the time to disable button after click (seconds)</value>
+    </data>
+    <data name="RollCallDisplaySettings" xml:space="preserve">
+        <value>Display Settings</value>
+    </data>
+    <data name="QuickDrawDisplaySettings" xml:space="preserve">
+        <value>Display Settings</value>
+    </data>
+    <data name="LotteryDisplaySettings" xml:space="preserve">
+        <value>Display Settings</value>
+    </data>
+    <data name="UseGlobalFont" xml:space="preserve">
+        <value>Use Global Font</value>
+    </data>
+    <data name="UseGlobalFontDesc" xml:space="preserve">
+        <value>Whether to use global font settings</value>
+    </data>
+    <data name="UseGlobalFontFollow" xml:space="preserve">
+        <value>Follow global font</value>
+    </data>
+    <data name="UseGlobalFontCustom" xml:space="preserve">
+        <value>Use custom font</value>
+    </data>
+    <data name="CustomFont" xml:space="preserve">
+        <value>Custom Font</value>
+    </data>
+    <data name="CustomFontDesc" xml:space="preserve">
+        <value>Select custom font</value>
+    </data>
+    <data name="FontSize" xml:space="preserve">
+        <value>Font Size</value>
+    </data>
+    <data name="FontSizeDesc" xml:space="preserve">
+        <value>Set font size</value>
+    </data>
+    <data name="DisplayFormat" xml:space="preserve">
+        <value>Result Display Format</value>
+    </data>
+    <data name="DisplayFormatDesc" xml:space="preserve">
+        <value>Set the results display format</value>
+    </data>
+    <data name="DisplayFormatIdName" xml:space="preserve">
+        <value>Student ID + Name</value>
+    </data>
+    <data name="DisplayFormatName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="DisplayFormatId" xml:space="preserve">
+        <value>Student ID</value>
+    </data>
+    <data name="DisplayStyle" xml:space="preserve">
+        <value>Result Display Style</value>
+    </data>
+    <data name="DisplayStyleDesc" xml:space="preserve">
+        <value>Set the result display style</value>
+    </data>
+    <data name="DisplayStyleDefault" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="DisplayStyleCard" xml:space="preserve">
+        <value>Card</value>
+    </data>
+    <data name="ShowRandom" xml:space="preserve">
+        <value>Format of Showing Random Group Member</value>
+    </data>
+    <data name="ShowRandomDesc" xml:space="preserve">
+        <value>Set random group member display format</value>
+    </data>
+    <data name="ShowRandomHide" xml:space="preserve">
+        <value>Hide</value>
+    </data>
+    <data name="ShowRandomNewline" xml:space="preserve">
+        <value>Group[New line]Name</value>
+    </data>
+    <data name="ShowRandomDash" xml:space="preserve">
+        <value>Group name[Dash]name</value>
+    </data>
+    <data name="ShowTags" xml:space="preserve">
+        <value>Show Tags</value>
+    </data>
+    <data name="ShowTagsDesc" xml:space="preserve">
+        <value>Whether to show tags in results</value>
+    </data>
+    <data name="RollCallAnimationSettings" xml:space="preserve">
+        <value>Animation Settings</value>
+    </data>
+    <data name="QuickDrawAnimationSettings" xml:space="preserve">
+        <value>Animation Settings</value>
+    </data>
+    <data name="LotteryAnimationSettings" xml:space="preserve">
+        <value>Animation Settings</value>
+    </data>
+    <data name="Animation" xml:space="preserve">
+        <value>Animation Mode</value>
+    </data>
+    <data name="AnimationDesc" xml:space="preserve">
+        <value>Set animation effect</value>
+    </data>
+    <data name="AnimationManual" xml:space="preserve">
+        <value>Manually stop animation</value>
+    </data>
+    <data name="AnimationAuto" xml:space="preserve">
+        <value>Automatically play animation</value>
+    </data>
+    <data name="AnimationDirect" xml:space="preserve">
+        <value>Directly show result</value>
+    </data>
+    <data name="AnimationInterval" xml:space="preserve">
+        <value>Animation Interval</value>
+    </data>
+    <data name="AnimationIntervalDesc" xml:space="preserve">
+        <value>Set the interval between animations (ms)</value>
+    </data>
+    <data name="AutoplayCount" xml:space="preserve">
+        <value>Autoplay Count</value>
+    </data>
+    <data name="AutoplayCountDesc" xml:space="preserve">
+        <value>Set the number of times to animate</value>
+    </data>
+    <data name="ResultFlowAnimationStyle" xml:space="preserve">
+        <value>Result Layout Animation</value>
+    </data>
+    <data name="ResultFlowAnimationStyleDesc" xml:space="preserve">
+        <value>Set result flow layout intro animation</value>
+    </data>
+    <data name="ResultFlowAnimationDuration" xml:space="preserve">
+        <value>Result Layout Duration</value>
+    </data>
+    <data name="ResultFlowAnimationDurationDesc" xml:space="preserve">
+        <value>Set result layout animation duration (ms)</value>
+    </data>
+    <data name="RollCallColorThemeSettings" xml:space="preserve">
+        <value>Color Theme Settings</value>
+    </data>
+    <data name="QuickDrawColorThemeSettings" xml:space="preserve">
+        <value>Color Theme Settings</value>
+    </data>
+    <data name="LotteryColorThemeSettings" xml:space="preserve">
+        <value>Color Theme Settings</value>
+    </data>
+    <data name="AnimationColorTheme" xml:space="preserve">
+        <value>Animation/Result Color Theme</value>
+    </data>
+    <data name="AnimationColorThemeDesc" xml:space="preserve">
+        <value>Set the animate/result color theme</value>
+    </data>
+    <data name="AnimationColorThemeOff" xml:space="preserve">
+        <value>Disabled</value>
+    </data>
+    <data name="AnimationColorThemeRandom" xml:space="preserve">
+        <value>Random color</value>
+    </data>
+    <data name="AnimationColorThemeFixed" xml:space="preserve">
+        <value>Fixed color</value>
+    </data>
+    <data name="AnimationFixedColor" xml:space="preserve">
+        <value>Animation/Result Fixed Color</value>
+    </data>
+    <data name="AnimationFixedColorDesc" xml:space="preserve">
+        <value>Set the animation/result color</value>
+    </data>
+    <data name="RollCallStudentImageSettings" xml:space="preserve">
+        <value>Student Image Settings</value>
+    </data>
+    <data name="StudentImage" xml:space="preserve">
+        <value>Show Student Images</value>
+    </data>
+    <data name="StudentImageDesc" xml:space="preserve">
+        <value>Set whether to show student images</value>
+    </data>
+    <data name="StudentImagePosition" xml:space="preserve">
+        <value>Image Position</value>
+    </data>
+    <data name="StudentImagePositionDesc" xml:space="preserve">
+        <value>Set the position of student images in results</value>
+    </data>
+    <data name="StudentImagePositionLeft" xml:space="preserve">
+        <value>Left</value>
+    </data>
+    <data name="StudentImagePositionTop" xml:space="preserve">
+        <value>Top</value>
+    </data>
+    <data name="StudentImagePositionRight" xml:space="preserve">
+        <value>Right</value>
+    </data>
+    <data name="StudentImagePositionBottom" xml:space="preserve">
+        <value>Bottom</value>
+    </data>
+</root>

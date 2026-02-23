@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="using:FluentAvalonia.UI.Controls"
         xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
-        xmlns:langs="clr-namespace:SecRandom.Langs"
+        xmlns:langs="clr-namespace:SecRandom.Langs.Common"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SecRandom.Views.FloatingWindow"
         Title="SecRandom"

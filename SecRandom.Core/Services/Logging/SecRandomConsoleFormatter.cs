@@ -5,7 +5,7 @@ using Pastel;
 
 namespace SecRandom.Core.Services.Logging;
 
-public class ClassIslandConsoleFormatter() : ConsoleFormatter("classisland")
+public class SecRandomConsoleFormatter() : ConsoleFormatter("secrandom")
 {
     public override void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, TextWriter textWriter)
     {

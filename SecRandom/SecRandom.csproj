@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -15,27 +15,66 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Langs\Resources.resx">
+      <EmbeddedResource Update="Langs\Common\Resources.zh-hans.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-        
-      <EmbeddedResource Update="Langs\RollCallPage\Resources.resx">
+
+      <EmbeddedResource Update="Langs\Common\Resources.en-us.resx">
+        <WithCulture>true</WithCulture>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\Pages\RollCallPage\Resources.zh-hans.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\Pages\RollCallPage\Resources.en-us.resx">
+        <WithCulture>true</WithCulture>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\SettingsPages\BasicSettingsPage\Resources.zh-hans.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\SettingsPages\BasicSettingsPage\Resources.en-us.resx">
+        <WithCulture>true</WithCulture>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.zh-hans.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.en-us.resx">
+        <WithCulture>true</WithCulture>
       </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Langs\Resources.Designer.cs">
+      <Compile Update="Langs\Common\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
-        
-      <Compile Update="Langs\RollCallPage\Resources.Designer.cs">
+
+      <Compile Update="Langs\Pages\RollCallPage\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+
+      <Compile Update="Langs\SettingsPages\BasicSettingsPage\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+
+      <Compile Update="Langs\SettingsPages\FloatingWindowPage\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 </Project>
