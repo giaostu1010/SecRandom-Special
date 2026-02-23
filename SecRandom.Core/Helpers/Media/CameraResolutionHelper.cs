@@ -217,7 +217,7 @@ public static class CameraResolutionHelper
 
                             try
                             {
-                                var mt = Marshal.PtrToStructure<AMMediaType>(pmtPtr);
+                                var mt = Marshal.PtrToStructure<AmMediaType>(pmtPtr);
                                 try
                                 {
                                     if (TryParseResolution(mt, out var resolution) &&
