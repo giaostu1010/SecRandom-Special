@@ -183,11 +183,8 @@ public partial class FaceDetectorSettingsSubPage : UserControl
         var configured = _settings.CameraDisplayResolution?.Trim() ?? string.Empty;
         var autoText = string.IsNullOrWhiteSpace(_autoResolutionText) ? string.Empty : _autoResolutionText;
 
-        var items = CameraResolutionHelper.GetResolutionsByIndex(_settings.CameraSourceIndex)
+        var items = CameraResolutionHelper.GetSuggestedResolutionsByIndex(_settings.CameraSourceIndex)
             .Select(x => x.ToString())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderByDescending(x => ParseResolutionArea(x))
-            .ThenByDescending(x => x, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         var options = new System.Collections.Generic.List<string>();
@@ -231,27 +228,6 @@ public partial class FaceDetectorSettingsSubPage : UserControl
             _cameraResolutionComboBox.SelectedItem = configured;
         }
         _isSyncing = false;
-    }
-
-    private static long ParseResolutionArea(string value)
-    {
-        var parts = value.Split('x', 'X');
-        if (parts.Length != 2)
-        {
-            return -1;
-        }
-
-        if (!int.TryParse(parts[0], out var w) || !int.TryParse(parts[1], out var h))
-        {
-            return -1;
-        }
-
-        if (w <= 0 || h <= 0)
-        {
-            return -1;
-        }
-
-        return (long)w * h;
     }
 
     private void DetectorTypeComboBox_OnDropDownOpened(object? sender, EventArgs e)
