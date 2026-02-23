@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SecRandom.Models.Config;
@@ -11,4 +12,8 @@ public partial class DrawSettingsConfig : ObservableObject
     [ObservableProperty] private QuickDrawSettingsConfig _quickDrawSettings = new();
     [ObservableProperty] private LotterySettingsConfig _lotterySettings = new();
     [ObservableProperty] private FaceDetectorSettingsConfig _faceDetectorSettings = new();
+
+    [ObservableProperty] private Dictionary<string, RollCallSettingsOverrideConfig> _rollCallListSpecificOverrides = [];
+    [ObservableProperty] private Dictionary<string, QuickDrawSettingsOverrideConfig> _quickDrawListSpecificOverrides = [];
+    [ObservableProperty] private Dictionary<string, LotterySettingsOverrideConfig> _lotteryListSpecificOverrides = [];
 }

@@ -114,6 +114,8 @@ public partial class App : Application
         Langs.Pages.RollCallPage.Resources.Culture = cultureInfo;
         Langs.SettingsPages.BasicSettingsPage.Resources.Culture = cultureInfo;
         Langs.SettingsPages.DrawSettingsPage.Resources.Culture = cultureInfo;
+        Langs.SettingsPages.FloatingWindowPage.Resources.Culture = cultureInfo;
+        Langs.SettingsPages.LinkageSettingsPage.Resources.Culture = cultureInfo;
     }
 
     private static CultureInfo GetStartupCulture(UiLanguageMode uiLanguageMode)

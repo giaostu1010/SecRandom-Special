@@ -34,6 +34,36 @@
     <data name="DrawSettingsNavHint" xml:space="preserve">
         <value>请在左侧导航栏选择具体设置</value>
     </data>
+    <data name="ListSpecificSettings" xml:space="preserve">
+        <value>独立名单配置</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClass" xml:space="preserve">
+        <value>选择班级</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClassDesc" xml:space="preserve">
+        <value>为所选班级设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSelectList" xml:space="preserve">
+        <value>选择名单</value>
+    </data>
+    <data name="ListSpecificSettingsSelectListDesc" xml:space="preserve">
+        <value>为所选名单设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPool" xml:space="preserve">
+        <value>选择奖池</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
+        <value>为所选奖池设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSync" xml:space="preserve">
+        <value>同步到全局</value>
+    </data>
+    <data name="ListSpecificSettingsSyncDesc" xml:space="preserve">
+        <value>清除独立配置，使用全局设置</value>
+    </data>
+    <data name="ListSpecificSettingsSyncButton" xml:space="preserve">
+        <value>使用全局设置</value>
+    </data>
     <data name="RollCallExtractionFunction" xml:space="preserve">
         <value>抽取功能</value>
     </data>
@@ -327,5 +357,14 @@
     </data>
     <data name="StudentImagePositionBottom" xml:space="preserve">
         <value>底部</value>
+    </data>
+    <data name="StudentImageFolder" xml:space="preserve">
+        <value>学生图片文件夹</value>
+    </data>
+    <data name="StudentImageFolderDesc" xml:space="preserve">
+        <value>管理学生图片文件，文件名需与学生姓名一致</value>
+    </data>
+    <data name="StudentImageFolderButton" xml:space="preserve">
+        <value>打开</value>
     </data>
 </root>

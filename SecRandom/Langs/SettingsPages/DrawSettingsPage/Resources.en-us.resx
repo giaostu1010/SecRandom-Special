@@ -34,6 +34,36 @@
     <data name="DrawSettingsNavHint" xml:space="preserve">
         <value>Select a settings entry from the left sidebar</value>
     </data>
+    <data name="ListSpecificSettings" xml:space="preserve">
+        <value>List-Specific Settings</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClass" xml:space="preserve">
+        <value>Select Class</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClassDesc" xml:space="preserve">
+        <value>Configure settings for the selected class</value>
+    </data>
+    <data name="ListSpecificSettingsSelectList" xml:space="preserve">
+        <value>Select List</value>
+    </data>
+    <data name="ListSpecificSettingsSelectListDesc" xml:space="preserve">
+        <value>Configure settings for the selected list</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPool" xml:space="preserve">
+        <value>Select Pool</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
+        <value>Configure settings for the selected pool</value>
+    </data>
+    <data name="ListSpecificSettingsSync" xml:space="preserve">
+        <value>Reset to Global</value>
+    </data>
+    <data name="ListSpecificSettingsSyncDesc" xml:space="preserve">
+        <value>Remove list-specific overrides and use global settings</value>
+    </data>
+    <data name="ListSpecificSettingsSyncButton" xml:space="preserve">
+        <value>Use Global</value>
+    </data>
     <data name="RollCallExtractionFunction" xml:space="preserve">
         <value>Picking Function</value>
     </data>
@@ -327,5 +357,14 @@
     </data>
     <data name="StudentImagePositionBottom" xml:space="preserve">
         <value>Bottom</value>
+    </data>
+    <data name="StudentImageFolder" xml:space="preserve">
+        <value>Student Images Folder</value>
+    </data>
+    <data name="StudentImageFolderDesc" xml:space="preserve">
+        <value>Manage student images; filenames must match student names</value>
+    </data>
+    <data name="StudentImageFolderButton" xml:space="preserve">
+        <value>Open</value>
     </data>
 </root>

@@ -75,6 +75,66 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
             }
         }
 
+        public static string ListSpecificSettings {
+            get {
+                return ResourceManager.GetString("ListSpecificSettings", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectClass {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectClass", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectClassDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectClassDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectList {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectList", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectListDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectListDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectPool {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectPool", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectPoolDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectPoolDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSync {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSync", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSyncDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSyncDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSyncButton {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSyncButton", resourceCulture);
+            }
+        }
+
         public static string RollCallExtractionFunction {
             get {
                 return ResourceManager.GetString("RollCallExtractionFunction", resourceCulture);
@@ -660,6 +720,24 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
         public static string StudentImagePositionBottom {
             get {
                 return ResourceManager.GetString("StudentImagePositionBottom", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolder {
+            get {
+                return ResourceManager.GetString("StudentImageFolder", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolderDesc {
+            get {
+                return ResourceManager.GetString("StudentImageFolderDesc", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolderButton {
+            get {
+                return ResourceManager.GetString("StudentImageFolderButton", resourceCulture);
             }
         }
     }

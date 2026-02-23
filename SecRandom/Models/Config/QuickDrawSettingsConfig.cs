@@ -26,4 +26,6 @@ public partial class QuickDrawSettingsConfig : ObservableObject
     [ObservableProperty] private int _resultFlowAnimationDuration = 300;
     [ObservableProperty] private int _animationColorTheme = 1;
     [ObservableProperty] private string _animationFixedColor = "#FFFFFF";
+    [ObservableProperty] private bool _studentImage = false;
+    [ObservableProperty] private int _studentImagePosition = 0;
 }
