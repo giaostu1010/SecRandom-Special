@@ -5,9 +5,15 @@
         xmlns:controls="clr-namespace:SecRandom.Core.Controls">
     <styling:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
     
-    <Style Selector="TextBlock">
+    <Style Selector=":is(TextBlock):not(#Icon)">
         <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>
         <Setter Property="FontWeight" Value="{DynamicResource AppFontWeight}"/>
+    </Style>
+    
+    <!-- E70E 为向上箭头 E70D 为向下箭头 -->
+    <Style Selector=":is(TextBlock)[Text=&#xE70E;], :is(TextBlock)[Text=&#xE70D;]">
+        <Setter Property="FontFamily" Value="{DynamicResource SymbolThemeFontFamily}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
     
     <StyleInclude Source="/Controls/TouchDragThumb.axaml"/>
