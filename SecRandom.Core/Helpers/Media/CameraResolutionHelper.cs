@@ -1016,7 +1016,7 @@ public static class CameraResolutionHelper
         IntPtr ptr;
         try
         {
-            hr = Marshal.QueryInterface(unk, ref iid, out ptr);
+            hr = Marshal.QueryInterface(unk, in iid, out ptr);
         }
         finally
         {
