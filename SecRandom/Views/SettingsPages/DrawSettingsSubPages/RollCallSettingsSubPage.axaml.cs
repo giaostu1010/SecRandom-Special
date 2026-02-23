@@ -17,7 +17,7 @@ using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.draw.rollCall", "\ue07c")]
+[PageInfo("settings.draw.rollCall", "\uECAA", "settings.draw")]
 public partial class RollCallSettingsSubPage : UserControl
 {
     private readonly MainConfigHandler _mainConfigHandler;

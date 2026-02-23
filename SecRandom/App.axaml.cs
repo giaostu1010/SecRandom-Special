@@ -24,6 +24,7 @@ using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
 using SecRandom.Core.Extensions.Registry;
 using SecRandom.Core.Enums;
+using SecRandom.Core.Models;
 using SecRandom.Core.Services;
 using SecRandom.Core.Services.Logging;
 using SecRandom.Services.Config;
@@ -132,8 +133,11 @@ public partial class App : Application
                 // 界面 Views
                 services.AddMainPage<RollCallPage>(Langs.Common.Resources.RollCall);
                 
+                // 设置界面 Views
                 services.AddSettingsPage<BasicSettingsPage>(Langs.Common.Resources.BasicSettings);
                 services.AddSettingsPage<RosterManagementPage>(Langs.Common.Resources.RosterManagement);
+                
+                services.AddGroup(new GroupInfo(Langs.Common.Resources.DrawSettings, "settings.draw", "\uE07C"));
                 services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
                 services.AddKeyedTransient<UserControl, RollCallListSpecificSettingsPage>("settings.draw.rollCall.listSpecific");
                 services.AddSettingsPage<QuickDrawSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.QuickDrawSettings);
@@ -141,6 +145,7 @@ public partial class App : Application
                 services.AddSettingsPage<LotterySettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings);
                 services.AddKeyedTransient<UserControl, LotteryListSpecificSettingsPage>("settings.draw.lottery.listSpecific");
                 services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
+                
                 services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
                 services.AddSettingsPage<NotificationSettingsPage>(Langs.Common.Resources.NotificationSettings);
                 services.AddSettingsPage<SecuritySettingsPage>(Langs.Common.Resources.SecuritySettings);

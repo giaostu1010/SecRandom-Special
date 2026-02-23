@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SecRandom.Core.Attributes;
 using SecRandom.Core.Enums;
+using SecRandom.Core.Models;
 using SecRandom.Core.Services;
 
 namespace SecRandom.Core.Extensions.Registry;
@@ -27,6 +28,17 @@ public static class PagesRegistryExtensions
     public static IServiceCollection AddSettingsPageSeparator(this IServiceCollection services, PageLocation location = PageLocation.Top)
     {
         PagesRegistryService.SettingsItems.Add(new PageInfo(true));
+        return services;
+    }
+
+    public static IServiceCollection AddGroup(this IServiceCollection services, GroupInfo info)
+    {
+        if (PagesRegistryService.GroupItems.FirstOrDefault(x => x.Id == info.Id) != null)
+        {
+            throw new ArgumentException($"此设置页面id {info.Id} 已经被占用。");
+        }
+
+        PagesRegistryService.GroupItems.Add(info);
         return services;
     }
 

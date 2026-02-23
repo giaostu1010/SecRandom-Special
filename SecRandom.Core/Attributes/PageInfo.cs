@@ -12,6 +12,7 @@ public class PageInfo : Attribute
     public string Name { get; set; } = string.Empty;
     public string Id { get; }
     public string IconGlyph { get; }
+    public string? GroupId { get; }
     
     public PageLocation Location { get; }
     public bool UseFullWidth { get; }
@@ -36,28 +37,13 @@ public class PageInfo : Attribute
         }
     }
     
-    /// <summary>
-    /// 尽量使用这个，在注册时本地化。
-    /// </summary>
-    public PageInfo(string id, string iconGlyph, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
+    public PageInfo(string id, string iconGlyph, string? groupId = null, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
     {
         IsSeparator = false;
         
         Id = id;
         IconGlyph = iconGlyph;
-
-        Location = location;
-        UseFullWidth = useFullWidth;
-        HidePageTitle = hidePageTitle;
-    }
-    
-    public PageInfo(string name, string id, string iconGlyph, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
-    {
-        IsSeparator = false;
-
-        Name = name;
-        Id = id;
-        IconGlyph = iconGlyph;
+        GroupId = groupId;
 
         Location = location;
         UseFullWidth = useFullWidth;

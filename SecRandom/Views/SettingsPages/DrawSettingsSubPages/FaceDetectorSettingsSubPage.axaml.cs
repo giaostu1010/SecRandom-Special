@@ -16,7 +16,7 @@ using SecRandom.Services.Config;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.draw.faceDetector", "\ue07c")]
+[PageInfo("settings.draw.faceDetector", "\uF3EE", "settings.draw")]
 public partial class FaceDetectorSettingsSubPage : UserControl
 {
     private readonly FaceDetectorSettingsConfig _settings;

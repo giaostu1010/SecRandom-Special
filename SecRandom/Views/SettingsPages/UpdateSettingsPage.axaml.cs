@@ -5,7 +5,7 @@ using SecRandom.Core.Enums;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.update", "\ue160", PageLocation.Bottom)]
+[PageInfo("settings.update", "\ue160", null, PageLocation.Bottom)]
 public partial class UpdateSettingsPage : UserControl
 {
     public UpdateSettingsPage()

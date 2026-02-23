@@ -4,7 +4,7 @@ using SecRandom.Core.Enums;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.about", "\ue9e3", PageLocation.Bottom)]
+[PageInfo("settings.about", "\ue9e3", null, PageLocation.Bottom)]
 public partial class AboutPage : UserControl
 {
     public AboutPage()

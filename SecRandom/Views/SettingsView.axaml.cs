@@ -12,6 +12,7 @@ using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
 using SecRandom.Core.Controls;
 using SecRandom.Core.Enums;
+using SecRandom.Core.Extensions;
 using SecRandom.Core.Services;
 using SecRandom.Services.Config;
 using SecRandom.ViewModels;
@@ -72,12 +73,12 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         ViewModel.NavigationViewItems
             .AddRange(PagesRegistryService.SettingsItems
                 .Where(info => info.Location == PageLocation.Top)
-                .Select(info => info.ToNavigationViewItemBase()));
+                .ToNavigationViewItems(ViewModel.FlattenNavigationItems));
         
         ViewModel.NavigationViewFooterItems
             .AddRange(PagesRegistryService.SettingsItems
                 .Where(info => info.Location == PageLocation.Bottom)
-                .Select(info => info.ToNavigationViewItemBase()));
+                .ToNavigationViewItems(ViewModel.FlattenNavigationItems));
     }
 
     public void SelectNavigationItemById(string id)
@@ -107,8 +108,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
     
     private void SelectNavigationItem(PageInfo info)
     {
-        var item = ViewModel.NavigationViewItems.FirstOrDefault(item => Equals(item.Tag, info)) ??
-                   ViewModel.NavigationViewFooterItems.FirstOrDefault(item => Equals(item.Tag, info));
+        var item = ViewModel.FlattenNavigationItems.FirstOrDefault(item => Equals(item.Tag, info));
         ViewModel.SelectedNavigationViewItem = item;
     }
 

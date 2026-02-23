@@ -17,7 +17,7 @@ using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.draw.lottery", "\ue07c")]
+[PageInfo("settings.draw.lottery", "\uE8EC", "settings.draw")]
 public partial class LotterySettingsSubPage : UserControl
 {
     private readonly MainConfigHandler _mainConfigHandler;

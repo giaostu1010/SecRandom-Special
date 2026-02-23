@@ -10,6 +10,7 @@ public partial class SettingsViewModel : ObservableRecipient
     [ObservableProperty] private object? _frameContent;
     [ObservableProperty] private PageInfo? _selectedPageInfo = null;
     [ObservableProperty] private NavigationViewItemBase? _selectedNavigationViewItem = null;
+    public ObservableCollection<NavigationViewItemBase> FlattenNavigationItems { get; } = [];
     public ObservableCollection<NavigationViewItemBase> NavigationViewItems { get; } = [];
     public ObservableCollection<NavigationViewItemBase> NavigationViewFooterItems { get; } = [];
 }

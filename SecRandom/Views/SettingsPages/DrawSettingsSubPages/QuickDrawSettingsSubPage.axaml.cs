@@ -17,7 +17,7 @@ using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.draw.quickDraw", "\ue07c")]
+[PageInfo("settings.draw.quickDraw", "\uE84E", "settings.draw")]
 public partial class QuickDrawSettingsSubPage : UserControl
 {
     private readonly MainConfigHandler _mainConfigHandler;

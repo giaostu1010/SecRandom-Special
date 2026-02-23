@@ -5,7 +5,7 @@ using SecRandom.Core.Enums;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.more", "\uebab", PageLocation.Bottom)]
+[PageInfo("settings.more", "\uebab", null, PageLocation.Bottom)]
 public partial class MoreSettingsPage : UserControl
 {
     public MoreSettingsPage()
