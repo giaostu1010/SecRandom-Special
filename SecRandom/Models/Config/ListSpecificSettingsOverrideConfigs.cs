@@ -71,5 +71,6 @@ public sealed class LotterySettingsOverrideConfig
     public int? ResultFlowAnimationDuration { get; set; }
     public int? AnimationColorTheme { get; set; }
     public string? AnimationFixedColor { get; set; }
+    public bool? LotteryImage { get; set; }
+    public int? LotteryImagePosition { get; set; }
 }
-

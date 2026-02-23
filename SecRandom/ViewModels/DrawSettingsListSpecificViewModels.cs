@@ -713,7 +713,9 @@ public sealed class LotterySettingsOverrideProxy(RootConfigHandler rootConfigHan
             ResultFlowAnimationStyle = source.ResultFlowAnimationStyle,
             ResultFlowAnimationDuration = source.ResultFlowAnimationDuration,
             AnimationColorTheme = source.AnimationColorTheme,
-            AnimationFixedColor = source.AnimationFixedColor
+            AnimationFixedColor = source.AnimationFixedColor,
+            LotteryImage = source.LotteryImage,
+            LotteryImagePosition = source.LotteryImagePosition
         };
     }
 
@@ -848,5 +850,17 @@ public sealed class LotterySettingsOverrideProxy(RootConfigHandler rootConfigHan
     {
         get => TryGetOverride()?.AnimationFixedColor ?? Global.AnimationFixedColor;
         set => SetOverride(o => { o.AnimationFixedColor = value; return o; });
+    }
+
+    public bool LotteryImage
+    {
+        get => TryGetOverride()?.LotteryImage ?? Global.LotteryImage;
+        set => SetOverride(o => { o.LotteryImage = value; return o; });
+    }
+
+    public int LotteryImagePosition
+    {
+        get => TryGetOverride()?.LotteryImagePosition ?? Global.LotteryImagePosition;
+        set => SetOverride(o => { o.LotteryImagePosition = value; return o; });
     }
 }

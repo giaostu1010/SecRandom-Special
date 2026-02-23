@@ -1,9 +1,17 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.VisualTree;
 using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
 using SecRandom.Core;
+using SecRandom.Models.Config;
 using SecRandom.Services.Config;
 using SecRandom.ViewModels;
 
@@ -13,13 +21,18 @@ namespace SecRandom.Views.SettingsPages;
 public partial class LotterySettingsSubPage : UserControl
 {
     private readonly RootConfigHandler _rootConfigHandler;
+    private readonly LotterySettingsConfig _globalSettings;
     private readonly ListNamesSource _globalListNamesSource;
-    private readonly LotteryListSpecificSettingsViewModel _listSpecificViewModel;
+    private ComboBox? _clearRecordComboBox;
+    private NumericUpDown? _halfRepeatUpDown;
+    private ComboBox? _customFontComboBox;
+    private List<FontFamily> _fontFamilies = [];
 
     public LotterySettingsSubPage()
     {
         _rootConfigHandler = IAppHost.GetService<RootConfigHandler>();
-        DataContext = _rootConfigHandler.Data.DrawSettings.LotterySettings;
+        _globalSettings = _rootConfigHandler.Data.DrawSettings.LotterySettings;
+        DataContext = _globalSettings;
         InitializeComponent();
 
         _globalListNamesSource = new ListNamesSource(Utils.GetFilePath("list", "lottery_list"));
@@ -31,26 +44,14 @@ public partial class LotterySettingsSubPage : UserControl
             defaultPoolComboBox.ItemsSource = _globalListNamesSource.Names;
         }
 
-        _listSpecificViewModel = new LotteryListSpecificSettingsViewModel(_rootConfigHandler);
-        _listSpecificViewModel.PropertyChanged += ListSpecificViewModel_OnPropertyChanged;
+        _clearRecordComboBox = this.FindControl<ComboBox>("ClearRecordComboBox");
+        _halfRepeatUpDown = this.FindControl<NumericUpDown>("HalfRepeatUpDown");
+        UpdateDependentControls(_globalSettings.DrawMode);
 
-        var listSpecificPanel = this.FindControl<StackPanel>("ListSpecificSettingsPanel");
-        if (listSpecificPanel is not null)
-        {
-            listSpecificPanel.DataContext = _listSpecificViewModel;
-        }
+        _customFontComboBox = this.FindControl<ComboBox>("CustomFontComboBox");
+        InitializeFontFamilies();
 
-        var listSpecificPoolComboBox = this.FindControl<ComboBox>("ListSpecificPoolComboBox");
-        if (listSpecificPoolComboBox is not null)
-        {
-            listSpecificPoolComboBox.ItemsSource = _listSpecificViewModel.ListNames;
-        }
-
-        var listSpecificDefaultPoolComboBox = this.FindControl<ComboBox>("ListSpecificDefaultPoolComboBox");
-        if (listSpecificDefaultPoolComboBox is not null)
-        {
-            listSpecificDefaultPoolComboBox.ItemsSource = _listSpecificViewModel.ListNames;
-        }
+        _globalSettings.PropertyChanged += GlobalSettings_OnPropertyChanged;
 
         DetachedFromVisualTree += LotterySettingsSubPage_OnDetachedFromVisualTree;
     }
@@ -74,39 +75,131 @@ public partial class LotterySettingsSubPage : UserControl
         }
     }
 
-    private void ListSpecificViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void InitializeFontFamilies()
     {
-        if (e.PropertyName != nameof(LotteryListSpecificSettingsViewModel.ListNames))
+        var fontCollection = FontManager.Current.SystemFonts;
+        _fontFamilies = new List<FontFamily>(fontCollection).OrderBy(x => x.Name).ToList();
+
+        if (_customFontComboBox is not null)
+        {
+            _customFontComboBox.ItemsSource = _fontFamilies;
+            SyncGlobalCustomFontSelection();
+        }
+    }
+
+    private void GlobalSettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(LotterySettingsConfig.CustomFont))
+        {
+            SyncGlobalCustomFontSelection();
+        }
+    }
+
+    private void DrawModeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        UpdateDependentControls(_globalSettings.DrawMode);
+    }
+
+    private void UpdateDependentControls(int drawMode)
+    {
+        if (_clearRecordComboBox is not null)
+        {
+            _clearRecordComboBox.IsEnabled = drawMode != 0;
+        }
+
+        if (_halfRepeatUpDown is not null)
+        {
+            _halfRepeatUpDown.IsEnabled = drawMode == 2;
+        }
+    }
+
+    private void SyncGlobalCustomFontSelection()
+    {
+        if (_customFontComboBox is null)
         {
             return;
         }
 
-        var listSpecificPoolComboBox = this.FindControl<ComboBox>("ListSpecificPoolComboBox");
-        if (listSpecificPoolComboBox is not null)
+        SyncSelectedFontFamily(_customFontComboBox, _globalSettings.CustomFont);
+    }
+
+    private void SyncSelectedFontFamily(ComboBox comboBox, string desiredName)
+    {
+        if (_fontFamilies.Count == 0)
         {
-            listSpecificPoolComboBox.ItemsSource = _listSpecificViewModel.ListNames;
+            return;
         }
 
-        var listSpecificDefaultPoolComboBox = this.FindControl<ComboBox>("ListSpecificDefaultPoolComboBox");
-        if (listSpecificDefaultPoolComboBox is not null)
+        if (string.IsNullOrWhiteSpace(desiredName))
         {
-            listSpecificDefaultPoolComboBox.ItemsSource = _listSpecificViewModel.ListNames;
+            if (comboBox.SelectedIndex != -1)
+            {
+                comboBox.SelectedIndex = -1;
+            }
+            return;
+        }
+
+        var selected = _fontFamilies.FirstOrDefault(x =>
+            string.Equals(x.Name, desiredName, StringComparison.OrdinalIgnoreCase));
+
+        if (selected is null)
+        {
+            return;
+        }
+
+        if (!Equals(comboBox.SelectedItem, selected))
+        {
+            comboBox.SelectedItem = selected;
         }
     }
 
-    private void SyncListSpecificSettings_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void CustomFontComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        _listSpecificViewModel.SyncWithGlobal();
+        if (sender is not ComboBox comboBox || comboBox.SelectedItem is not FontFamily selected)
+        {
+            return;
+        }
+
+        if (!string.Equals(_globalSettings.CustomFont, selected.Name, StringComparison.Ordinal))
+        {
+            _globalSettings.CustomFont = selected.Name;
+        }
+    }
+
+    private void OpenLotteryImageFolder_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var folderPath = Utils.GetFilePath("images", "prize_images");
+        Directory.CreateDirectory(folderPath);
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = folderPath,
+                UseShellExecute = true
+            });
+        }
+        catch
+        {
+        }
+    }
+    
+    private void OpenListSpecificSettings_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
+        settingsView?.NavigateToPage(
+            new PageInfo(SecRandom.Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings,
+                "settings.draw.lottery.listSpecific",
+                "\ue8a7"),
+            false);
     }
 
     private void LotterySettingsSubPage_OnDetachedFromVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
     {
         DetachedFromVisualTree -= LotterySettingsSubPage_OnDetachedFromVisualTree;
 
+        _globalSettings.PropertyChanged -= GlobalSettings_OnPropertyChanged;
+
         _globalListNamesSource.PropertyChanged -= GlobalListNamesSource_OnPropertyChanged;
         _globalListNamesSource.Dispose();
-
-        _listSpecificViewModel.PropertyChanged -= ListSpecificViewModel_OnPropertyChanged;
-        _listSpecificViewModel.Dispose();
     }
 }

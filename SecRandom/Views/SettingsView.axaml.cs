@@ -89,6 +89,21 @@ public partial class SettingsView : UserControl, INavigationPageFactory
             CoreNavigate(info);
         }
     }
+
+    public void NavigateToPage(PageInfo info, bool selectNavigationItem)
+    {
+        ViewModel.FrameContent = null;
+        if (selectNavigationItem)
+        {
+            SelectNavigationItem(info);
+        }
+        else
+        {
+            ViewModel.SelectedNavigationViewItem = null;
+        }
+        ViewModel.SelectedPageInfo = info;
+        NavigationFrame.NavigateFromObject(info);
+    }
     
     private void SelectNavigationItem(PageInfo info)
     {
