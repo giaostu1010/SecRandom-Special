@@ -34,6 +34,36 @@
     <data name="DrawSettingsNavHint" xml:space="preserve">
         <value>请在左侧导航栏选择具体设置</value>
     </data>
+    <data name="ListSpecificSettings" xml:space="preserve">
+        <value>独立名单配置</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClass" xml:space="preserve">
+        <value>选择班级</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClassDesc" xml:space="preserve">
+        <value>为所选班级设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSelectList" xml:space="preserve">
+        <value>选择名单</value>
+    </data>
+    <data name="ListSpecificSettingsSelectListDesc" xml:space="preserve">
+        <value>为所选名单设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPool" xml:space="preserve">
+        <value>选择奖池</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
+        <value>为所选奖池设置独立参数</value>
+    </data>
+    <data name="ListSpecificSettingsSync" xml:space="preserve">
+        <value>同步到全局</value>
+    </data>
+    <data name="ListSpecificSettingsSyncDesc" xml:space="preserve">
+        <value>清除独立配置，使用全局设置</value>
+    </data>
+    <data name="ListSpecificSettingsSyncButton" xml:space="preserve">
+        <value>使用全局设置</value>
+    </data>
     <data name="RollCallExtractionFunction" xml:space="preserve">
         <value>抽取功能</value>
     </data>
@@ -52,6 +82,30 @@
     <data name="CameraSourceDesc" xml:space="preserve">
         <value>选择人脸抽取使用的摄像头设备</value>
     </data>
+    <data name="CameraDisplayResolution" xml:space="preserve">
+        <value>摄像头显示分辨率</value>
+    </data>
+    <data name="CameraDisplayResolutionDesc" xml:space="preserve">
+        <value>设置摄像头预览采集分辨率（留空=最高）</value>
+    </data>
+    <data name="CameraDisplayResolutionPlaceholder" xml:space="preserve">
+        <value>自动（最高）</value>
+    </data>
+    <data name="CameraPreviewMode" xml:space="preserve">
+        <value>模式</value>
+    </data>
+    <data name="CameraPreviewModeDesc" xml:space="preserve">
+        <value>选择摄像头预览工作模式</value>
+    </data>
+    <data name="CameraPreviewModePicking" xml:space="preserve">
+        <value>抽取模式</value>
+    </data>
+    <data name="CameraPreviewModeRecognition" xml:space="preserve">
+        <value>识别模式</value>
+    </data>
+    <data name="FaceDetectorAdvancedSettings" xml:space="preserve">
+        <value>高级设置</value>
+    </data>
     <data name="DetectorType" xml:space="preserve">
         <value>识别模型</value>
     </data>
@@ -61,11 +115,47 @@
     <data name="DetectorTypePlaceholder" xml:space="preserve">
         <value>version-RFB-640.onnx</value>
     </data>
+    <data name="OpenModelFolder" xml:space="preserve">
+        <value>模型文件夹</value>
+    </data>
+    <data name="OpenModelFolderDesc" xml:space="preserve">
+        <value>打开 data/cv_models，用于添加 ONNX 模型文件</value>
+    </data>
+    <data name="OpenModelFolderButton" xml:space="preserve">
+        <value>打开</value>
+    </data>
+    <data name="ModelInputSize" xml:space="preserve">
+        <value>模型输入尺寸</value>
+    </data>
+    <data name="ModelInputSizeDesc" xml:space="preserve">
+        <value>设置输入到人脸检测模型的画面宽高（0 表示使用原始帧）</value>
+    </data>
+    <data name="FaceDetectorPickerAnimationSettings" xml:space="preserve">
+        <value>抽取动画</value>
+    </data>
+    <data name="PickerFrameColor" xml:space="preserve">
+        <value>框颜色</value>
+    </data>
+    <data name="PickerFrameColorDesc" xml:space="preserve">
+        <value>抽取动画圆形框颜色</value>
+    </data>
     <data name="PickingDurationSeconds" xml:space="preserve">
         <value>抽取时长</value>
     </data>
     <data name="PickingDurationSecondsDesc" xml:space="preserve">
         <value>抽取动画持续时间（秒）</value>
+    </data>
+    <data name="PlayProcessAudio" xml:space="preserve">
+        <value>过程音效</value>
+    </data>
+    <data name="PlayProcessAudioDesc" xml:space="preserve">
+        <value>抽取过程中是否播放音效</value>
+    </data>
+    <data name="PlayResultAudio" xml:space="preserve">
+        <value>结果音效</value>
+    </data>
+    <data name="PlayResultAudioDesc" xml:space="preserve">
+        <value>抽取结果展示时是否播放音效</value>
     </data>
     <data name="DrawMode" xml:space="preserve">
         <value>抽取模式</value>
@@ -301,6 +391,42 @@
     <data name="AnimationFixedColorDesc" xml:space="preserve">
         <value>设置动画/结果固定颜色</value>
     </data>
+    <data name="LotteryImageSettings" xml:space="preserve">
+        <value>奖品图片设置</value>
+    </data>
+    <data name="LotteryImage" xml:space="preserve">
+        <value>显示奖品图片</value>
+    </data>
+    <data name="LotteryImageDesc" xml:space="preserve">
+        <value>设置是否显示奖品图片</value>
+    </data>
+    <data name="LotteryImagePosition" xml:space="preserve">
+        <value>图片位置</value>
+    </data>
+    <data name="LotteryImagePositionDesc" xml:space="preserve">
+        <value>设置奖品图片在结果中的位置</value>
+    </data>
+    <data name="LotteryImagePositionLeft" xml:space="preserve">
+        <value>左部</value>
+    </data>
+    <data name="LotteryImagePositionTop" xml:space="preserve">
+        <value>顶部</value>
+    </data>
+    <data name="LotteryImagePositionRight" xml:space="preserve">
+        <value>右部</value>
+    </data>
+    <data name="LotteryImagePositionBottom" xml:space="preserve">
+        <value>底部</value>
+    </data>
+    <data name="LotteryImageFolder" xml:space="preserve">
+        <value>奖品图片文件夹</value>
+    </data>
+    <data name="LotteryImageFolderDesc" xml:space="preserve">
+        <value>管理奖品图片文件</value>
+    </data>
+    <data name="LotteryImageFolderButton" xml:space="preserve">
+        <value>打开</value>
+    </data>
     <data name="RollCallStudentImageSettings" xml:space="preserve">
         <value>学生头像设置</value>
     </data>
@@ -327,5 +453,14 @@
     </data>
     <data name="StudentImagePositionBottom" xml:space="preserve">
         <value>底部</value>
+    </data>
+    <data name="StudentImageFolder" xml:space="preserve">
+        <value>学生图片文件夹</value>
+    </data>
+    <data name="StudentImageFolderDesc" xml:space="preserve">
+        <value>管理学生图片文件，文件名需与学生姓名一致</value>
+    </data>
+    <data name="StudentImageFolderButton" xml:space="preserve">
+        <value>打开</value>
     </data>
 </root>

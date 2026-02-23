@@ -34,6 +34,36 @@
     <data name="DrawSettingsNavHint" xml:space="preserve">
         <value>Select a settings entry from the left sidebar</value>
     </data>
+    <data name="ListSpecificSettings" xml:space="preserve">
+        <value>List-Specific Settings</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClass" xml:space="preserve">
+        <value>Select Class</value>
+    </data>
+    <data name="ListSpecificSettingsSelectClassDesc" xml:space="preserve">
+        <value>Configure settings for the selected class</value>
+    </data>
+    <data name="ListSpecificSettingsSelectList" xml:space="preserve">
+        <value>Select List</value>
+    </data>
+    <data name="ListSpecificSettingsSelectListDesc" xml:space="preserve">
+        <value>Configure settings for the selected list</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPool" xml:space="preserve">
+        <value>Select Pool</value>
+    </data>
+    <data name="ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
+        <value>Configure settings for the selected pool</value>
+    </data>
+    <data name="ListSpecificSettingsSync" xml:space="preserve">
+        <value>Reset to Global</value>
+    </data>
+    <data name="ListSpecificSettingsSyncDesc" xml:space="preserve">
+        <value>Remove list-specific overrides and use global settings</value>
+    </data>
+    <data name="ListSpecificSettingsSyncButton" xml:space="preserve">
+        <value>Use Global</value>
+    </data>
     <data name="RollCallExtractionFunction" xml:space="preserve">
         <value>Picking Function</value>
     </data>
@@ -52,6 +82,30 @@
     <data name="CameraSourceDesc" xml:space="preserve">
         <value>Select the camera device for face picking</value>
     </data>
+    <data name="CameraDisplayResolution" xml:space="preserve">
+        <value>Camera Resolution</value>
+    </data>
+    <data name="CameraDisplayResolutionDesc" xml:space="preserve">
+        <value>Set camera preview resolution (empty = highest)</value>
+    </data>
+    <data name="CameraDisplayResolutionPlaceholder" xml:space="preserve">
+        <value>Auto (highest)</value>
+    </data>
+    <data name="CameraPreviewMode" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="CameraPreviewModeDesc" xml:space="preserve">
+        <value>Select camera preview mode</value>
+    </data>
+    <data name="CameraPreviewModePicking" xml:space="preserve">
+        <value>Picking mode</value>
+    </data>
+    <data name="CameraPreviewModeRecognition" xml:space="preserve">
+        <value>Recognition mode</value>
+    </data>
+    <data name="FaceDetectorAdvancedSettings" xml:space="preserve">
+        <value>Advanced settings</value>
+    </data>
     <data name="DetectorType" xml:space="preserve">
         <value>Detector Model</value>
     </data>
@@ -61,11 +115,47 @@
     <data name="DetectorTypePlaceholder" xml:space="preserve">
         <value>version-RFB-640.onnx</value>
     </data>
+    <data name="OpenModelFolder" xml:space="preserve">
+        <value>Model folder</value>
+    </data>
+    <data name="OpenModelFolderDesc" xml:space="preserve">
+        <value>Open data/cv_models to add ONNX model files</value>
+    </data>
+    <data name="OpenModelFolderButton" xml:space="preserve">
+        <value>Open</value>
+    </data>
+    <data name="ModelInputSize" xml:space="preserve">
+        <value>Model input size</value>
+    </data>
+    <data name="ModelInputSizeDesc" xml:space="preserve">
+        <value>Set input width/height for the detector (0 = original frame)</value>
+    </data>
+    <data name="FaceDetectorPickerAnimationSettings" xml:space="preserve">
+        <value>Picking animation</value>
+    </data>
+    <data name="PickerFrameColor" xml:space="preserve">
+        <value>Frame color</value>
+    </data>
+    <data name="PickerFrameColorDesc" xml:space="preserve">
+        <value>Color of circle frames during picking</value>
+    </data>
     <data name="PickingDurationSeconds" xml:space="preserve">
         <value>Duration</value>
     </data>
     <data name="PickingDurationSecondsDesc" xml:space="preserve">
         <value>Face picking animation duration (seconds)</value>
+    </data>
+    <data name="PlayProcessAudio" xml:space="preserve">
+        <value>Process audio</value>
+    </data>
+    <data name="PlayProcessAudioDesc" xml:space="preserve">
+        <value>Play audio during picking</value>
+    </data>
+    <data name="PlayResultAudio" xml:space="preserve">
+        <value>Result audio</value>
+    </data>
+    <data name="PlayResultAudioDesc" xml:space="preserve">
+        <value>Play audio when showing result</value>
     </data>
     <data name="DrawMode" xml:space="preserve">
         <value>Picking Mode</value>
@@ -301,6 +391,42 @@
     <data name="AnimationFixedColorDesc" xml:space="preserve">
         <value>Set the animation/result color</value>
     </data>
+    <data name="LotteryImageSettings" xml:space="preserve">
+        <value>Prize Image Settings</value>
+    </data>
+    <data name="LotteryImage" xml:space="preserve">
+        <value>Show prize image</value>
+    </data>
+    <data name="LotteryImageDesc" xml:space="preserve">
+        <value>Toggle displaying prize image</value>
+    </data>
+    <data name="LotteryImagePosition" xml:space="preserve">
+        <value>Image Position</value>
+    </data>
+    <data name="LotteryImagePositionDesc" xml:space="preserve">
+        <value>Set prize image position in result</value>
+    </data>
+    <data name="LotteryImagePositionLeft" xml:space="preserve">
+        <value>Left</value>
+    </data>
+    <data name="LotteryImagePositionTop" xml:space="preserve">
+        <value>Top</value>
+    </data>
+    <data name="LotteryImagePositionRight" xml:space="preserve">
+        <value>Right</value>
+    </data>
+    <data name="LotteryImagePositionBottom" xml:space="preserve">
+        <value>Bottom</value>
+    </data>
+    <data name="LotteryImageFolder" xml:space="preserve">
+        <value>Prize image folder</value>
+    </data>
+    <data name="LotteryImageFolderDesc" xml:space="preserve">
+        <value>Manage prize image files</value>
+    </data>
+    <data name="LotteryImageFolderButton" xml:space="preserve">
+        <value>Open</value>
+    </data>
     <data name="RollCallStudentImageSettings" xml:space="preserve">
         <value>Student Image Settings</value>
     </data>
@@ -327,5 +453,14 @@
     </data>
     <data name="StudentImagePositionBottom" xml:space="preserve">
         <value>Bottom</value>
+    </data>
+    <data name="StudentImageFolder" xml:space="preserve">
+        <value>Student Images Folder</value>
+    </data>
+    <data name="StudentImageFolderDesc" xml:space="preserve">
+        <value>Manage student images; filenames must match student names</value>
+    </data>
+    <data name="StudentImageFolderButton" xml:space="preserve">
+        <value>Open</value>
     </data>
 </root>

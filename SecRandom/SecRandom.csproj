@@ -30,9 +30,19 @@
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
+      <EmbeddedResource Update="Langs\SettingsPages\DrawSettingsPage\Resources.zh-hans.resx">
+          <Generator>PublicResXFileCodeGenerator</Generator>
+          <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
       <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
+      <EmbeddedResource Update="Langs\SettingsPages\LinkageSettingsPage\Resources.zh-hans.resx">
+          <Generator>PublicResXFileCodeGenerator</Generator>
+          <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -55,7 +65,19 @@
         <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
 
+      <Compile Update="Langs\SettingsPages\DrawSettingsPage\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+
       <Compile Update="Langs\SettingsPages\FloatingWindowPage\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+
+      <Compile Update="Langs\SettingsPages\LinkageSettingsPage\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>

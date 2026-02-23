@@ -75,6 +75,66 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
             }
         }
 
+        public static string ListSpecificSettings {
+            get {
+                return ResourceManager.GetString("ListSpecificSettings", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectClass {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectClass", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectClassDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectClassDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectList {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectList", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectListDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectListDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectPool {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectPool", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSelectPoolDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSelectPoolDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSync {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSync", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSyncDesc {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSyncDesc", resourceCulture);
+            }
+        }
+
+        public static string ListSpecificSettingsSyncButton {
+            get {
+                return ResourceManager.GetString("ListSpecificSettingsSyncButton", resourceCulture);
+            }
+        }
+
         public static string RollCallExtractionFunction {
             get {
                 return ResourceManager.GetString("RollCallExtractionFunction", resourceCulture);
@@ -110,6 +170,54 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
                 return ResourceManager.GetString("CameraSourceDesc", resourceCulture);
             }
         }
+
+        public static string CameraDisplayResolution {
+            get {
+                return ResourceManager.GetString("CameraDisplayResolution", resourceCulture);
+            }
+        }
+
+        public static string CameraDisplayResolutionDesc {
+            get {
+                return ResourceManager.GetString("CameraDisplayResolutionDesc", resourceCulture);
+            }
+        }
+
+        public static string CameraDisplayResolutionPlaceholder {
+            get {
+                return ResourceManager.GetString("CameraDisplayResolutionPlaceholder", resourceCulture);
+            }
+        }
+
+        public static string CameraPreviewMode {
+            get {
+                return ResourceManager.GetString("CameraPreviewMode", resourceCulture);
+            }
+        }
+
+        public static string CameraPreviewModeDesc {
+            get {
+                return ResourceManager.GetString("CameraPreviewModeDesc", resourceCulture);
+            }
+        }
+
+        public static string CameraPreviewModePicking {
+            get {
+                return ResourceManager.GetString("CameraPreviewModePicking", resourceCulture);
+            }
+        }
+
+        public static string CameraPreviewModeRecognition {
+            get {
+                return ResourceManager.GetString("CameraPreviewModeRecognition", resourceCulture);
+            }
+        }
+
+        public static string FaceDetectorAdvancedSettings {
+            get {
+                return ResourceManager.GetString("FaceDetectorAdvancedSettings", resourceCulture);
+            }
+        }
         
         public static string DetectorType {
             get {
@@ -128,6 +236,54 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
                 return ResourceManager.GetString("DetectorTypePlaceholder", resourceCulture);
             }
         }
+
+        public static string OpenModelFolder {
+            get {
+                return ResourceManager.GetString("OpenModelFolder", resourceCulture);
+            }
+        }
+
+        public static string OpenModelFolderDesc {
+            get {
+                return ResourceManager.GetString("OpenModelFolderDesc", resourceCulture);
+            }
+        }
+
+        public static string OpenModelFolderButton {
+            get {
+                return ResourceManager.GetString("OpenModelFolderButton", resourceCulture);
+            }
+        }
+
+        public static string ModelInputSize {
+            get {
+                return ResourceManager.GetString("ModelInputSize", resourceCulture);
+            }
+        }
+
+        public static string ModelInputSizeDesc {
+            get {
+                return ResourceManager.GetString("ModelInputSizeDesc", resourceCulture);
+            }
+        }
+
+        public static string FaceDetectorPickerAnimationSettings {
+            get {
+                return ResourceManager.GetString("FaceDetectorPickerAnimationSettings", resourceCulture);
+            }
+        }
+
+        public static string PickerFrameColor {
+            get {
+                return ResourceManager.GetString("PickerFrameColor", resourceCulture);
+            }
+        }
+
+        public static string PickerFrameColorDesc {
+            get {
+                return ResourceManager.GetString("PickerFrameColorDesc", resourceCulture);
+            }
+        }
         
         public static string PickingDurationSeconds {
             get {
@@ -138,6 +294,30 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
         public static string PickingDurationSecondsDesc {
             get {
                 return ResourceManager.GetString("PickingDurationSecondsDesc", resourceCulture);
+            }
+        }
+
+        public static string PlayProcessAudio {
+            get {
+                return ResourceManager.GetString("PlayProcessAudio", resourceCulture);
+            }
+        }
+
+        public static string PlayProcessAudioDesc {
+            get {
+                return ResourceManager.GetString("PlayProcessAudioDesc", resourceCulture);
+            }
+        }
+
+        public static string PlayResultAudio {
+            get {
+                return ResourceManager.GetString("PlayResultAudio", resourceCulture);
+            }
+        }
+
+        public static string PlayResultAudioDesc {
+            get {
+                return ResourceManager.GetString("PlayResultAudioDesc", resourceCulture);
             }
         }
 
@@ -609,6 +789,78 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
             }
         }
 
+        public static string LotteryImageSettings {
+            get {
+                return ResourceManager.GetString("LotteryImageSettings", resourceCulture);
+            }
+        }
+
+        public static string LotteryImage {
+            get {
+                return ResourceManager.GetString("LotteryImage", resourceCulture);
+            }
+        }
+
+        public static string LotteryImageDesc {
+            get {
+                return ResourceManager.GetString("LotteryImageDesc", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePosition {
+            get {
+                return ResourceManager.GetString("LotteryImagePosition", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePositionDesc {
+            get {
+                return ResourceManager.GetString("LotteryImagePositionDesc", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePositionLeft {
+            get {
+                return ResourceManager.GetString("LotteryImagePositionLeft", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePositionTop {
+            get {
+                return ResourceManager.GetString("LotteryImagePositionTop", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePositionRight {
+            get {
+                return ResourceManager.GetString("LotteryImagePositionRight", resourceCulture);
+            }
+        }
+
+        public static string LotteryImagePositionBottom {
+            get {
+                return ResourceManager.GetString("LotteryImagePositionBottom", resourceCulture);
+            }
+        }
+
+        public static string LotteryImageFolder {
+            get {
+                return ResourceManager.GetString("LotteryImageFolder", resourceCulture);
+            }
+        }
+
+        public static string LotteryImageFolderDesc {
+            get {
+                return ResourceManager.GetString("LotteryImageFolderDesc", resourceCulture);
+            }
+        }
+
+        public static string LotteryImageFolderButton {
+            get {
+                return ResourceManager.GetString("LotteryImageFolderButton", resourceCulture);
+            }
+        }
+
         public static string RollCallStudentImageSettings {
             get {
                 return ResourceManager.GetString("RollCallStudentImageSettings", resourceCulture);
@@ -660,6 +912,24 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
         public static string StudentImagePositionBottom {
             get {
                 return ResourceManager.GetString("StudentImagePositionBottom", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolder {
+            get {
+                return ResourceManager.GetString("StudentImageFolder", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolderDesc {
+            get {
+                return ResourceManager.GetString("StudentImageFolderDesc", resourceCulture);
+            }
+        }
+
+        public static string StudentImageFolderButton {
+            get {
+                return ResourceManager.GetString("StudentImageFolderButton", resourceCulture);
             }
         }
     }
