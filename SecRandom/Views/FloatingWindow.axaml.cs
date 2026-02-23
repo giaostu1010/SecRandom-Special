@@ -1,4 +1,3 @@
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -16,6 +15,7 @@ namespace SecRandom.Views;
 public partial class FloatingWindow : Window
 {
     public ViewModelBase ViewModel { get; } = IAppHost.GetService<ViewModelBase>();
+    public bool CanClose { get; set; } = false;
     
     public FloatingWindow()
     {
@@ -51,7 +51,10 @@ public partial class FloatingWindow : Window
 
     private void OnClosing(object? sender, WindowClosingEventArgs e)
     {
-        e.Cancel = true;
+        if (!CanClose)
+        {
+            e.Cancel = true;
+        }
     }
     
     private void OnLoaded(object? sender, RoutedEventArgs e)

@@ -36,12 +36,15 @@ namespace SecRandom;
 
 public partial class App : Application
 {
+    public new static App Current => (Application.Current as App)!;
+    
     private static FloatingWindow? _floatingWindow;
     private static MainWindow? _mainWindow;
     private static MainWindow? _settingsWindow;
     private static CultureInfo? _startupCulture;
     private static UiLanguageMode _startupUiLanguageMode;
     private static string? _startupConfigFilePath;
+    private static IClassicDesktopStyleApplicationLifetime? _desktopLifetime;
     
     public override void Initialize()
     {
@@ -63,6 +66,7 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
+            _desktopLifetime = desktop;
             _floatingWindow = new FloatingWindow();
             _floatingWindow.Closed += (_, _) => _floatingWindow = null;
             desktop.MainWindow = _floatingWindow;
@@ -172,6 +176,18 @@ public partial class App : Application
         ApplyUiFont(basicSettings.UiFontFamilyName, basicSettings.UiFontFamilyIndex, basicSettings.UiFontWeightIndex);
     }
 
+    public static void Stop()
+    {
+        var logger = IAppHost.GetService<ILogger<App>>();
+        logger.LogInformation("正在停止应用");
+
+        _floatingWindow?.CanClose = true;
+        
+        var configHandler = IAppHost.GetService<MainConfigHandler>();
+        configHandler.Save();
+        _desktopLifetime?.Shutdown();
+    }
+
     #region Windows
 
     public static void ShowMainWindow()
@@ -248,8 +264,7 @@ public partial class App : Application
         InitializeLanguages(culture);
         UpdateRegisteredPageNames();
         ReloadOpenWindows(uiLanguageMode, culture);
-        var app = Current as App;
-        app?.CreateTrayIconMenu();
+        Current.CreateTrayIconMenu();
     }
     
     private static void UpdateRegisteredPageNames()
@@ -382,11 +397,6 @@ public partial class App : Application
 
     public static void ApplyUiThemeModeIndex(int uiThemeModeIndex)
     {
-        if (Current is null)
-        {
-            return;
-        }
-
         Current.RequestedThemeVariant = uiThemeModeIndex switch
         {
             1 => ThemeVariant.Light,
@@ -397,11 +407,6 @@ public partial class App : Application
 
     public static void ApplyUiFont(string? uiFontFamilyName, int uiFontFamilyIndex, int uiFontWeightIndex)
     {
-        if (Current is null)
-        {
-            return;
-        }
-
         var fontFamilyName = ResolveUiFontFamilyName(uiFontFamilyName, uiFontFamilyIndex);
 
         var weightIndex = uiFontWeightIndex;
@@ -467,6 +472,15 @@ public partial class App : Application
             ShowSettingsWindow();
         };
         menu.Items.Add(menuOpenSettings);
+        
+        menu.Items.Add(new NativeMenuItemSeparator());
+        
+        var menuExitProgram = new NativeMenuItem(Langs.Common.Resources.ExitProgram);
+        menuExitProgram.Click += (sender, args) =>
+        {
+            Stop();
+        };
+        menu.Items.Add(menuExitProgram);
     }
 
     #endregion

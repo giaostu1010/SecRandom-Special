@@ -87,6 +87,15 @@ namespace SecRandom.Langs.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 退出程序.
+        /// </summary>
+        public static string ExitProgram {
+            get {
+                return ResourceManager.GetString("ExitProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 人脸抽取.
         /// </summary>
         public static string FaceDraw {

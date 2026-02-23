@@ -82,4 +82,7 @@
     <data name="OpenMainWindow" xml:space="preserve">
         <value>打开主窗口</value>
     </data>
+    <data name="ExitProgram" xml:space="preserve">
+        <value>退出程序</value>
+    </data>
 </root>
