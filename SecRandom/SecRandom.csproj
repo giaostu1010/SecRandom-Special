@@ -30,7 +30,7 @@
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
-      <EmbeddedResource Update="Langs\SettingsPages\DrawSettingsPage\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\SettingsPages\DrawSettingsPage\Resources.resx">
           <Generator>PublicResXFileCodeGenerator</Generator>
           <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
@@ -40,7 +40,7 @@
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
-      <EmbeddedResource Update="Langs\SettingsPages\LinkageSettingsPage\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\SettingsPages\LinkageSettingsPage\Resources.resx">
           <Generator>PublicResXFileCodeGenerator</Generator>
           <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>

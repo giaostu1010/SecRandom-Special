@@ -38,8 +38,7 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <StackPanel DataContext="{Binding Settings}"
-                            x:DataType="vm:RollCallSettingsOverrideProxy">
+                <StackPanel DataContext="{Binding Settings}">
                     <TextBlock Text="{x:Static pageLangs:Resources.RollCallExtractionFunction}"
                                FontSize="14"
                                FontWeight="SemiBold"

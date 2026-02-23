@@ -20,7 +20,7 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.quickDraw", "\ue07c")]
 public partial class QuickDrawSettingsSubPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly QuickDrawSettingsConfig _globalSettings;
     private readonly ListNamesSource _globalListNamesSource;
     private ComboBox? _customFontComboBox;
@@ -28,8 +28,8 @@ public partial class QuickDrawSettingsSubPage : UserControl
 
     public QuickDrawSettingsSubPage()
     {
-        _rootConfigHandler = IAppHost.GetService<MainConfigHandler>();
-        _globalSettings = _rootConfigHandler.Data.DrawSettings.QuickDrawSettings;
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _globalSettings = _mainConfigHandler.Data.DrawSettings.QuickDrawSettings;
         DataContext = _globalSettings;
         InitializeComponent();
 

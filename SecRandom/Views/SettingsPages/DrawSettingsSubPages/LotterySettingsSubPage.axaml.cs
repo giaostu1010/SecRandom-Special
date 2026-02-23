@@ -20,7 +20,7 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.lottery", "\ue07c")]
 public partial class LotterySettingsSubPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly LotterySettingsConfig _globalSettings;
     private readonly ListNamesSource _globalListNamesSource;
     private ComboBox? _clearRecordComboBox;
@@ -30,8 +30,8 @@ public partial class LotterySettingsSubPage : UserControl
 
     public LotterySettingsSubPage()
     {
-        _rootConfigHandler = IAppHost.GetService<MainConfigHandler>();
-        _globalSettings = _rootConfigHandler.Data.DrawSettings.LotterySettings;
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _globalSettings = _mainConfigHandler.Data.DrawSettings.LotterySettings;
         DataContext = _globalSettings;
         InitializeComponent();
 

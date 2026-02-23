@@ -13,7 +13,7 @@ namespace SecRandom.Views.SettingsPages;
 public partial class LinkageSettingsPage : UserControl
 {
     public LinkageSettingsConfig ViewModel { get; } =
-        IAppHost.GetService<RootConfigHandler>().Data.LinkageSettings;
+        IAppHost.GetService<MainConfigHandler>().Data.LinkageSettings;
 
     public LinkageSettingsPage()
     {

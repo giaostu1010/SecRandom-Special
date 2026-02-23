@@ -20,7 +20,7 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.rollCall", "\ue07c")]
 public partial class RollCallSettingsSubPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly RollCallSettingsConfig _globalSettings;
     private readonly ListNamesSource _globalListNamesSource;
     private ComboBox? _customFontComboBox;
@@ -28,8 +28,8 @@ public partial class RollCallSettingsSubPage : UserControl
 
     public RollCallSettingsSubPage()
     {
-        _rootConfigHandler = IAppHost.GetService<MainConfigHandler>();
-        _globalSettings = _rootConfigHandler.Data.DrawSettings.RollCallSettings;
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _globalSettings = _mainConfigHandler.Data.DrawSettings.RollCallSettings;
         DataContext = _globalSettings;
         InitializeComponent();
 

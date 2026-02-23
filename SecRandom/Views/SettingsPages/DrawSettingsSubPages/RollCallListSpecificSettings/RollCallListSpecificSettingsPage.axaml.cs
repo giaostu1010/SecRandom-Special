@@ -18,15 +18,15 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.rollCall.listSpecific", "\ue8a7")]
 public partial class RollCallListSpecificSettingsPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly RollCallListSpecificSettingsViewModel _listSpecificViewModel;
     private ComboBox? _listSpecificCustomFontComboBox;
     private List<FontFamily> _fontFamilies = [];
 
     public RollCallListSpecificSettingsPage()
     {
-        _rootConfigHandler = IAppHost.GetService<RootConfigHandler>();
-        _listSpecificViewModel = new RollCallListSpecificSettingsViewModel(_rootConfigHandler);
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _listSpecificViewModel = new RollCallListSpecificSettingsViewModel(_mainConfigHandler);
         _listSpecificViewModel.PropertyChanged += ListSpecificViewModel_OnPropertyChanged;
 
         DataContext = _listSpecificViewModel;

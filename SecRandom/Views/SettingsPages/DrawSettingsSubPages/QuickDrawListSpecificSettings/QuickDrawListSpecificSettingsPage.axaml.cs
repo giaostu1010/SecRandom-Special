@@ -18,15 +18,15 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.quickDraw.listSpecific", "\ue8a7")]
 public partial class QuickDrawListSpecificSettingsPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly QuickDrawListSpecificSettingsViewModel _listSpecificViewModel;
     private ComboBox? _listSpecificCustomFontComboBox;
     private List<FontFamily> _fontFamilies = [];
 
     public QuickDrawListSpecificSettingsPage()
     {
-        _rootConfigHandler = IAppHost.GetService<RootConfigHandler>();
-        _listSpecificViewModel = new QuickDrawListSpecificSettingsViewModel(_rootConfigHandler);
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _listSpecificViewModel = new QuickDrawListSpecificSettingsViewModel(_mainConfigHandler);
         _listSpecificViewModel.PropertyChanged += ListSpecificViewModel_OnPropertyChanged;
 
         DataContext = _listSpecificViewModel;

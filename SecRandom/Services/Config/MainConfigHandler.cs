@@ -17,6 +17,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     private QuickDrawSettingsConfig? _quickDrawSettings;
     private LotterySettingsConfig? _lotterySettings;
     private FaceDetectorSettingsConfig? _faceDetectorSettings;
+    private LinkageSettingsConfig? _linkageSettings;
 
     public MainConfigHandler(ILogger<MainConfigHandler> logger, ConfigServiceBase configService)
         : base(logger, configService, () => new MainConfigModel())
@@ -24,6 +25,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         AttachBasicSettingsHandlers();
         AttachDrawSettingsHandlers();
         AttachFloatingWindowSettingsHandlers();
+        AttachLinkageSettingsHandlers();
     }
 
     protected override void Reload()
@@ -31,10 +33,12 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         DetachBasicSettingsHandlers();
         DetachDrawSettingsHandlers();
         DetachFloatingWindowSettingsHandlers();
+        DetachLinkageSettingsHandlers();
         base.Reload();
         AttachBasicSettingsHandlers();
         AttachDrawSettingsHandlers();
         AttachFloatingWindowSettingsHandlers();
+        AttachLinkageSettingsHandlers();
     }
 
     protected override void Data_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -53,6 +57,11 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         {
             DetachDrawSettingsHandlers();
             AttachDrawSettingsHandlers();
+        }
+        else if (e.PropertyName == nameof(MainConfigModel.LinkageSettings))
+        {
+            DetachLinkageSettingsHandlers();
+            AttachLinkageSettingsHandlers();
         }
 
         base.Data_OnPropertyChanged(sender, e);
@@ -172,6 +181,28 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     }
 
     private void FloatingWindowSettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        Save();
+    }
+    
+    private void AttachLinkageSettingsHandlers()
+    {
+        _linkageSettings = Data.LinkageSettings;
+        _linkageSettings.PropertyChanged += LinkageSettings_OnPropertyChanged;
+    }
+    
+    private void DetachLinkageSettingsHandlers()
+    {
+        if (_linkageSettings is null)
+        {
+            return;
+        }
+        
+        _linkageSettings.PropertyChanged -= LinkageSettings_OnPropertyChanged;
+        _linkageSettings = null;
+    }
+    
+    private void LinkageSettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Save();
     }

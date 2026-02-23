@@ -18,7 +18,7 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.draw.lottery.listSpecific", "\ue8a7")]
 public partial class LotteryListSpecificSettingsPage : UserControl
 {
-    private readonly RootConfigHandler _rootConfigHandler;
+    private readonly MainConfigHandler _mainConfigHandler;
     private readonly LotteryListSpecificSettingsViewModel _listSpecificViewModel;
     private ComboBox? _listSpecificClearRecordComboBox;
     private NumericUpDown? _listSpecificHalfRepeatUpDown;
@@ -27,8 +27,8 @@ public partial class LotteryListSpecificSettingsPage : UserControl
 
     public LotteryListSpecificSettingsPage()
     {
-        _rootConfigHandler = IAppHost.GetService<RootConfigHandler>();
-        _listSpecificViewModel = new LotteryListSpecificSettingsViewModel(_rootConfigHandler);
+        _mainConfigHandler = IAppHost.GetService<MainConfigHandler>();
+        _listSpecificViewModel = new LotteryListSpecificSettingsViewModel(_mainConfigHandler);
         _listSpecificViewModel.PropertyChanged += ListSpecificViewModel_OnPropertyChanged;
 
         DataContext = _listSpecificViewModel;

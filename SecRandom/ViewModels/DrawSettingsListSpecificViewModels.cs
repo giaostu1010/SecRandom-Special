@@ -102,12 +102,12 @@ public sealed partial class ListNamesSource : ObservableObject, IDisposable
 
 public abstract partial class ListSpecificSettingsViewModelBase : ObservableObject, IDisposable
 {
-    protected RootConfigHandler RootConfigHandler { get; }
+    protected MainConfigHandler MainConfigHandler { get; }
     protected ListNamesSource NamesSource { get; }
 
-    protected ListSpecificSettingsViewModelBase(RootConfigHandler rootConfigHandler, string directoryPath)
+    protected ListSpecificSettingsViewModelBase(MainConfigHandler mainConfigHandler, string directoryPath)
     {
-        RootConfigHandler = rootConfigHandler;
+        MainConfigHandler = mainConfigHandler;
         NamesSource = new ListNamesSource(directoryPath);
         NamesSource.PropertyChanged += NamesSource_OnPropertyChanged;
     }
@@ -130,16 +130,16 @@ public abstract partial class ListSpecificSettingsViewModelBase : ObservableObje
     }
 }
 
-public sealed partial class RollCallListSpecificSettingsViewModel(RootConfigHandler rootConfigHandler)
-    : ListSpecificSettingsViewModelBase(rootConfigHandler, Utils.GetFilePath("list", "roll_call_list"))
+public sealed partial class RollCallListSpecificSettingsViewModel(MainConfigHandler mainConfigHandler)
+    : ListSpecificSettingsViewModelBase(mainConfigHandler, Utils.GetFilePath("list", "roll_call_list"))
 {
     [ObservableProperty] private string _selectedClassName = string.Empty;
     [ObservableProperty] private bool _isSyncEnabled;
-    [ObservableProperty] private RollCallSettingsOverrideProxy _settings = new(rootConfigHandler, string.Empty);
+    [ObservableProperty] private RollCallSettingsOverrideProxy _settings = new(mainConfigHandler, string.Empty);
 
     partial void OnSelectedClassNameChanged(string value)
     {
-        Settings = new RollCallSettingsOverrideProxy(RootConfigHandler, value);
+        Settings = new RollCallSettingsOverrideProxy(MainConfigHandler, value);
         IsSyncEnabled = HasOverrides(value);
     }
 
@@ -150,7 +150,7 @@ public sealed partial class RollCallListSpecificSettingsViewModel(RootConfigHand
             return false;
         }
 
-        return RootConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides.ContainsKey(listName);
+        return MainConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides.ContainsKey(listName);
     }
 
     public void SyncWithGlobal()
@@ -161,33 +161,33 @@ public sealed partial class RollCallListSpecificSettingsViewModel(RootConfigHand
             return;
         }
 
-        var current = RootConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides;
+        var current = MainConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides;
         if (!current.ContainsKey(listName))
         {
             IsSyncEnabled = false;
-            Settings = new RollCallSettingsOverrideProxy(RootConfigHandler, listName);
+            Settings = new RollCallSettingsOverrideProxy(MainConfigHandler, listName);
             return;
         }
 
         var next = new Dictionary<string, RollCallSettingsOverrideConfig>(current, StringComparer.Ordinal);
         next.Remove(listName);
-        RootConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides = next;
+        MainConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides = next;
 
         IsSyncEnabled = false;
-        Settings = new RollCallSettingsOverrideProxy(RootConfigHandler, listName);
+        Settings = new RollCallSettingsOverrideProxy(MainConfigHandler, listName);
     }
 }
 
-public sealed partial class QuickDrawListSpecificSettingsViewModel(RootConfigHandler rootConfigHandler)
-    : ListSpecificSettingsViewModelBase(rootConfigHandler, Utils.GetFilePath("list", "roll_call_list"))
+public sealed partial class QuickDrawListSpecificSettingsViewModel(MainConfigHandler mainConfigHandler)
+    : ListSpecificSettingsViewModelBase(mainConfigHandler, Utils.GetFilePath("list", "roll_call_list"))
 {
     [ObservableProperty] private string _selectedListName = string.Empty;
     [ObservableProperty] private bool _isSyncEnabled;
-    [ObservableProperty] private QuickDrawSettingsOverrideProxy _settings = new(rootConfigHandler, string.Empty);
+    [ObservableProperty] private QuickDrawSettingsOverrideProxy _settings = new(mainConfigHandler, string.Empty);
 
     partial void OnSelectedListNameChanged(string value)
     {
-        Settings = new QuickDrawSettingsOverrideProxy(RootConfigHandler, value);
+        Settings = new QuickDrawSettingsOverrideProxy(MainConfigHandler, value);
         IsSyncEnabled = HasOverrides(value);
     }
 
@@ -198,7 +198,7 @@ public sealed partial class QuickDrawListSpecificSettingsViewModel(RootConfigHan
             return false;
         }
 
-        return RootConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides.ContainsKey(listName);
+        return MainConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides.ContainsKey(listName);
     }
 
     public void SyncWithGlobal()
@@ -209,33 +209,33 @@ public sealed partial class QuickDrawListSpecificSettingsViewModel(RootConfigHan
             return;
         }
 
-        var current = RootConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides;
+        var current = MainConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides;
         if (!current.ContainsKey(listName))
         {
             IsSyncEnabled = false;
-            Settings = new QuickDrawSettingsOverrideProxy(RootConfigHandler, listName);
+            Settings = new QuickDrawSettingsOverrideProxy(MainConfigHandler, listName);
             return;
         }
 
         var next = new Dictionary<string, QuickDrawSettingsOverrideConfig>(current, StringComparer.Ordinal);
         next.Remove(listName);
-        RootConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides = next;
+        MainConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides = next;
 
         IsSyncEnabled = false;
-        Settings = new QuickDrawSettingsOverrideProxy(RootConfigHandler, listName);
+        Settings = new QuickDrawSettingsOverrideProxy(MainConfigHandler, listName);
     }
 }
 
-public sealed partial class LotteryListSpecificSettingsViewModel(RootConfigHandler rootConfigHandler)
-    : ListSpecificSettingsViewModelBase(rootConfigHandler, Utils.GetFilePath("list", "lottery_list"))
+public sealed partial class LotteryListSpecificSettingsViewModel(MainConfigHandler mainConfigHandler)
+    : ListSpecificSettingsViewModelBase(mainConfigHandler, Utils.GetFilePath("list", "lottery_list"))
 {
     [ObservableProperty] private string _selectedPoolName = string.Empty;
     [ObservableProperty] private bool _isSyncEnabled;
-    [ObservableProperty] private LotterySettingsOverrideProxy _settings = new(rootConfigHandler, string.Empty);
+    [ObservableProperty] private LotterySettingsOverrideProxy _settings = new(mainConfigHandler, string.Empty);
 
     partial void OnSelectedPoolNameChanged(string value)
     {
-        Settings = new LotterySettingsOverrideProxy(RootConfigHandler, value);
+        Settings = new LotterySettingsOverrideProxy(MainConfigHandler, value);
         IsSyncEnabled = HasOverrides(value);
     }
 
@@ -246,7 +246,7 @@ public sealed partial class LotteryListSpecificSettingsViewModel(RootConfigHandl
             return false;
         }
 
-        return RootConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides.ContainsKey(poolName);
+        return MainConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides.ContainsKey(poolName);
     }
 
     public void SyncWithGlobal()
@@ -257,29 +257,28 @@ public sealed partial class LotteryListSpecificSettingsViewModel(RootConfigHandl
             return;
         }
 
-        var current = RootConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides;
+        var current = MainConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides;
         if (!current.ContainsKey(poolName))
         {
             IsSyncEnabled = false;
-            Settings = new LotterySettingsOverrideProxy(RootConfigHandler, poolName);
+            Settings = new LotterySettingsOverrideProxy(MainConfigHandler, poolName);
             return;
         }
 
         var next = new Dictionary<string, LotterySettingsOverrideConfig>(current, StringComparer.Ordinal);
         next.Remove(poolName);
-        RootConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides = next;
+        MainConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides = next;
 
         IsSyncEnabled = false;
-        Settings = new LotterySettingsOverrideProxy(RootConfigHandler, poolName);
+        Settings = new LotterySettingsOverrideProxy(MainConfigHandler, poolName);
     }
 }
 
-public sealed class RollCallSettingsOverrideProxy(RootConfigHandler rootConfigHandler, string listName)
+public sealed class RollCallSettingsOverrideProxy(MainConfigHandler mainConfigHandler, string listName)
 {
-    private readonly RootConfigHandler _rootConfigHandler = rootConfigHandler;
     private readonly string _listName = listName?.Trim() ?? string.Empty;
 
-    private RollCallSettingsConfig Global => _rootConfigHandler.Data.DrawSettings.RollCallSettings;
+    private RollCallSettingsConfig Global => mainConfigHandler.Data.DrawSettings.RollCallSettings;
 
     private RollCallSettingsOverrideConfig? TryGetOverride()
     {
@@ -288,7 +287,7 @@ public sealed class RollCallSettingsOverrideProxy(RootConfigHandler rootConfigHa
             return null;
         }
 
-        var dict = _rootConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides;
+        var dict = mainConfigHandler.Data.DrawSettings.RollCallListSpecificOverrides;
         return dict.TryGetValue(_listName, out var v) ? v : null;
     }
 
@@ -332,7 +331,7 @@ public sealed class RollCallSettingsOverrideProxy(RootConfigHandler rootConfigHa
             return;
         }
 
-        var drawSettings = _rootConfigHandler.Data.DrawSettings;
+        var drawSettings = mainConfigHandler.Data.DrawSettings;
         var current = drawSettings.RollCallListSpecificOverrides;
         current.TryGetValue(_listName, out var existing);
         var nextEntry = updater(Clone(existing));
@@ -471,12 +470,11 @@ public sealed class RollCallSettingsOverrideProxy(RootConfigHandler rootConfigHa
     }
 }
 
-public sealed class QuickDrawSettingsOverrideProxy(RootConfigHandler rootConfigHandler, string listName)
+public sealed class QuickDrawSettingsOverrideProxy(MainConfigHandler mainConfigHandler, string listName)
 {
-    private readonly RootConfigHandler _rootConfigHandler = rootConfigHandler;
     private readonly string _listName = listName?.Trim() ?? string.Empty;
 
-    private QuickDrawSettingsConfig Global => _rootConfigHandler.Data.DrawSettings.QuickDrawSettings;
+    private QuickDrawSettingsConfig Global => mainConfigHandler.Data.DrawSettings.QuickDrawSettings;
 
     private QuickDrawSettingsOverrideConfig? TryGetOverride()
     {
@@ -485,7 +483,7 @@ public sealed class QuickDrawSettingsOverrideProxy(RootConfigHandler rootConfigH
             return null;
         }
 
-        var dict = _rootConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides;
+        var dict = mainConfigHandler.Data.DrawSettings.QuickDrawListSpecificOverrides;
         return dict.TryGetValue(_listName, out var v) ? v : null;
     }
 
@@ -529,7 +527,7 @@ public sealed class QuickDrawSettingsOverrideProxy(RootConfigHandler rootConfigH
             return;
         }
 
-        var drawSettings = _rootConfigHandler.Data.DrawSettings;
+        var drawSettings = mainConfigHandler.Data.DrawSettings;
         var current = drawSettings.QuickDrawListSpecificOverrides;
         current.TryGetValue(_listName, out var existing);
         var nextEntry = updater(Clone(existing));
@@ -668,12 +666,11 @@ public sealed class QuickDrawSettingsOverrideProxy(RootConfigHandler rootConfigH
     }
 }
 
-public sealed class LotterySettingsOverrideProxy(RootConfigHandler rootConfigHandler, string poolName)
+public sealed class LotterySettingsOverrideProxy(MainConfigHandler mainConfigHandler, string poolName)
 {
-    private readonly RootConfigHandler _rootConfigHandler = rootConfigHandler;
     private readonly string _poolName = poolName?.Trim() ?? string.Empty;
 
-    private LotterySettingsConfig Global => _rootConfigHandler.Data.DrawSettings.LotterySettings;
+    private LotterySettingsConfig Global => mainConfigHandler.Data.DrawSettings.LotterySettings;
 
     private LotterySettingsOverrideConfig? TryGetOverride()
     {
@@ -682,7 +679,7 @@ public sealed class LotterySettingsOverrideProxy(RootConfigHandler rootConfigHan
             return null;
         }
 
-        var dict = _rootConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides;
+        var dict = mainConfigHandler.Data.DrawSettings.LotteryListSpecificOverrides;
         return dict.TryGetValue(_poolName, out var v) ? v : null;
     }
 
@@ -726,7 +723,7 @@ public sealed class LotterySettingsOverrideProxy(RootConfigHandler rootConfigHan
             return;
         }
 
-        var drawSettings = _rootConfigHandler.Data.DrawSettings;
+        var drawSettings = mainConfigHandler.Data.DrawSettings;
         var current = drawSettings.LotteryListSpecificOverrides;
         current.TryGetValue(_poolName, out var existing);
         var nextEntry = updater(Clone(existing));

@@ -348,7 +348,7 @@ public static class CameraResolutionHelper
         }
     }
 
-    private static bool TryParseResolution(AMMediaType mediaType, out CameraResolution resolution)
+    private static bool TryParseResolution(AmMediaType mediaType, out CameraResolution resolution)
     {
         resolution = default;
         if (mediaType.formatPtr == IntPtr.Zero)
@@ -377,7 +377,7 @@ public static class CameraResolutionHelper
         return false;
     }
 
-    private static void FreeMediaType(ref AMMediaType mediaType)
+    private static void FreeMediaType(ref AmMediaType mediaType)
     {
         if (mediaType.formatPtr != IntPtr.Zero)
         {
@@ -409,7 +409,7 @@ public static class CameraResolutionHelper
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct AMMediaType
+    private struct AmMediaType
     {
         public Guid majorType;
         public Guid subType;
@@ -513,7 +513,7 @@ public static class CameraResolutionHelper
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IMoniker
     {
-        void GetClassID(out Guid pClassID);
+        void GetClassID(out Guid pClassId);
         void IsDirty();
         void Load(object pStm);
         void Save(object pStm, bool fClearDirty);
@@ -553,7 +553,7 @@ public static class CameraResolutionHelper
     private interface IBaseFilter
     {
         [PreserveSig]
-        int GetClassID(out Guid pClassID);
+        int GetClassID(out Guid pClassId);
 
         [PreserveSig]
         int Stop();
@@ -577,7 +577,7 @@ public static class CameraResolutionHelper
         int EnumPins(out IEnumPins? ppEnum);
 
         [PreserveSig]
-        int FindPin([MarshalAs(UnmanagedType.LPWStr)] string Id, out IPin? ppPin);
+        int FindPin([MarshalAs(UnmanagedType.LPWStr)] string id, out IPin? ppPin);
 
         [PreserveSig]
         int QueryFilterInfo(out FilterInfo pInfo);
@@ -643,7 +643,7 @@ public static class CameraResolutionHelper
         int QueryDirection(out PinDirection pPinDir);
 
         [PreserveSig]
-        int QueryId([MarshalAs(UnmanagedType.LPWStr)] out string Id);
+        int QueryId([MarshalAs(UnmanagedType.LPWStr)] out string id);
 
         [PreserveSig]
         int QueryAccept(IntPtr pmt);
@@ -691,6 +691,6 @@ public static class CameraResolutionHelper
         int GetNumberOfCapabilities(out int piCount, out int piSize);
 
         [PreserveSig]
-        int GetStreamCaps(int iIndex, out AMMediaType pmt, IntPtr pScc);
+        int GetStreamCaps(int iIndex, out AmMediaType pmt, IntPtr pScc);
     }
 }
