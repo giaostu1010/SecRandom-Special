@@ -91,6 +91,12 @@
     <data name="CameraDisplayResolutionPlaceholder" xml:space="preserve">
         <value>Auto</value>
     </data>
+    <data name="CameraDisplayResolutionAutoFormat" xml:space="preserve">
+        <value>Auto ({0})</value>
+    </data>
+    <data name="CameraDisplayResolutionUnknown" xml:space="preserve">
+        <value>Unknown</value>
+    </data>
     <data name="CameraPreviewMode" xml:space="preserve">
         <value>Mode</value>
     </data>

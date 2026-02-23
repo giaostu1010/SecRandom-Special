@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -14,13 +15,46 @@ public static class CameraResolutionHelper
 
     public static IReadOnlyList<CameraResolution> GetSuggestedResolutionsByIndex(int deviceIndex)
     {
+        var result = new HashSet<CameraResolution>();
+        var supported = GetResolutionsByIndex(deviceIndex);
+        foreach (var resolution in supported)
+        {
+            var normalized = NormalizeEven(resolution);
+            if (normalized.Width >= 320 && normalized.Height >= 240)
+            {
+                result.Add(normalized);
+            }
+        }
+
+        if (result.Count > 0)
+        {
+            return result
+                .OrderByDescending(x => (long)x.Width * x.Height)
+                .ThenByDescending(x => x.Width)
+                .ThenByDescending(x => x.Height)
+                .ToList();
+        }
+
         var max = GetMaximumResolutionByIndex(deviceIndex);
         if (max.Width <= 0 || max.Height <= 0)
         {
-            max = new CameraResolution(1920, 1080);
+            foreach (var targetHeight in new[] { 4320, 2160, 1440, 1080, 720, 540, 480, 360, 240 })
+            {
+                var w = (int)Math.Round(targetHeight * (16 / 9.0));
+                var scaled = NormalizeEven(new CameraResolution(w, targetHeight));
+                if (scaled.Width >= 320 && scaled.Height >= 240)
+                {
+                    result.Add(scaled);
+                }
+            }
+
+            return result
+                .OrderByDescending(x => (long)x.Width * x.Height)
+                .ThenByDescending(x => x.Width)
+                .ThenByDescending(x => x.Height)
+                .ToList();
         }
 
-        var result = new HashSet<CameraResolution>();
         result.Add(NormalizeEven(max));
 
         var scalePercents = new[] { 100, 75, 67, 50, 40, 33, 25 };
@@ -65,8 +99,6 @@ public static class CameraResolutionHelper
 
     public static CameraResolution GetMaximumResolutionByIndex(int deviceIndex)
     {
-        using var _ = new ComInitScope();
-
         var list = GetResolutionsByIndex(deviceIndex);
         if (list.Count == 0)
         {
@@ -137,6 +169,8 @@ public static class CameraResolutionHelper
         {
             return default;
         }
+
+        using var _ = new ComInitScope();
 
         var devEnumType = Type.GetTypeFromCLSID(Clsid.SystemDeviceEnum);
         if (devEnumType is null)
@@ -286,11 +320,62 @@ public static class CameraResolutionHelper
 
     public static IReadOnlyList<string> GetCameraNames()
     {
-        if (!OperatingSystem.IsWindows())
+        if (OperatingSystem.IsWindows())
+        {
+            return GetCameraNamesWindows();
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return GetCameraNamesMacOs();
+        }
+
+        if (OperatingSystem.IsLinux())
+        {
+            return GetCameraNamesLinux();
+        }
+
+#if ANDROID
+        return GetCameraNamesAndroid();
+#else
+        return [];
+#endif
+    }
+
+    public static IReadOnlyList<CameraResolution> GetResolutionsByIndex(int deviceIndex)
+    {
+        if (deviceIndex < 0)
         {
             return [];
         }
 
+        if (OperatingSystem.IsWindows())
+        {
+            using var _ = new ComInitScope();
+            try
+            {
+                return EnumerateDirectShowResolutions(deviceIndex);
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return GetResolutionsMacOs(deviceIndex);
+        }
+
+#if ANDROID
+        return GetResolutionsAndroid(deviceIndex);
+#else
+        return [];
+#endif
+    }
+
+    private static IReadOnlyList<string> GetCameraNamesWindows()
+    {
         using var _ = new ComInitScope();
 
         var devEnumType = Type.GetTypeFromCLSID(Clsid.SystemDeviceEnum);
@@ -358,29 +443,390 @@ public static class CameraResolutionHelper
         }
     }
 
-    public static IReadOnlyList<CameraResolution> GetResolutionsByIndex(int deviceIndex)
+    private static IReadOnlyList<string> GetCameraNamesLinux()
     {
-        if (!OperatingSystem.IsWindows())
-        {
-            return [];
-        }
-
-        if (deviceIndex < 0)
-        {
-            return [];
-        }
-
-        using var _ = new ComInitScope();
-
         try
         {
-            return EnumerateDirectShowResolutions(deviceIndex);
+            var candidates = Directory.EnumerateFiles("/dev", "video*")
+                .Select(path => Path.GetFileName(path))
+                .Select(name =>
+                {
+                    if (name is null || !name.StartsWith("video", StringComparison.Ordinal))
+                    {
+                        return (-1, (string?)null);
+                    }
+
+                    var numberText = name["video".Length..];
+                    return int.TryParse(numberText, out var index) ? (index, name) : (-1, (string?)null);
+                })
+                .Where(x => x.Item1 >= 0 && x.Item2 is not null)
+                .OrderBy(x => x.Item1)
+                .ToList();
+
+            var result = new List<string>();
+            foreach (var (index, name) in candidates)
+            {
+                var sysNamePath = $"/sys/class/video4linux/{name}/name";
+                string? friendly = null;
+                try
+                {
+                    if (File.Exists(sysNamePath))
+                    {
+                        friendly = File.ReadAllText(sysNamePath).Trim();
+                    }
+                }
+                catch
+                {
+                    friendly = null;
+                }
+
+                if (string.IsNullOrWhiteSpace(friendly))
+                {
+                    result.Add($"{index}");
+                }
+                else
+                {
+                    result.Add($"{index}: {friendly}");
+                }
+            }
+
+            return result;
         }
         catch
         {
             return [];
         }
     }
+
+    private static IReadOnlyList<string> GetCameraNamesMacOs()
+    {
+        var pool = ObjcAutoreleasePoolPush();
+        try
+        {
+            var devices = MacOsGetVideoDevices();
+            if (devices == IntPtr.Zero)
+            {
+                return [];
+            }
+
+            var count = (nuint)ObjcMsgSendUIntPtr(devices, Sel("count"));
+            if (count == 0)
+            {
+                return [];
+            }
+
+            var result = new List<string>();
+            for (nuint i = 0; i < count; i++)
+            {
+                var device = ObjcMsgSendUIntPtr(devices, Sel("objectAtIndex:"), i);
+                if (device == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                var localizedName = ObjcMsgSendUIntPtr(device, Sel("localizedName"));
+                var name = MacOsReadNSString(localizedName);
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    result.Add($"{i}");
+                }
+                else
+                {
+                    result.Add($"{i}: {name}");
+                }
+            }
+
+            return result;
+        }
+        catch
+        {
+            return [];
+        }
+        finally
+        {
+            ObjcAutoreleasePoolPop(pool);
+        }
+    }
+
+    private static IReadOnlyList<CameraResolution> GetResolutionsMacOs(int deviceIndex)
+    {
+        var pool = ObjcAutoreleasePoolPush();
+        try
+        {
+            var devices = MacOsGetVideoDevices();
+            if (devices == IntPtr.Zero)
+            {
+                return [];
+            }
+
+            var count = (nuint)ObjcMsgSendUIntPtr(devices, Sel("count"));
+            if ((nuint)deviceIndex >= count)
+            {
+                return [];
+            }
+
+            var device = ObjcMsgSendUIntPtr(devices, Sel("objectAtIndex:"), (nuint)deviceIndex);
+            if (device == IntPtr.Zero)
+            {
+                return [];
+            }
+
+            var formats = ObjcMsgSendUIntPtr(device, Sel("formats"));
+            if (formats == IntPtr.Zero)
+            {
+                return [];
+            }
+
+            var formatsCount = (nuint)ObjcMsgSendUIntPtr(formats, Sel("count"));
+            if (formatsCount == 0)
+            {
+                return [];
+            }
+
+            var resolutions = new HashSet<CameraResolution>();
+            for (nuint i = 0; i < formatsCount; i++)
+            {
+                var format = ObjcMsgSendUIntPtr(formats, Sel("objectAtIndex:"), i);
+                if (format == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                var formatDescription = ObjcMsgSendUIntPtr(format, Sel("formatDescription"));
+                if (formatDescription == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                var dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription);
+                if (dimensions.width > 0 && dimensions.height > 0)
+                {
+                    resolutions.Add(new CameraResolution(dimensions.width, dimensions.height));
+                }
+            }
+
+            return resolutions
+                .OrderByDescending(r => (long)r.Width * r.Height)
+                .ThenByDescending(r => r.Width)
+                .ThenByDescending(r => r.Height)
+                .ToList();
+        }
+        catch
+        {
+            return [];
+        }
+        finally
+        {
+            ObjcAutoreleasePoolPop(pool);
+        }
+    }
+
+#if ANDROID
+    private static IReadOnlyList<string> GetCameraNamesAndroid()
+    {
+        try
+        {
+            var context = Android.App.Application.Context;
+            var cameraManager = (Android.Hardware.Camera2.CameraManager?)context.GetSystemService(Android.Content.Context.CameraService);
+            if (cameraManager is null)
+            {
+                return [];
+            }
+
+            var ids = cameraManager.GetCameraIdList();
+            if (ids is null || ids.Length == 0)
+            {
+                return [];
+            }
+
+            var result = new List<string>();
+            for (var i = 0; i < ids.Length; i++)
+            {
+                var id = ids[i];
+                string? label = null;
+                try
+                {
+                    var chars = cameraManager.GetCameraCharacteristics(id);
+                    var facingObj = chars.Get(Android.Hardware.Camera2.CameraCharacteristics.LensFacing);
+                    if (facingObj is Java.Lang.Integer facing)
+                    {
+                        label = facing.IntValue() switch
+                        {
+                            (int)Android.Hardware.Camera2.CameraCharacteristics.LensFacingFront => "Front",
+                            (int)Android.Hardware.Camera2.CameraCharacteristics.LensFacingBack => "Back",
+                            (int)Android.Hardware.Camera2.CameraCharacteristics.LensFacingExternal => "External",
+                            _ => null
+                        };
+                    }
+                }
+                catch
+                {
+                    label = null;
+                }
+
+                result.Add(string.IsNullOrWhiteSpace(label) ? $"{i}" : $"{i}: {label}");
+            }
+
+            return result;
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    private static IReadOnlyList<CameraResolution> GetResolutionsAndroid(int deviceIndex)
+    {
+        try
+        {
+            var context = Android.App.Application.Context;
+            var cameraManager = (Android.Hardware.Camera2.CameraManager?)context.GetSystemService(Android.Content.Context.CameraService);
+            if (cameraManager is null)
+            {
+                return [];
+            }
+
+            var ids = cameraManager.GetCameraIdList();
+            if (ids is null || ids.Length == 0)
+            {
+                return [];
+            }
+
+            if (deviceIndex < 0 || deviceIndex >= ids.Length)
+            {
+                return [];
+            }
+
+            var chars = cameraManager.GetCameraCharacteristics(ids[deviceIndex]);
+            var mapObj = chars.Get(Android.Hardware.Camera2.CameraCharacteristics.ScalerStreamConfigurationMap);
+            if (mapObj is not Android.Hardware.Camera2.Params.StreamConfigurationMap map)
+            {
+                return [];
+            }
+
+            var cls = Java.Lang.Class.FromType(typeof(Android.Graphics.SurfaceTexture));
+            var sizes = map.GetOutputSizes(cls);
+            if (sizes is null || sizes.Length == 0)
+            {
+                return [];
+            }
+
+            var result = new HashSet<CameraResolution>();
+            foreach (var size in sizes)
+            {
+                if (size is null)
+                {
+                    continue;
+                }
+
+                var w = size.Width;
+                var h = size.Height;
+                if (w > 0 && h > 0)
+                {
+                    result.Add(new CameraResolution(w, h));
+                }
+            }
+
+            return result
+                .OrderByDescending(r => (long)r.Width * r.Height)
+                .ThenByDescending(r => r.Width)
+                .ThenByDescending(r => r.Height)
+                .ToList();
+        }
+        catch
+        {
+            return [];
+        }
+    }
+#endif
+
+    private static IntPtr MacOsGetVideoDevices()
+    {
+        var avCaptureDevice = ObjcGetClass("AVCaptureDevice");
+        if (avCaptureDevice == IntPtr.Zero)
+        {
+            return IntPtr.Zero;
+        }
+
+        var mediaTypeVideo = MacOsCreateNSString("vide");
+        if (mediaTypeVideo == IntPtr.Zero)
+        {
+            return IntPtr.Zero;
+        }
+
+        return ObjcMsgSendUIntPtr(avCaptureDevice, Sel("devicesWithMediaType:"), mediaTypeVideo);
+    }
+
+    private static string? MacOsReadNSString(IntPtr nsString)
+    {
+        if (nsString == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        var utf8Ptr = ObjcMsgSendUIntPtr(nsString, Sel("UTF8String"));
+        if (utf8Ptr == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        return Marshal.PtrToStringUTF8(utf8Ptr);
+    }
+
+    private static IntPtr MacOsCreateNSString(string value)
+    {
+        var nsStringClass = ObjcGetClass("NSString");
+        if (nsStringClass == IntPtr.Zero)
+        {
+            return IntPtr.Zero;
+        }
+
+        var bytes = System.Text.Encoding.UTF8.GetBytes(value);
+        var unmanaged = Marshal.AllocHGlobal(bytes.Length + 1);
+        try
+        {
+            Marshal.Copy(bytes, 0, unmanaged, bytes.Length);
+            Marshal.WriteByte(unmanaged, bytes.Length, 0);
+            return ObjcMsgSendUIntPtr(nsStringClass, Sel("stringWithUTF8String:"), unmanaged);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(unmanaged);
+        }
+    }
+
+    private static IntPtr Sel(string name) => SelRegisterName(name);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct CMVideoDimensions
+    {
+        public int width;
+        public int height;
+    }
+
+    [DllImport("/System/Library/Frameworks/CoreMedia.framework/CoreMedia")]
+    private static extern CMVideoDimensions CMVideoFormatDescriptionGetDimensions(IntPtr desc);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_getClass")]
+    private static extern IntPtr ObjcGetClass([MarshalAs(UnmanagedType.LPStr)] string name);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "sel_registerName")]
+    private static extern IntPtr SelRegisterName([MarshalAs(UnmanagedType.LPStr)] string name);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_autoreleasePoolPush")]
+    private static extern IntPtr ObjcAutoreleasePoolPush();
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_autoreleasePoolPop")]
+    private static extern void ObjcAutoreleasePoolPop(IntPtr token);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr ObjcMsgSendUIntPtr(IntPtr receiver, IntPtr selector);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr ObjcMsgSendUIntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr ObjcMsgSendUIntPtr(IntPtr receiver, IntPtr selector, nuint arg1);
 
     private static IReadOnlyList<CameraResolution> EnumerateDirectShowResolutions(int deviceIndex)
     {
@@ -605,7 +1051,7 @@ public static class CameraResolutionHelper
             }
 
             var hr = CoInitializeEx(IntPtr.Zero, CoInit.MultiThreaded);
-            _initialized = hr == 0 || hr == 1;
+            _initialized = hr >= 0;
         }
 
         public void Dispose()

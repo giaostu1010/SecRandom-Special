@@ -189,6 +189,18 @@ namespace SecRandom.Langs.SettingsPages.DrawSettingsPage {
             }
         }
 
+        public static string CameraDisplayResolutionAutoFormat {
+            get {
+                return ResourceManager.GetString("CameraDisplayResolutionAutoFormat", resourceCulture);
+            }
+        }
+
+        public static string CameraDisplayResolutionUnknown {
+            get {
+                return ResourceManager.GetString("CameraDisplayResolutionUnknown", resourceCulture);
+            }
+        }
+
         public static string CameraPreviewMode {
             get {
                 return ResourceManager.GetString("CameraPreviewMode", resourceCulture);

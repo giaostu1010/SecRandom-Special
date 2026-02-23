@@ -32,7 +32,6 @@ public partial class FaceDetectorSettingsSubPage : UserControl
         DataContext = _settings;
         InitializeComponent();
 
-        _autoResolutionText = pageLangs.CameraDisplayResolutionPlaceholder;
         _cameraSourceComboBox = this.FindControl<ComboBox>("CameraSourceComboBox");
         _cameraResolutionComboBox = this.FindControl<ComboBox>("CameraResolutionComboBox");
         _detectorTypeComboBox = this.FindControl<ComboBox>("DetectorTypeComboBox");
@@ -181,7 +180,12 @@ public partial class FaceDetectorSettingsSubPage : UserControl
         }
 
         var configured = _settings.CameraDisplayResolution?.Trim() ?? string.Empty;
-        var autoText = string.IsNullOrWhiteSpace(_autoResolutionText) ? string.Empty : _autoResolutionText;
+        var maximum = CameraResolutionHelper.GetMaximumResolutionByIndex(_settings.CameraSourceIndex);
+        var maximumText = maximum.Width > 0 && maximum.Height > 0
+            ? maximum.ToString()
+            : pageLangs.CameraDisplayResolutionUnknown;
+        _autoResolutionText = string.Format(pageLangs.CameraDisplayResolutionAutoFormat, maximumText);
+        var autoText = _autoResolutionText;
 
         var items = CameraResolutionHelper.GetSuggestedResolutionsByIndex(_settings.CameraSourceIndex)
             .Select(x => x.ToString())
