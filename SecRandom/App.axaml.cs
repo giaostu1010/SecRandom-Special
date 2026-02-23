@@ -8,13 +8,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Converters;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Styling;
-using DynamicData;
+using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -49,6 +48,7 @@ public partial class App : Application
     
     public override void Initialize()
     {
+        this.EnableHotReload();
         AvaloniaXamlLoader.Load(this);
         CreateTrayIconMenu();
     }
