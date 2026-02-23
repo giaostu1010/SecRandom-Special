@@ -86,10 +86,10 @@
         <value>Camera Resolution</value>
     </data>
     <data name="CameraDisplayResolutionDesc" xml:space="preserve">
-        <value>Set camera preview resolution (empty = highest)</value>
+        <value>Auto uses the maximum resolution</value>
     </data>
     <data name="CameraDisplayResolutionPlaceholder" xml:space="preserve">
-        <value>Auto (highest)</value>
+        <value>Auto</value>
     </data>
     <data name="CameraPreviewMode" xml:space="preserve">
         <value>Mode</value>

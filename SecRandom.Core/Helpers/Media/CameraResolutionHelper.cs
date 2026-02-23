@@ -12,12 +12,286 @@ public static class CameraResolutionHelper
         public override string ToString() => $"{Width}x{Height}";
     }
 
+    public static IReadOnlyList<CameraResolution> GetSuggestedResolutionsByIndex(int deviceIndex)
+    {
+        var max = GetMaximumResolutionByIndex(deviceIndex);
+        if (max.Width <= 0 || max.Height <= 0)
+        {
+            max = new CameraResolution(1920, 1080);
+        }
+
+        var result = new HashSet<CameraResolution>();
+        result.Add(NormalizeEven(max));
+
+        var scalePercents = new[] { 100, 75, 67, 50, 40, 33, 25 };
+        foreach (var percent in scalePercents)
+        {
+            if (percent == 100)
+            {
+                continue;
+            }
+
+            var w = (int)Math.Round(max.Width * (percent / 100.0));
+            var h = (int)Math.Round(max.Height * (percent / 100.0));
+            var scaled = NormalizeEven(new CameraResolution(w, h));
+            if (scaled.Width >= 320 && scaled.Height >= 240)
+            {
+                result.Add(scaled);
+            }
+        }
+
+        foreach (var targetHeight in new[] { 2160, 1440, 1080, 720, 540, 480, 360, 240 })
+        {
+            if (targetHeight >= max.Height)
+            {
+                continue;
+            }
+
+            var w = (int)Math.Round(max.Width * (targetHeight / (double)max.Height));
+            var h = targetHeight;
+            var scaled = NormalizeEven(new CameraResolution(w, h));
+            if (scaled.Width >= 320 && scaled.Height >= 240)
+            {
+                result.Add(scaled);
+            }
+        }
+
+        return result
+            .OrderByDescending(x => (long)x.Width * x.Height)
+            .ThenByDescending(x => x.Width)
+            .ThenByDescending(x => x.Height)
+            .ToList();
+    }
+
+    public static CameraResolution GetMaximumResolutionByIndex(int deviceIndex)
+    {
+        using var _ = new ComInitScope();
+
+        var list = GetResolutionsByIndex(deviceIndex);
+        if (list.Count == 0)
+        {
+            var current = GetCurrentResolutionByIndex(deviceIndex);
+            if (current.Width > 0 && current.Height > 0)
+            {
+                return current;
+            }
+
+            return default;
+        }
+
+        CameraResolution best = default;
+        long bestArea = -1;
+        foreach (var r in list)
+        {
+            if (r.Width <= 0 || r.Height <= 0)
+            {
+                continue;
+            }
+
+            var area = (long)r.Width * r.Height;
+            if (area > bestArea)
+            {
+                best = r;
+                bestArea = area;
+            }
+        }
+
+        return best;
+    }
+
+    private static CameraResolution NormalizeEven(CameraResolution resolution)
+    {
+        var w = resolution.Width;
+        var h = resolution.Height;
+        if (w <= 0 || h <= 0)
+        {
+            return default;
+        }
+
+        if ((w & 1) == 1)
+        {
+            w--;
+        }
+
+        if ((h & 1) == 1)
+        {
+            h--;
+        }
+
+        if (w <= 0 || h <= 0)
+        {
+            return default;
+        }
+
+        return new CameraResolution(w, h);
+    }
+
+    private static CameraResolution GetCurrentResolutionByIndex(int deviceIndex)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return default;
+        }
+
+        if (deviceIndex < 0)
+        {
+            return default;
+        }
+
+        var devEnumType = Type.GetTypeFromCLSID(Clsid.SystemDeviceEnum);
+        if (devEnumType is null)
+        {
+            return default;
+        }
+
+        var createDevEnum = (ICreateDevEnum?)Activator.CreateInstance(devEnumType);
+        if (createDevEnum is null)
+        {
+            return default;
+        }
+
+        IEnumMoniker? enumMoniker = null;
+        IBaseFilter? filter = null;
+        IEnumPins? enumPins = null;
+        IPin? pin = null;
+
+        try
+        {
+            var category = FilterCategory.VideoInputDevice;
+            var hr = createDevEnum.CreateClassEnumerator(in category, out enumMoniker, 0);
+            if (hr != 0 || enumMoniker is null)
+            {
+                return default;
+            }
+
+            var targetMoniker = GetMonikerByIndex(enumMoniker, deviceIndex);
+            if (targetMoniker is null)
+            {
+                return default;
+            }
+
+            try
+            {
+                var filterGuid = typeof(IBaseFilter).GUID;
+                targetMoniker.BindToObject(null, null, in filterGuid, out var filterObj);
+                filter = filterObj as IBaseFilter;
+                if (filter is null)
+                {
+                    if (filterObj is not null)
+                    {
+                        Marshal.ReleaseComObject(filterObj);
+                    }
+                    return default;
+                }
+
+                filter.EnumPins(out enumPins);
+                if (enumPins is null)
+                {
+                    return default;
+                }
+
+                var pins = new IPin[1];
+                while (enumPins.Next(1, pins, IntPtr.Zero) == 0)
+                {
+                    pin = pins[0];
+                    try
+                    {
+                        pin.QueryDirection(out var direction);
+                        if (direction != PinDirection.Output)
+                        {
+                            continue;
+                        }
+
+                        if (!TryGetStreamConfig(pin, out var streamConfig) || streamConfig is null)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            var fmtHr = streamConfig.GetFormat(out var pmtPtr);
+                            if (fmtHr != 0 || pmtPtr == IntPtr.Zero)
+                            {
+                                continue;
+                            }
+
+                            try
+                            {
+                                var mt = Marshal.PtrToStructure<AMMediaType>(pmtPtr);
+                                try
+                                {
+                                    if (TryParseResolution(mt, out var resolution) &&
+                                        resolution.Width > 0 &&
+                                        resolution.Height > 0)
+                                    {
+                                        return resolution;
+                                    }
+                                }
+                                finally
+                                {
+                                    FreeMediaType(ref mt);
+                                }
+                            }
+                            finally
+                            {
+                                Marshal.FreeCoTaskMem(pmtPtr);
+                            }
+                        }
+                        finally
+                        {
+                            Marshal.ReleaseComObject(streamConfig);
+                        }
+                    }
+                    finally
+                    {
+                        Marshal.ReleaseComObject(pin);
+                        pin = null;
+                    }
+
+                    pins = new IPin[1];
+                }
+
+                return default;
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(targetMoniker);
+            }
+        }
+        catch
+        {
+            return default;
+        }
+        finally
+        {
+            if (pin is not null)
+            {
+                Marshal.ReleaseComObject(pin);
+            }
+            if (enumPins is not null)
+            {
+                Marshal.ReleaseComObject(enumPins);
+            }
+            if (filter is not null)
+            {
+                Marshal.ReleaseComObject(filter);
+            }
+            if (enumMoniker is not null)
+            {
+                Marshal.ReleaseComObject(enumMoniker);
+            }
+            Marshal.ReleaseComObject(createDevEnum);
+        }
+    }
+
     public static IReadOnlyList<string> GetCameraNames()
     {
         if (!OperatingSystem.IsWindows())
         {
             return [];
         }
+
+        using var _ = new ComInitScope();
 
         var devEnumType = Type.GetTypeFromCLSID(Clsid.SystemDeviceEnum);
         if (devEnumType is null)
@@ -95,6 +369,8 @@ public static class CameraResolutionHelper
         {
             return [];
         }
+
+        using var _ = new ComInitScope();
 
         try
         {
@@ -281,6 +557,12 @@ public static class CameraResolutionHelper
 
     private static bool TryGetStreamConfig(IPin pin, out IAMStreamConfig? streamConfig)
     {
+        if (pin is IAMStreamConfig directCast)
+        {
+            streamConfig = directCast;
+            return true;
+        }
+
         streamConfig = null;
         var iid = typeof(IAMStreamConfig).GUID;
         var unk = Marshal.GetIUnknownForObject(pin);
@@ -309,6 +591,43 @@ public static class CameraResolutionHelper
             Marshal.Release(ptr);
         }
     }
+
+    private sealed class ComInitScope : IDisposable
+    {
+        private readonly bool _initialized;
+
+        public ComInitScope()
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                _initialized = false;
+                return;
+            }
+
+            var hr = CoInitializeEx(IntPtr.Zero, CoInit.MultiThreaded);
+            _initialized = hr == 0 || hr == 1;
+        }
+
+        public void Dispose()
+        {
+            if (_initialized)
+            {
+                CoUninitialize();
+            }
+        }
+    }
+
+    [Flags]
+    private enum CoInit : uint
+    {
+        MultiThreaded = 0x0
+    }
+
+    [DllImport("ole32.dll")]
+    private static extern int CoInitializeEx(IntPtr pvReserved, CoInit dwCoInit);
+
+    [DllImport("ole32.dll")]
+    private static extern void CoUninitialize();
 
     private static string? TryGetMonikerFriendlyName(IMoniker moniker)
     {
