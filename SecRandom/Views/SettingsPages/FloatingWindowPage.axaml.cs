@@ -12,7 +12,7 @@ namespace SecRandom.Views.SettingsPages;
 public partial class FloatingWindowPage : UserControl
 {
     public FloatingWindowSettingsConfig ViewModel { get; } =
-        IAppHost.GetService<RootConfigHandler>().Data.FloatingWindowSettings;
+        IAppHost.GetService<MainConfigHandler>().Data.FloatingWindowSettings;
 
     public FloatingWindowPage()
     {

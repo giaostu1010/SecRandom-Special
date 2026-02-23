@@ -25,6 +25,18 @@
     <data name="RollCall" xml:space="preserve">
         <value>点名</value>
     </data>
+    <data name="QuickDraw" xml:space="preserve">
+        <value>闪抽</value>
+    </data>
+    <data name="Lottery" xml:space="preserve">
+        <value>抽奖</value>
+    </data>
+    <data name="FaceDraw" xml:space="preserve">
+        <value>人脸抽取</value>
+    </data>
+    <data name="Timer" xml:space="preserve">
+        <value>计时器</value>
+    </data>
     <data name="About" xml:space="preserve">
         <value>关于</value>
     </data>
@@ -63,5 +75,11 @@
     </data>
     <data name="UpdateSettings" xml:space="preserve">
         <value>更新设置</value>
+    </data>
+    <data name="OpenSettings" xml:space="preserve">
+        <value>打开设置</value>
+    </data>
+    <data name="OpenMainWindow" xml:space="preserve">
+        <value>打开主窗口</value>
     </data>
 </root>

@@ -11,7 +11,7 @@ public partial class FaceDetectorSettingsSubPage : UserControl
 {
     public FaceDetectorSettingsSubPage()
     {
-        DataContext = IAppHost.GetService<RootConfigHandler>().Data.DrawSettings.FaceDetectorSettings;
+        DataContext = IAppHost.GetService<MainConfigHandler>().Data.DrawSettings.FaceDetectorSettings;
         InitializeComponent();
     }
 

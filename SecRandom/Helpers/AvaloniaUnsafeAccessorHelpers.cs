@@ -29,7 +29,7 @@ internal static class AvaloniaUnsafeAccessorHelpers
         var renderTimerClassName = renderTimer?.GetType().Name;
         var win32CompositionMode = renderTimerClassName switch
         {
-            "WinUiCompositorConnection" => Win32CompositionMode.WinUIComposition,
+            "WinUiCompositorConnection" => Win32CompositionMode.WinUiComposition,
             "DirectCompositionConnection" => Win32CompositionMode.DirectComposition,
             "DxgiConnection" => Win32CompositionMode.LowLatencyDxgiSwapChain,
             _ => Win32CompositionMode.RedirectionSurface
@@ -39,7 +39,7 @@ internal static class AvaloniaUnsafeAccessorHelpers
 
     public enum Win32CompositionMode
     {
-        WinUIComposition = 1,
+        WinUiComposition = 1,
         DirectComposition = 2,
         LowLatencyDxgiSwapChain = 3,
         RedirectionSurface = 4,

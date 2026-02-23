@@ -11,7 +11,7 @@ public partial class LotterySettingsSubPage : UserControl
 {
     public LotterySettingsSubPage()
     {
-        DataContext = IAppHost.GetService<RootConfigHandler>().Data.DrawSettings.LotterySettings;
+        DataContext = IAppHost.GetService<MainConfigHandler>().Data.DrawSettings.LotterySettings;
         InitializeComponent();
     }
 

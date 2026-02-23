@@ -23,7 +23,7 @@ public partial class MainWindow : AppWindow
     {
         var isMicaSupported = OperatingSystem.IsWindows() 
                               && Environment.OSVersion.Version >= new Version(10, 0, 22000, 0)
-                              && AvaloniaUnsafeAccessorHelpers.GetActiveWin32CompositionMode() == AvaloniaUnsafeAccessorHelpers.Win32CompositionMode.WinUIComposition;
+                              && AvaloniaUnsafeAccessorHelpers.GetActiveWin32CompositionMode() == AvaloniaUnsafeAccessorHelpers.Win32CompositionMode.WinUiComposition;
         if (isMicaSupported)
         {
             TransparencyLevelHint = [WindowTransparencyLevel.Mica];

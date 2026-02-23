@@ -21,7 +21,7 @@ namespace SecRandom.Views;
 public partial class SettingsView : UserControl, INavigationPageFactory
 {
     public SettingsViewModel ViewModel { get; } = IAppHost.GetService<SettingsViewModel>();
-    private const string DefaultMainPageId = "settings.about";
+    private const string DefaultMainPageId = "settings.basic";
     
     private AppToastAdorner? _appToastAdorner;
     private bool _isAdornerAdded;

@@ -110,7 +110,7 @@
         <value>点名</value>
     </data>
     <data name="QuickDrawButton" xml:space="preserve">
-        <value>快速抽取</value>
+        <value>闪抽</value>
     </data>
     <data name="LotteryButton" xml:space="preserve">
         <value>抽奖</value>

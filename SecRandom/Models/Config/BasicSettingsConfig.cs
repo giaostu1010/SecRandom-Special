@@ -21,16 +21,4 @@ public partial class BasicSettingsConfig : ObservableObject
     [ObservableProperty] private string _uiFontFamilyName = "HarmonyOS Sans SC";
     [ObservableProperty] private int _uiFontWeightIndex = 0;
     [ObservableProperty] private int _uiDpiScaleIndex = 5;
-
-    [JsonIgnore]
-    public int UiLanguageModeIndex
-    {
-        get => (int)UiLanguageMode;
-        set => UiLanguageMode = (UiLanguageMode)value;
-    }
-
-    partial void OnUiLanguageModeChanged(UiLanguageMode value)
-    {
-        OnPropertyChanged(nameof(UiLanguageModeIndex));
-    }
 }

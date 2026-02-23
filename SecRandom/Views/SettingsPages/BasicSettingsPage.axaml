@@ -116,7 +116,7 @@
                                          Description="{x:Static pageLangs:Resources.LanguageDesc}"
                                          IconSource="{controls:FluentIconSource &#xE774;}">
                     <fa:SettingsExpanderItem.Footer>
-                        <ComboBox SelectedIndex="{Binding UiLanguageModeIndex}"
+                        <ComboBox SelectedIndex="{Binding UiLanguageMode}"
                                   MinWidth="140">
                             <ComboBoxItem Content="{x:Static pageLangs:Resources.LanguageFollowSystem}" />
                             <ComboBoxItem Content="{x:Static pageLangs:Resources.LanguageEnglish}" />

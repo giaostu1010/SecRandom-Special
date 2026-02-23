@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -15,40 +15,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Langs\Common\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\Common\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
-      <EmbeddedResource Update="Langs\Common\Resources.en-us.resx">
-        <WithCulture>true</WithCulture>
-      </EmbeddedResource>
-
-      <EmbeddedResource Update="Langs\Pages\RollCallPage\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\Pages\RollCallPage\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
-      <EmbeddedResource Update="Langs\Pages\RollCallPage\Resources.en-us.resx">
-        <WithCulture>true</WithCulture>
-      </EmbeddedResource>
-
-      <EmbeddedResource Update="Langs\SettingsPages\BasicSettingsPage\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\SettingsPages\BasicSettingsPage\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
-      <EmbeddedResource Update="Langs\SettingsPages\BasicSettingsPage\Resources.en-us.resx">
-        <WithCulture>true</WithCulture>
-      </EmbeddedResource>
-
-      <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.zh-hans.resx">
+      <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-
-      <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.en-us.resx">
-        <WithCulture>true</WithCulture>
       </EmbeddedResource>
     </ItemGroup>
 

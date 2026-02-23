@@ -19,10 +19,10 @@ namespace SecRandom.Views.SettingsPages;
 [PageInfo("settings.basic", "\uf4c4")]
 public partial class BasicSettingsPage : UserControl
 {
-    public BasicSettingsConfig ViewModel { get; } = IAppHost.GetService<RootConfigHandler>().Data.BasicSettings;
+    public BasicSettingsConfig ViewModel { get; } = IAppHost.GetService<MainConfigHandler>().Data.BasicSettings;
     private ComboBox? _fontFamilyComboBox;
     private List<FontFamily> _fontFamilies = [];
-    private static readonly string[] _legacyUiFontFamilies = ["HarmonyOS Sans SC", "Segoe UI", "Microsoft YaHei UI"];
+    private static readonly string[] LegacyUiFontFamilies = ["HarmonyOS Sans SC", "Segoe UI", "Microsoft YaHei UI"];
     
     public BasicSettingsPage()
     {
@@ -75,11 +75,11 @@ public partial class BasicSettingsPage : UserControl
         if (string.IsNullOrWhiteSpace(desiredName))
         {
             var legacyIndex = ViewModel.UiFontFamilyIndex;
-            if (legacyIndex < 0 || legacyIndex >= _legacyUiFontFamilies.Length)
+            if (legacyIndex < 0 || legacyIndex >= LegacyUiFontFamilies.Length)
             {
                 legacyIndex = 0;
             }
-            desiredName = _legacyUiFontFamilies[legacyIndex];
+            desiredName = LegacyUiFontFamilies[legacyIndex];
         }
         var selected = _fontFamilies.FirstOrDefault(x =>
                            string.Equals(x.Name, desiredName, StringComparison.OrdinalIgnoreCase)) ??

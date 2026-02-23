@@ -1,21 +1,27 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.Converters;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Avalonia.Styling;
+using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using SecRandom.Core;
 using SecRandom.Core.Abstraction;
+using SecRandom.Core.Attributes;
 using SecRandom.Core.Extensions.Registry;
 using SecRandom.Core.Enums;
 using SecRandom.Core.Services;
@@ -30,37 +36,17 @@ namespace SecRandom;
 
 public partial class App : Application
 {
+    private static FloatingWindow? _floatingWindow;
     private static MainWindow? _mainWindow;
     private static MainWindow? _settingsWindow;
     private static CultureInfo? _startupCulture;
     private static UiLanguageMode _startupUiLanguageMode;
     private static string? _startupConfigFilePath;
-    private static readonly string[] _legacyUiFontFamilies = ["HarmonyOS Sans SC", "Segoe UI", "Microsoft YaHei UI"];
-    private static readonly FontWeight[] _uiFontWeights = [FontWeight.Normal, FontWeight.SemiBold, FontWeight.Bold];
-    private static readonly Dictionary<string, Func<string>> _pageNameProviders = new()
-    {
-        ["main.rollCall"] = () => Langs.Common.Resources.RollCall,
-        ["settings.basic"] = () => Langs.Common.Resources.BasicSettings,
-        ["settings.rosterManagement"] = () => Langs.Common.Resources.RosterManagement,
-        ["settings.draw.rollCall"] = () => Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings,
-        ["settings.draw.quickDraw"] = () => Langs.SettingsPages.DrawSettingsPage.Resources.QuickDrawSettings,
-        ["settings.draw.lottery"] = () => Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings,
-        ["settings.draw.faceDetector"] = () => Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings,
-        ["settings.floatingWindow"] = () => Langs.Common.Resources.FloatingWindowManagement,
-        ["settings.notificationSettings"] = () => Langs.Common.Resources.NotificationSettings,
-        ["settings.securitySettings"] = () => Langs.Common.Resources.SecuritySettings,
-        ["settings.linkageSettings"] = () => Langs.Common.Resources.LinkageSettings,
-        ["settings.voiceSettings"] = () => Langs.Common.Resources.VoiceSettings,
-        ["settings.themeManagement"] = () => Langs.Common.Resources.ThemeManagement,
-        ["settings.history"] = () => Langs.Common.Resources.History,
-        ["settings.more"] = () => Langs.Common.Resources.MoreSettings,
-        ["settings.update"] = () => Langs.Common.Resources.UpdateSettings,
-        ["settings.about"] = () => Langs.Common.Resources.About
-    };
     
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        CreateTrayIconMenu();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -77,13 +63,9 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
-            _mainWindow = new MainWindow
-            {
-                Content = IAppHost.GetService<MainView>(),
-                Title = "SecRandom"
-            };
-            _mainWindow.Closed += (_, _) => _mainWindow = null;
-            desktop.MainWindow = _mainWindow;
+            _floatingWindow = new FloatingWindow();
+            _floatingWindow.Closed += (_, _) => _floatingWindow = null;
+            desktop.MainWindow = _floatingWindow;
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
@@ -105,6 +87,137 @@ public partial class App : Application
             BindingPlugins.DataValidators.Remove(plugin);
         }
     }
+    
+    private static void BuildHost()
+    {
+        if (IAppHost.Host is not null)
+        {
+            return;
+        }
+
+        IAppHost.Host = Host
+            .CreateDefaultBuilder()
+            .UseContentRoot(AppContext.BaseDirectory)
+            .ConfigureServices(services =>
+            {
+                // 日志
+                services.AddLogging(builder =>
+                {
+                    builder.AddConsoleFormatter<SecRandomConsoleFormatter, ConsoleFormatterOptions>();
+                    builder.AddConsole(console => { console.FormatterName = "secrandom"; });
+                    builder.AddProvider(new SecRandomFileLoggerProvider(Utils.GetFilePath("logs", "app.log")));
+#if DEBUG
+                    builder.SetMinimumLevel(LogLevel.Trace);
+#endif
+                });
+                
+                // 配置
+                services.AddSingleton<ConfigServiceBase, DesktopConfigService>();
+                services.AddSingleton<MainConfigHandler>();
+                
+                // 服务
+                services.AddSingleton<ViewModelBase>();
+                
+                // 窗口
+                services.AddTransient<MainView>();
+                services.AddTransient<MainViewModel>();
+                
+                services.AddTransient<SettingsView>();
+                services.AddTransient<SettingsViewModel>();
+                
+                // 界面 Views
+                services.AddMainPage<RollCallPage>(Langs.Common.Resources.RollCall);
+                
+                services.AddSettingsPage<BasicSettingsPage>(Langs.Common.Resources.BasicSettings);
+                services.AddSettingsPage<RosterManagementPage>(Langs.Common.Resources.RosterManagement);
+                services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
+                services.AddSettingsPage<QuickDrawSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.QuickDrawSettings);
+                services.AddSettingsPage<LotterySettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings);
+                services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
+                services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
+                services.AddSettingsPage<NotificationSettingsPage>(Langs.Common.Resources.NotificationSettings);
+                services.AddSettingsPage<SecuritySettingsPage>(Langs.Common.Resources.SecuritySettings);
+                services.AddSettingsPage<LinkageSettingsPage>(Langs.Common.Resources.LinkageSettings);
+                services.AddSettingsPage<VoiceSettingsPage>(Langs.Common.Resources.VoiceSettings);
+                services.AddSettingsPage<ThemeManagementPage>(Langs.Common.Resources.ThemeManagement);
+                services.AddSettingsPage<HistoryPage>(Langs.Common.Resources.History);
+                
+                services.AddSettingsPage<MoreSettingsPage>(Langs.Common.Resources.MoreSettings);
+                services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
+                services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
+
+                // 界面 ViewModels
+            })
+            .Build();
+
+        var logger = IAppHost.GetService<ILogger<App>>();
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("SecRandom  Copyright by SECTL(2025~{YEAR})  Licensed under GPL3.0",
+                DateTime.Now.Year);
+            logger.LogInformation("Host built.");
+            
+            if (_startupCulture is not null && !string.IsNullOrWhiteSpace(_startupConfigFilePath))
+            {
+                logger.LogInformation("UI Culture: {CULTURE} (Mode={MODE}, Config={PATH})",
+                    _startupCulture.Name, _startupUiLanguageMode, _startupConfigFilePath);
+            }
+        }
+        
+        var basicSettings = IAppHost.GetService<MainConfigHandler>().Data.BasicSettings;
+        ApplyUiThemeModeIndex(basicSettings.UiThemeModeIndex);
+        ApplyUiFont(basicSettings.UiFontFamilyName, basicSettings.UiFontFamilyIndex, basicSettings.UiFontWeightIndex);
+    }
+
+    #region Windows
+
+    public static void ShowMainWindow()
+    {
+        if (_mainWindow is { IsVisible: true })
+        {
+            _mainWindow.Activate();
+            return;
+        }
+
+        if (_mainWindow is not { IsLoaded: true })
+        {
+            _mainWindow = new MainWindow
+            {
+                Content = IAppHost.GetService<MainView>(),
+                Title = "SecRandom"
+            };
+            _mainWindow.Closed += (_, _) => _mainWindow = null;
+        }
+
+        _mainWindow.Show();
+        _mainWindow.Activate();
+    }
+    
+    public static void ShowSettingsWindow()
+    {
+        if (_settingsWindow is { IsVisible: true })
+        {
+            _settingsWindow.Activate();
+            return;
+        }
+        
+        if (_settingsWindow is not { IsLoaded: true })
+        {
+            _settingsWindow = new MainWindow
+            {
+                Content = IAppHost.GetService<SettingsView>(),
+                Title = "SecRandom"
+            };
+            _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+        }
+
+        _settingsWindow.Show();
+        _settingsWindow.Activate();
+    }
+
+    #endregion
+    
+    #region Language
 
     private static void InitializeLanguages(CultureInfo cultureInfo)
     {
@@ -132,57 +245,10 @@ public partial class App : Application
         InitializeLanguages(culture);
         UpdateRegisteredPageNames();
         ReloadOpenWindows(uiLanguageMode, culture);
+        var app = Current as App;
+        app?.CreateTrayIconMenu();
     }
-
-    public static void ApplyUiThemeModeIndex(int uiThemeModeIndex)
-    {
-        if (Current is null)
-        {
-            return;
-        }
-
-        Current.RequestedThemeVariant = uiThemeModeIndex switch
-        {
-            1 => ThemeVariant.Light,
-            2 => ThemeVariant.Dark,
-            _ => ThemeVariant.Default
-        };
-    }
-
-    public static void ApplyUiFont(string? uiFontFamilyName, int uiFontFamilyIndex, int uiFontWeightIndex)
-    {
-        if (Current is null)
-        {
-            return;
-        }
-
-        var fontFamilyName = ResolveUiFontFamilyName(uiFontFamilyName, uiFontFamilyIndex);
-
-        var weightIndex = uiFontWeightIndex;
-        if (weightIndex < 0 || weightIndex >= _uiFontWeights.Length)
-        {
-            weightIndex = 0;
-        }
-
-        Current.Resources["AppFontFamily"] = new FontFamily(fontFamilyName);
-        Current.Resources["AppFontWeight"] = _uiFontWeights[weightIndex];
-    }
-
-    private static string ResolveUiFontFamilyName(string? uiFontFamilyName, int uiFontFamilyIndex)
-    {
-        if (!string.IsNullOrWhiteSpace(uiFontFamilyName))
-        {
-            return uiFontFamilyName;
-        }
-
-        if (uiFontFamilyIndex < 0 || uiFontFamilyIndex >= _legacyUiFontFamilies.Length)
-        {
-            return _legacyUiFontFamilies[0];
-        }
-
-        return _legacyUiFontFamilies[uiFontFamilyIndex];
-    }
-
+    
     private static void UpdateRegisteredPageNames()
     {
         foreach (var info in PagesRegistryService.MainItems)
@@ -196,14 +262,14 @@ public partial class App : Application
         }
     }
 
-    private static void UpdateRegisteredPageName(SecRandom.Core.Attributes.PageInfo info)
+    private static void UpdateRegisteredPageName(PageInfo info)
     {
         if (info.IsSeparator)
         {
             return;
         }
 
-        if (_pageNameProviders.TryGetValue(info.Id, out var provider))
+        if (PageNameProviders.TryGetValue(info.Id, out var provider))
         {
             info.Name = provider();
         }
@@ -306,127 +372,99 @@ public partial class App : Application
 
         return new CultureInfo("en-us");
     }
-    
-    private static void BuildHost()
+
+    #endregion
+
+    #region UI
+
+    public static void ApplyUiThemeModeIndex(int uiThemeModeIndex)
     {
-        if (IAppHost.Host is not null)
+        if (Current is null)
         {
             return;
         }
 
-        IAppHost.Host = Host
-            .CreateDefaultBuilder()
-            .UseContentRoot(AppContext.BaseDirectory)
-            .ConfigureServices(services =>
-            {
-                // 日志
-                services.AddLogging(builder =>
-                {
-                    builder.AddConsoleFormatter<SecRandomConsoleFormatter, ConsoleFormatterOptions>();
-                    builder.AddConsole(console => { console.FormatterName = "secrandom"; });
-                    builder.AddProvider(new SecRandomFileLoggerProvider(Utils.GetFilePath("logs", "app.log")));
-#if DEBUG
-                    builder.SetMinimumLevel(LogLevel.Trace);
-#endif
-                });
-                
-                // 配置
-                services.AddSingleton<ConfigServiceBase, DesktopConfigService>();
-                services.AddSingleton<RootConfigHandler>();
-                
-                // 服务
-                
-                // 窗口
-                services.AddTransient<MainView>();
-                services.AddTransient<MainViewModel>();
-                
-                services.AddTransient<SettingsView>();
-                services.AddTransient<SettingsViewModel>();
-                
-                // 界面 Views
-                services.AddMainPage<RollCallPage>(Langs.Common.Resources.RollCall);
-                
-                services.AddSettingsPage<BasicSettingsPage>(Langs.Common.Resources.BasicSettings);
-                services.AddSettingsPage<RosterManagementPage>(Langs.Common.Resources.RosterManagement);
-                services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
-                services.AddSettingsPage<QuickDrawSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.QuickDrawSettings);
-                services.AddSettingsPage<LotterySettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings);
-                services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
-                services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
-                services.AddSettingsPage<NotificationSettingsPage>(Langs.Common.Resources.NotificationSettings);
-                services.AddSettingsPage<SecuritySettingsPage>(Langs.Common.Resources.SecuritySettings);
-                services.AddSettingsPage<LinkageSettingsPage>(Langs.Common.Resources.LinkageSettings);
-                services.AddSettingsPage<VoiceSettingsPage>(Langs.Common.Resources.VoiceSettings);
-                services.AddSettingsPage<ThemeManagementPage>(Langs.Common.Resources.ThemeManagement);
-                services.AddSettingsPage<HistoryPage>(Langs.Common.Resources.History);
-                
-                services.AddSettingsPage<MoreSettingsPage>(Langs.Common.Resources.MoreSettings);
-                services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
-                services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
-
-                // 界面 ViewModels
-            })
-            .Build();
-
-        var logger = IAppHost.GetService<ILogger<App>>();
-        if (logger.IsEnabled(LogLevel.Information))
+        Current.RequestedThemeVariant = uiThemeModeIndex switch
         {
-            logger.LogInformation("SecRandom  Copyright by SECTL(2025~{YEAR})  Licensed under GPL3.0",
-                DateTime.Now.Year);
-            logger.LogInformation("Host built.");
-            if (_startupCulture is not null && !string.IsNullOrWhiteSpace(_startupConfigFilePath))
-            {
-                logger.LogInformation("UI Culture: {CULTURE} (Mode={MODE}, Config={PATH})",
-                    _startupCulture.Name, _startupUiLanguageMode, _startupConfigFilePath);
-            }
-        }
-        
-        var basicSettings = IAppHost.GetService<RootConfigHandler>().Data.BasicSettings;
-        ApplyUiThemeModeIndex(basicSettings.UiThemeModeIndex);
-        ApplyUiFont(basicSettings.UiFontFamilyName, basicSettings.UiFontFamilyIndex, basicSettings.UiFontWeightIndex);
+            1 => ThemeVariant.Light,
+            2 => ThemeVariant.Dark,
+            _ => ThemeVariant.Default
+        };
     }
 
-    public static void ShowMainWindow()
+    public static void ApplyUiFont(string? uiFontFamilyName, int uiFontFamilyIndex, int uiFontWeightIndex)
     {
-        if (_mainWindow is { IsVisible: true })
+        if (Current is null)
         {
-            _mainWindow.Activate();
             return;
         }
 
-        if (_mainWindow is not { IsLoaded: true })
+        var fontFamilyName = ResolveUiFontFamilyName(uiFontFamilyName, uiFontFamilyIndex);
+
+        var weightIndex = uiFontWeightIndex;
+        if (weightIndex < 0 || weightIndex >= UiFontWeights.Length)
         {
-            _mainWindow = new MainWindow
-            {
-                Content = IAppHost.GetService<MainView>(),
-                Title = "SecRandom"
-            };
-            _mainWindow.Closed += (_, _) => _mainWindow = null;
+            weightIndex = 0;
         }
 
-        _mainWindow.Show();
-        _mainWindow.Activate();
+        Current.Resources["AppFontFamily"] = new FontFamily(fontFamilyName);
+        Current.Resources["AppFontWeight"] = UiFontWeights[weightIndex];
+    }
+
+    private static string ResolveUiFontFamilyName(string? uiFontFamilyName, int uiFontFamilyIndex)
+    {
+        if (!string.IsNullOrWhiteSpace(uiFontFamilyName))
+        {
+            return uiFontFamilyName;
+        }
+
+        if (uiFontFamilyIndex < 0 || uiFontFamilyIndex >= LegacyUiFontFamilies.Length)
+        {
+            return LegacyUiFontFamilies[0];
+        }
+
+        return LegacyUiFontFamilies[uiFontFamilyIndex];
     }
     
-    public static void ShowSettingsWindow()
-    {
-        if (_settingsWindow is { IsVisible: true })
-        {
-            _settingsWindow.Activate();
-            return;
-        }
-        
-        if (_settingsWindow is not { IsLoaded: true })
-        {
-            _settingsWindow = new MainWindow
-            {
-                Content = IAppHost.GetService<SettingsView>(),
-                Title = "SecRandom"
-            };
-            _settingsWindow.Closed += (_, _) => _settingsWindow = null;
-        }
+    #endregion
 
-        _settingsWindow.Show();
-        _settingsWindow.Activate();
+    #region TrayIcon
+
+    private void CreateTrayIconMenu()
+    {
+        var menu = (this.FindResource("AppMenu") as NativeMenu)!;
+        menu.Items.Clear();
+
+        var menuAbout = new NativeMenuItem
+        {
+            Header = "SecRandom",
+            Icon = OnPlatformExtension.ShouldProvideOption("OSX")
+                ? null
+                : new Bitmap(AssetLoader.Open(new Uri("avares://SecRandom/Assets/AppLogo.png"))),
+        };
+        menuAbout.Click += (sender, e) =>
+        {
+            ShowSettingsWindow();
+            IAppHost.GetService<SettingsView>().SelectNavigationItemById("settings.about");
+        };
+        menu.Items.Add(menuAbout);
+
+        menu.Items.Add(new NativeMenuItemSeparator());
+        
+        var menuOpenMainWindow = new NativeMenuItem(Langs.Common.Resources.OpenMainWindow);
+        menuOpenMainWindow.Click += (sender, args) =>
+        {
+            ShowMainWindow();
+        };
+        menu.Items.Add(menuOpenMainWindow);
+        
+        var menuOpenSettings = new NativeMenuItem(Langs.Common.Resources.OpenSettings);
+        menuOpenSettings.Click += (sender, args) =>
+        {
+            ShowSettingsWindow();
+        };
+        menu.Items.Add(menuOpenSettings);
     }
+
+    #endregion
 }

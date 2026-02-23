@@ -11,7 +11,7 @@ public partial class RollCallSettingsSubPage : UserControl
 {
     public RollCallSettingsSubPage()
     {
-        DataContext = IAppHost.GetService<RootConfigHandler>().Data.DrawSettings.RollCallSettings;
+        DataContext = IAppHost.GetService<MainConfigHandler>().Data.DrawSettings.RollCallSettings;
         InitializeComponent();
     }
 

@@ -11,7 +11,7 @@ public partial class QuickDrawSettingsSubPage : UserControl
 {
     public QuickDrawSettingsSubPage()
     {
-        DataContext = IAppHost.GetService<RootConfigHandler>().Data.DrawSettings.QuickDrawSettings;
+        DataContext = IAppHost.GetService<MainConfigHandler>().Data.DrawSettings.QuickDrawSettings;
         InitializeComponent();
     }
 
