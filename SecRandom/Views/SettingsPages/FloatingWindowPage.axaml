@@ -93,6 +93,16 @@
                                       OffContent=""/>
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AcrylicBackground}"
+                                         Description="{x:Static pageLangs:Resources.AcrylicBackgroundDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE51F;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding IsAcrylicBackgroundEnabled}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
                 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ResetFloatingWindowPosition}"
                                          Description="{x:Static pageLangs:Resources.ResetFloatingWindowPositionDesc}"

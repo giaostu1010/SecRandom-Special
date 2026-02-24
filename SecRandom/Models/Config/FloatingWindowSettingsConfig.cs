@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace SecRandom.Models.Config;
@@ -11,11 +12,12 @@ namespace SecRandom.Models.Config;
 public partial class FloatingWindowSettingsConfig : ObservableObject
 {
     [ObservableProperty] private bool _isShowFloatingWindowOnStartupEnabled = true;
-    [ObservableProperty] private double _floatingWindowOpacity = 0.8;
+    [ObservableProperty] private double _floatingWindowOpacity = 0.6;
     [ObservableProperty] private int _floatingWindowTopmostMode = 1;
     [ObservableProperty] private bool _isExtendQuickDrawComponentEnabled = false;
+    [ObservableProperty] private bool _isAcrylicBackgroundEnabled = true;
 
-    [ObservableProperty] private List<string> _floatingWindowButtonControl = ["roll_call", "quick_draw"];
+    [ObservableProperty] private ObservableCollection<string> _floatingWindowButtonControl = ["roll_call", "quick_draw"];
 
     [ObservableProperty] private bool _isRollCallButtonEnabled = true;
     [ObservableProperty] private bool _isQuickDrawButtonEnabled = true;

@@ -33,6 +33,7 @@ public partial class FloatingWindow : Window
         ViewModel.Config.FloatingWindowSettings.PropertyChanged += (sender, args) =>
         {
             CheckIsVisibleValidate();
+            OnLoaded(this, new RoutedEventArgs());
         };
     }
 
@@ -60,6 +61,14 @@ public partial class FloatingWindow : Window
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         Position = new PixelPoint(ViewModel.Config.FloatPosition.X, ViewModel.Config.FloatPosition.Y);
+        if (App.IsAcrylicBlurSupported && ViewModel.Config.FloatingWindowSettings.IsAcrylicBackgroundEnabled)
+        {
+            TransparencyLevelHint = [WindowTransparencyLevel.AcrylicBlur];
+        }
+        else
+        {
+            TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
+        }
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)

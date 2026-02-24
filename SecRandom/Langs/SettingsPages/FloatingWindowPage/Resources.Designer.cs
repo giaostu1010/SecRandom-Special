@@ -60,6 +60,24 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 亚克力背景.
+        /// </summary>
+        public static string AcrylicBackground {
+            get {
+                return ResourceManager.GetString("AcrylicBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 控制是否使用亚克力背景，仅在 Windows 10.0.18362.0 及以上版本可用。.
+        /// </summary>
+        public static string AcrylicBackgroundDesc {
+            get {
+                return ResourceManager.GetString("AcrylicBackgroundDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 外观设置.
         /// </summary>
         public static string AppearanceSettings {

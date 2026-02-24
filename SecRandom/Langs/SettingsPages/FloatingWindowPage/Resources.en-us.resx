@@ -251,4 +251,10 @@
     <data name="HideFloatingWindowOnForegroundProcessNamesDesc" xml:space="preserve">
         <value>Comma-separated keywords to match processes</value>
     </data>
+    <data name="AcrylicBackground" xml:space="preserve">
+        <value>Acrylic background</value>
+    </data>
+    <data name="AcrylicBackgroundDesc" xml:space="preserve">
+        <value>Specifies whether the acrylic background effect is enabled. This setting is only available on Windows 10.0.18362.0 and later.</value>
+    </data>
 </root>

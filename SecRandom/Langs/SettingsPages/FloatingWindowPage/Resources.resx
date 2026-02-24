@@ -251,4 +251,10 @@
     <data name="HideFloatingWindowOnForegroundProcessNamesDesc" xml:space="preserve">
         <value>用英文逗号分隔，匹配进程名关键字</value>
     </data>
+    <data name="AcrylicBackground" xml:space="preserve">
+        <value>亚克力背景</value>
+    </data>
+    <data name="AcrylicBackgroundDesc" xml:space="preserve">
+        <value>控制是否使用亚克力背景，仅在 Windows 10.0.18362.0 及以上版本可用。</value>
+    </data>
 </root>
