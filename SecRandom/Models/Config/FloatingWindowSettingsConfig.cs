@@ -33,7 +33,7 @@ public partial class FloatingWindowSettingsConfig : ObservableObject
     [ObservableProperty] private int _floatingWindowStickToEdgeDisplayStyle = 1;
 
     [ObservableProperty] private bool _isFloatingWindowDraggableEnabled = true;
-    [ObservableProperty] private int _floatingWindowLongPressDuration = 500;
+    [ObservableProperty] private int _floatingWindowLongPressDuration = 100;
 
     [ObservableProperty] private bool _isDoNotStealFocusEnabled = true;
 

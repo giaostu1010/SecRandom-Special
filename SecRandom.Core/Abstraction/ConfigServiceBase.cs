@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace SecRandom.Core.Abstraction;
 
@@ -7,7 +7,8 @@ public abstract class ConfigServiceBase
     protected readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        Converters = { new ColorJsonConverter() }
     };
 
     public abstract T LoadConfig<T>(T fallback) where T : ConfigBase;

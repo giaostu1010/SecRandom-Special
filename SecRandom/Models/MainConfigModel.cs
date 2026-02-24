@@ -18,4 +18,6 @@ public partial class MainConfigModel : ConfigBase
     [ObservableProperty] private FloatingWindowSettingsConfig _floatingWindowSettings = new();
     [ObservableProperty] private LinkageSettingsConfig _linkageSettings = new();
     [ObservableProperty] private SecuritySettingsConfig _securitySettings = new();
+    [ObservableProperty] private ThemeManagementSettingsConfig _themeManagement = new();
+    [ObservableProperty] private UserSettingsConfig _userSettings = new();
 }

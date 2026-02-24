@@ -15,6 +15,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     private FaceDetectorSettingsConfig? _faceDetectorSettings;
     private LinkageSettingsConfig? _linkageSettings;
     private SecuritySettingsConfig? _securitySettings;
+    private ThemeManagementSettingsConfig? _themeManagement;
 
     public MainConfigHandler(ILogger<MainConfigHandler> logger, ConfigServiceBase configService)
         : base(logger, configService, () => new MainConfigModel())
@@ -24,6 +25,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         AttachFloatingWindowSettingsHandlers();
         AttachLinkageSettingsHandlers();
         AttachSecuritySettingsHandlers();
+        AttachThemeManagementHandlers();
     }
 
     protected override void Reload()
@@ -33,12 +35,14 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         DetachFloatingWindowSettingsHandlers();
         DetachLinkageSettingsHandlers();
         DetachSecuritySettingsHandlers();
+        DetachThemeManagementHandlers();
         base.Reload();
         AttachBasicSettingsHandlers();
         AttachDrawSettingsHandlers();
         AttachFloatingWindowSettingsHandlers();
         AttachLinkageSettingsHandlers();
         AttachSecuritySettingsHandlers();
+        AttachThemeManagementHandlers();
     }
 
     protected override void Data_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -67,6 +71,11 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         {
             DetachSecuritySettingsHandlers();
             AttachSecuritySettingsHandlers();
+        }
+        else if (e.PropertyName == nameof(MainConfigModel.ThemeManagement))
+        {
+            DetachThemeManagementHandlers();
+            AttachThemeManagementHandlers();
         }
 
         base.Data_OnPropertyChanged(sender, e);
@@ -230,6 +239,28 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     }
 
     private void SecuritySettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        Save();
+    }
+
+    private void AttachThemeManagementHandlers()
+    {
+        _themeManagement = Data.ThemeManagement;
+        _themeManagement.PropertyChanged += ThemeManagement_OnPropertyChanged;
+    }
+
+    private void DetachThemeManagementHandlers()
+    {
+        if (_themeManagement is null)
+        {
+            return;
+        }
+
+        _themeManagement.PropertyChanged -= ThemeManagement_OnPropertyChanged;
+        _themeManagement = null;
+    }
+
+    private void ThemeManagement_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Save();
     }

@@ -134,7 +134,8 @@ jobs:
           fi
 
           version_no_v="${version#v}"
-          changelog="CHANGELOG/${version}/CHANGELOG.md"
+          major_version="v${version_no_v%%.*}"
+          changelog="CHANGELOG/${major_version}/${version}/CHANGELOG.md"
           if [ "${create_release}" = "true" ] && [ ! -f "${changelog}" ]; then
             echo "Missing changelog: ${changelog}"
             exit 1
