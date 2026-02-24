@@ -13,6 +13,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,7 +77,10 @@ public partial class App : Application
         {
             throw new PlatformNotSupportedException();
         }
-
+        
+        AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
+        Dispatcher.UIThread.UnhandledException += App_OnDispatcherUnhandledException;
+        
         base.OnFrameworkInitializationCompleted();
     }
 
@@ -163,22 +167,27 @@ public partial class App : Application
             .Build();
 
         var logger = IAppHost.GetService<ILogger<App>>();
-        if (logger.IsEnabled(LogLevel.Information))
+        
+        logger.LogInformation("SecRandom {VERSION} (Codename: {CODENAME})",
+            GlobalConstants.Version, GlobalConstants.Codename);
+        logger.LogInformation("Copyright by SECTL(2025~{YEAR})  Licensed under GPL3.0", DateTime.Now.Year);
+        logger.LogInformation("Host built.");
+        
+        var lifetime = IAppHost.GetService<IHostApplicationLifetime>();
+        lifetime.ApplicationStopping.Register(Stop);
+        
+        if (_startupCulture is not null && !string.IsNullOrWhiteSpace(_startupConfigFilePath))
         {
-            logger.LogInformation("SecRandom  Copyright by SECTL(2025~{YEAR})  Licensed under GPL3.0",
-                DateTime.Now.Year);
-            logger.LogInformation("Host built.");
-            
-            if (_startupCulture is not null && !string.IsNullOrWhiteSpace(_startupConfigFilePath))
-            {
-                logger.LogInformation("UI Culture: {CULTURE} (Mode={MODE}, Config={PATH})",
-                    _startupCulture.Name, _startupUiLanguageMode, _startupConfigFilePath);
-            }
+            logger.LogInformation("UI Culture: {CULTURE} (Mode={MODE}, Config={PATH})",
+                _startupCulture.Name, _startupUiLanguageMode, _startupConfigFilePath);
         }
         
         var basicSettings = IAppHost.GetService<MainConfigHandler>().Data.BasicSettings;
         ApplyUiThemeModeIndex(basicSettings.UiThemeModeIndex);
         ApplyUiFont(basicSettings.UiFontFamilyName, basicSettings.UiFontFamilyIndex, basicSettings.UiFontWeightIndex);
+        
+        // 启动服务主机
+        _ = IAppHost.Host.StartAsync();
     }
 
     public static void Stop()
@@ -194,6 +203,21 @@ public partial class App : Application
         var configHandler = IAppHost.GetService<MainConfigHandler>();
         configHandler.Save();
         _desktopLifetime?.Shutdown();
+    }
+
+    private void App_OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        var configHandler = IAppHost.GetService<MainConfigHandler>();
+        configHandler.Save();
+        
+        var logger = IAppHost.GetService<ILogger<App>>();
+        logger.LogCritical(e.Exception, "发生严重错误");
+    }
+
+    private void CurrentDomainOnProcessExit(object? sender, EventArgs e)
+    {
+        var configHandler = IAppHost.GetService<MainConfigHandler>();
+        configHandler.Save();
     }
 
     #region Windows
