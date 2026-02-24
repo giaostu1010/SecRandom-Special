@@ -21,8 +21,17 @@ public class DesktopConfigService(ILogger<DesktopConfigService> logger) : Config
             return fallback;
         }
         
-        var json = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<T>(json, JsonOptions) ?? fallback;
+        try
+        {
+            var json = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<T>(json, JsonOptions) ?? fallback;
+        }
+        catch (JsonException ex)
+        {
+            Logger.LogWarning(ex, "配置解析失败，正在回滚并保存...");
+            SaveConfig(fallback);
+            return fallback;
+        }
     }
 
     public override void SaveConfig<T>(T config)

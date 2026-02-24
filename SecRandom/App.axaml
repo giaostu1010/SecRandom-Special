@@ -10,7 +10,6 @@
     
     <Application.Styles>
         <StyleInclude Source="/Styles.axaml"/>
-
         <Style Selector=":is(Window)">
             <Setter Property="Icon" Value="/Assets/AppLogo.png"/>
         </Style>

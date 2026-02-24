@@ -251,7 +251,7 @@ public partial class App : Application
         CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
         CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         Langs.Common.Resources.Culture = cultureInfo;
-        Langs.Pages.RollCallPage.Resources.Culture = cultureInfo;
+        Langs.MainPages.RollCallPage.Resources.Culture = cultureInfo;
         Langs.SettingsPages.BasicSettingsPage.Resources.Culture = cultureInfo;
         Langs.SettingsPages.DrawSettingsPage.Resources.Culture = cultureInfo;
     }
