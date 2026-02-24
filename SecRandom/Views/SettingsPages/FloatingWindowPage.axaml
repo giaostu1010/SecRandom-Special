@@ -6,7 +6,9 @@
              xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
              xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.FloatingWindowPage"
              xmlns:configModels="using:SecRandom.Models.Config"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:settingsPages="clr-namespace:SecRandom.Views.SettingsPages"
+             mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SecRandom.Views.SettingsPages.FloatingWindowPage"
              x:DataType="configModels:FloatingWindowSettingsConfig">
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
@@ -125,18 +127,19 @@
                                          Description="{x:Static pageLangs:Resources.FloatingWindowButtonControlDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8FD;}">
                     <fa:SettingsExpanderItem.Footer>
-                        <StackPanel Orientation="Vertical" Spacing="4" MinWidth="140">
-                            <CheckBox Content="{x:Static pageLangs:Resources.RollCallButton}"
-                                      IsChecked="{Binding IsRollCallButtonEnabled}"/>
-                            <CheckBox Content="{x:Static pageLangs:Resources.QuickDrawButton}"
-                                      IsChecked="{Binding IsQuickDrawButtonEnabled}"/>
-                            <CheckBox Content="{x:Static pageLangs:Resources.LotteryButton}"
-                                      IsChecked="{Binding IsLotteryButtonEnabled}"/>
-                            <CheckBox Content="{x:Static pageLangs:Resources.FaceDrawButton}"
-                                      IsChecked="{Binding IsFaceDrawButtonEnabled}"/>
-                            <CheckBox Content="{x:Static pageLangs:Resources.TimerButton}"
-                                      IsChecked="{Binding IsTimerButtonEnabled}"/>
-                        </StackPanel>
+                        <u:MultiComboBox SelectedItems="{Binding FloatingWindowButtonControl}"
+                                         ItemsSource="{Binding FloatingControls, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type settingsPages:FloatingWindowPage}}}">
+                            <u:MultiComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={x:Static settingsPages:FloatingWindowPage.FloatingControlLocalizationConverter}}" />
+                                </DataTemplate>
+                            </u:MultiComboBox.ItemTemplate>
+                            <u:MultiComboBox.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={x:Static settingsPages:FloatingWindowPage.FloatingControlLocalizationConverter}}" />
+                                </DataTemplate>
+                            </u:MultiComboBox.SelectedItemTemplate>
+                        </u:MultiComboBox>
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 

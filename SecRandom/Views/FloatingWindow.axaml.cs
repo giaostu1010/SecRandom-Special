@@ -1,12 +1,17 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using SecRandom.Core.Abstraction;
+using SecRandom.Core.Controls;
 using SecRandom.Models.Config;
 using SecRandom.ViewModels;
 
@@ -32,22 +37,129 @@ public partial class FloatingWindow : Window
 
         ViewModel.Config.FloatingWindowSettings.PropertyChanged += (sender, args) =>
         {
-            CheckIsVisibleValidate();
             OnLoaded(this, new RoutedEventArgs());
         };
+
+        ViewModel.Config.FloatingWindowSettings.FloatingWindowButtonControl.CollectionChanged += (sender, args) =>
+        {
+            CheckIsVisibleValidate();
+            RefreshItems();
+        };
+        
+        CheckIsVisibleValidate();
+        RefreshItems();
     }
 
     private void CheckIsVisibleValidate()
     {
         var settings = ViewModel.Config.FloatingWindowSettings;
-        if (!settings.IsRollCallButtonEnabled &&
-            !settings.IsQuickDrawButtonEnabled &&
-            !settings.IsLotteryButtonEnabled &&
-            !settings.IsFaceDrawButtonEnabled &&
-            !settings.IsTimerButtonEnabled)
+        if (!settings.FloatingWindowButtonControl.Any())
         {
-            settings.IsRollCallButtonEnabled = true;
+            _ = MakeIsVisibleValidate();
         }
+    }
+
+    private async Task MakeIsVisibleValidate()
+    {
+        await Task.Delay(1);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            ViewModel.Config.FloatingWindowSettings.FloatingWindowButtonControl.Add("roll_call");
+        });
+    }
+
+    public void RefreshItems()
+    {
+        RootStackPanel.Children.Clear();
+        RootStackPanel.Children.Add(new TouchDragThumb { Orientation = Orientation.Horizontal, Height = 24 });
+
+        foreach (var controlName in ViewModel.Config.FloatingWindowSettings.FloatingWindowButtonControl)
+        {
+            var control = controlName switch
+            {
+                "roll_call" => GetRollCallButton(),
+                "quick_draw" => GetQuickDrawButton(),
+                "lottery" => GetLotteryButton(),
+                "face_draw" => GetFaceDrawButton(),
+                "timer" => GetTimerButton(),
+                _ => null
+            };
+
+            if (control == null)
+            {
+                RootStackPanel.Children.Add(new TextBlock { Text = controlName });
+                continue;
+            }
+            
+            RootStackPanel.Children.Add(control);
+        }
+    }
+
+    private static CommandBarButton GetRollCallButton()
+    {
+        var b = new CommandBarButton
+        {
+            IconSource = new FluentIconSource("\uECAA"),
+            Label = Langs.Common.Resources.RollCall,
+        };
+        
+        b.Click += (sender, args) =>
+        {
+            App.ShowMainWindow();
+            var view = IAppHost.GetService<MainView>();
+            view.SelectNavigationItemById("main.rollCall");
+        };
+
+        return b;
+    }
+    
+    private static CommandBarButton GetQuickDrawButton()
+    {
+        var b = new CommandBarButton
+        {
+            IconSource = new FluentIconSource("\uE84E"),
+            Label = Langs.Common.Resources.QuickDraw,
+        };
+
+        return b;
+    }
+
+    private static CommandBarButton GetLotteryButton()
+    {
+        var b = new CommandBarButton
+        {
+            IconSource = new FluentIconSource("\uE8EC"),
+            Label = Langs.Common.Resources.Lottery,
+        };
+
+        return b;
+    }
+    
+    private static CommandBarButton GetFaceDrawButton()
+    {
+        var b = new CommandBarButton
+        {
+            IconSource = new FluentIconSource("\uF3EE"),
+            Label = Langs.Common.Resources.FaceDraw,
+        };
+
+        return b;
+    }
+    
+    private static CommandBarButton GetTimerButton()
+    {
+        var b = new CommandBarButton
+        {
+            IconSource = new FluentIconSource("\uF360"),
+            Label = Langs.Common.Resources.Timer,
+        };
+        
+        return b;
+    }
+    
+    private void OpenMainWindowButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        App.ShowMainWindow();
     }
 
     private void OnClosing(object? sender, WindowClosingEventArgs e)
@@ -88,7 +200,7 @@ public partial class FloatingWindow : Window
         }
     }
     
-    private bool IsChildOfButton(Visual? visual)
+    private static bool IsChildOfButton(Visual? visual)
     {
         while (visual != null)
         {
@@ -104,10 +216,5 @@ public partial class FloatingWindow : Window
         base.OnPointerReleased(e);
         
         ViewModel.Config.FloatPosition = new FloatPositionConfig { X = Position.X, Y = Position.Y };
-    }
-
-    private void OpenMainWindowButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        App.ShowMainWindow();
     }
 }

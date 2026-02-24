@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SecRandom.Core.Abstraction;
@@ -187,14 +188,23 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     private void AttachFloatingWindowSettingsHandlers()
     {
         Data.FloatingWindowSettings.PropertyChanged += FloatingWindowSettings_OnPropertyChanged;
+        Data.FloatingWindowSettings.FloatingWindowButtonControl.CollectionChanged +=
+            FloatingWindowButtonControl_OnCollectionChanged;
     }
 
     private void DetachFloatingWindowSettingsHandlers()
     {
         Data.FloatingWindowSettings.PropertyChanged -= FloatingWindowSettings_OnPropertyChanged;
+        Data.FloatingWindowSettings.FloatingWindowButtonControl.CollectionChanged -=
+            FloatingWindowButtonControl_OnCollectionChanged;
     }
 
     private void FloatingWindowSettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        Save();
+    }
+
+    private void FloatingWindowButtonControl_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         Save();
     }

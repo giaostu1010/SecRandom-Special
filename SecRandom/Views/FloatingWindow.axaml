@@ -2,9 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:fa="using:FluentAvalonia.UI.Controls"
-        xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
-        xmlns:langs="clr-namespace:SecRandom.Langs.Common"
         xmlns:views="clr-namespace:SecRandom.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SecRandom.Views.FloatingWindow"
@@ -35,33 +32,6 @@
                     Orientation="Vertical"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
-                    Margin="4">
-            <controls:TouchDragThumb Orientation="Horizontal" Height="24" />
-            
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xECAA;}"
-                                 Label="{x:Static langs:Resources.RollCall}"
-                                 IsVisible="{Binding ViewModel.Config.FloatingWindowSettings.IsRollCallButtonEnabled}"
-                                 Click="OpenMainWindowButton_OnClick" />
-            
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xE84E;}"
-                                 Label="{x:Static langs:Resources.QuickDraw}"
-                                 IsVisible="{Binding ViewModel.Config.FloatingWindowSettings.IsQuickDrawButtonEnabled}"
-                                 Click="OpenMainWindowButton_OnClick" />
-            
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xE8EC;}"
-                                 Label="{x:Static langs:Resources.Lottery}"
-                                 IsVisible="{Binding ViewModel.Config.FloatingWindowSettings.IsLotteryButtonEnabled}"
-                                 Click="OpenMainWindowButton_OnClick" />
-            
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xF3EE;}"
-                                 Label="{x:Static langs:Resources.FaceDraw}"
-                                 IsVisible="{Binding ViewModel.Config.FloatingWindowSettings.IsFaceDrawButtonEnabled}"
-                                 Click="OpenMainWindowButton_OnClick" />
-            
-            <fa:CommandBarButton IconSource="{controls:FluentIconSource &#xF360;}"
-                                 Label="{x:Static langs:Resources.Timer}"
-                                 IsVisible="{Binding ViewModel.Config.FloatingWindowSettings.IsTimerButtonEnabled}"
-                                 Click="OpenMainWindowButton_OnClick" />
-        </StackPanel>
+                    Margin="4" />
     </Grid>
 </Window>

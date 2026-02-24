@@ -19,12 +19,6 @@ public partial class FloatingWindowSettingsConfig : ObservableObject
 
     [ObservableProperty] private ObservableCollection<string> _floatingWindowButtonControl = ["roll_call", "quick_draw"];
 
-    [ObservableProperty] private bool _isRollCallButtonEnabled = true;
-    [ObservableProperty] private bool _isQuickDrawButtonEnabled = true;
-    [ObservableProperty] private bool _isLotteryButtonEnabled = false;
-    [ObservableProperty] private bool _isFaceDrawButtonEnabled = false;
-    [ObservableProperty] private bool _isTimerButtonEnabled = false;
-
     [ObservableProperty] private int _floatingWindowPlacement = 1;
     [ObservableProperty] private int _floatingWindowDisplayStyle = 0;
     [ObservableProperty] private int _floatingWindowSize = 3;

@@ -250,10 +250,6 @@ public partial class App : Application
     {
         CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
         CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-        Langs.Common.Resources.Culture = cultureInfo;
-        Langs.MainPages.RollCallPage.Resources.Culture = cultureInfo;
-        Langs.SettingsPages.BasicSettingsPage.Resources.Culture = cultureInfo;
-        Langs.SettingsPages.DrawSettingsPage.Resources.Culture = cultureInfo;
     }
 
     private static CultureInfo GetStartupCulture(UiLanguageMode uiLanguageMode)
@@ -272,6 +268,7 @@ public partial class App : Application
         InitializeLanguages(culture);
         UpdateRegisteredPageNames();
         ReloadOpenWindows(uiLanguageMode, culture);
+        _floatingWindow?.RefreshItems();
         Current.CreateTrayIconMenu();
     }
     
