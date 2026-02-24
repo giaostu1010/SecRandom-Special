@@ -17,4 +17,5 @@ public partial class MainConfigModel : ConfigBase
     [ObservableProperty] private DrawSettingsConfig _drawSettings = new();
     [ObservableProperty] private FloatingWindowSettingsConfig _floatingWindowSettings = new();
     [ObservableProperty] private LinkageSettingsConfig _linkageSettings = new();
+    [ObservableProperty] private SecuritySettingsConfig _securitySettings = new();
 }

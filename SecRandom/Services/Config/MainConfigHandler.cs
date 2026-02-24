@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using SecRandom.Core.Abstraction;
 using SecRandom.Models;
@@ -14,6 +14,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     private LotterySettingsConfig? _lotterySettings;
     private FaceDetectorSettingsConfig? _faceDetectorSettings;
     private LinkageSettingsConfig? _linkageSettings;
+    private SecuritySettingsConfig? _securitySettings;
 
     public MainConfigHandler(ILogger<MainConfigHandler> logger, ConfigServiceBase configService)
         : base(logger, configService, () => new MainConfigModel())
@@ -22,6 +23,7 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         AttachDrawSettingsHandlers();
         AttachFloatingWindowSettingsHandlers();
         AttachLinkageSettingsHandlers();
+        AttachSecuritySettingsHandlers();
     }
 
     protected override void Reload()
@@ -30,11 +32,13 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         DetachDrawSettingsHandlers();
         DetachFloatingWindowSettingsHandlers();
         DetachLinkageSettingsHandlers();
+        DetachSecuritySettingsHandlers();
         base.Reload();
         AttachBasicSettingsHandlers();
         AttachDrawSettingsHandlers();
         AttachFloatingWindowSettingsHandlers();
         AttachLinkageSettingsHandlers();
+        AttachSecuritySettingsHandlers();
     }
 
     protected override void Data_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -58,6 +62,11 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
         {
             DetachLinkageSettingsHandlers();
             AttachLinkageSettingsHandlers();
+        }
+        else if (e.PropertyName == nameof(MainConfigModel.SecuritySettings))
+        {
+            DetachSecuritySettingsHandlers();
+            AttachSecuritySettingsHandlers();
         }
 
         base.Data_OnPropertyChanged(sender, e);
@@ -199,6 +208,28 @@ public class MainConfigHandler : ConfigHandlerBase<MainConfigModel>
     }
     
     private void LinkageSettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        Save();
+    }
+
+    private void AttachSecuritySettingsHandlers()
+    {
+        _securitySettings = Data.SecuritySettings;
+        _securitySettings.PropertyChanged += SecuritySettings_OnPropertyChanged;
+    }
+
+    private void DetachSecuritySettingsHandlers()
+    {
+        if (_securitySettings is null)
+        {
+            return;
+        }
+
+        _securitySettings.PropertyChanged -= SecuritySettings_OnPropertyChanged;
+        _securitySettings = null;
+    }
+
+    private void SecuritySettings_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Save();
     }

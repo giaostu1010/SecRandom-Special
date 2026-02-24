@@ -2,10 +2,186 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
              xmlns:langs="using:SecRandom.Langs.Common"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.SecuritySettingsPage"
+             xmlns:configModels="using:SecRandom.Models.Config"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SecRandom.Views.SettingsPages.SecuritySettingsPage">
-    <StackPanel Orientation="Vertical" Margin="12 12 18 12">
-        <TextBlock Text="{x:Static langs:Resources.SecuritySettings}" />
-    </StackPanel>
+             x:Class="SecRandom.Views.SettingsPages.SecuritySettingsPage"
+             x:DataType="configModels:SecuritySettingsConfig">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
+            <TextBlock Text="{x:Static pageLangs:Resources.BasicSafetySettings}"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SafetySwitch}"
+                                         Description="{x:Static pageLangs:Resources.SafetySwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding SafetySwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetPassword}"
+                                         Description="{x:Static pageLangs:Resources.SetPasswordDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.SetPassword}"
+                                MinWidth="140"
+                                Click="SetPassword_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.TotpSwitch}"
+                                         Description="{x:Static pageLangs:Resources.TotpSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding TotpSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetTotp}"
+                                         Description="{x:Static pageLangs:Resources.SetTotpDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.SetTotp}"
+                                MinWidth="140"
+                                Click="SetTotp_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.UsbSwitch}"
+                                         Description="{x:Static pageLangs:Resources.UsbSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding UsbSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BindUsb}"
+                                         Description="{x:Static pageLangs:Resources.BindUsbDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.BindUsb}"
+                                MinWidth="140"
+                                Click="BindUsb_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.UnbindUsb}"
+                                         Description="{x:Static pageLangs:Resources.UnbindUsbDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <Button Content="{x:Static pageLangs:Resources.UnbindUsb}"
+                                MinWidth="140"
+                                Click="UnbindUsb_OnClick"/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+
+            <TextBlock Text="{x:Static pageLangs:Resources.VerificationProcess}"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Margin="0 8 0 0"/>
+
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.VerificationProcess}"
+                                         Description="{x:Static pageLangs:Resources.VerificationProcessDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ComboBox SelectedIndex="{Binding VerificationProcess}"
+                                  MinWidth="280"
+                                  IsEnabled="{Binding IsSafetyEnabled}">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessOneStep}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessPasswordOnly}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessTotpOnly}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessUsbOnly}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessPasswordTotp}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessPasswordUsb}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessTotpUsb}" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.VerificationProcessPasswordTotpUsb}" />
+                        </ComboBox>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+
+            <TextBlock Text="{x:Static pageLangs:Resources.SecurityOperations}"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Margin="0 8 0 0"/>
+
+            <StackPanel Orientation="Vertical" Spacing="0">
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PreviewSettingsSwitch}"
+                                         Description="{x:Static pageLangs:Resources.PreviewSettingsSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding PreviewSettingsSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowHideFloatingWindowSwitch}"
+                                         Description="{x:Static pageLangs:Resources.ShowHideFloatingWindowSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding ShowHideFloatingWindowSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.RestartSwitch}"
+                                         Description="{x:Static pageLangs:Resources.RestartSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding RestartSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExitSwitch}"
+                                         Description="{x:Static pageLangs:Resources.ExitSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding ExitSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OpenSettingsSwitch}"
+                                         Description="{x:Static pageLangs:Resources.OpenSettingsSwitchDesc}"
+                                         IconSource="{controls:FluentIconSource &#xE8B6;}"
+                                         IsEnabled="{Binding IsSafetyEnabled}">
+                    <fa:SettingsExpanderItem.Footer>
+                        <ToggleSwitch IsChecked="{Binding OpenSettingsSwitch}"
+                                      OnContent=""
+                                      OffContent=""/>
+                    </fa:SettingsExpanderItem.Footer>
+                </fa:SettingsExpanderItem>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
