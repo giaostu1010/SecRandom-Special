@@ -141,15 +141,6 @@ namespace SecRandom.Langs.Common {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 更多设置.
-        /// </summary>
-        public static string MoreSettings {
-            get {
-                return ResourceManager.GetString("MoreSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 通知设置.
         /// </summary>
         public static string NotificationSettings {

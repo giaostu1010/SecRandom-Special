@@ -31,6 +31,8 @@ using SecRandom.ViewModels;
 using SecRandom.Views;
 using SecRandom.Views.MainPages;
 using SecRandom.Views.SettingsPages;
+using SecRandom.Views.SettingsPages.ListManagementSubPages;
+using SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
 
 namespace SecRandom;
 
@@ -135,7 +137,14 @@ public partial class App : Application
                 
                 // 设置界面 Views
                 services.AddSettingsPage<BasicSettingsPage>(Langs.Common.Resources.BasicSettings);
-                services.AddSettingsPage<RosterManagementPage>(Langs.Common.Resources.RosterManagement);
+
+                services.AddGroup(new GroupInfo(Langs.SettingsPages.ListManagementPage.Resources.ListManagement, "settings.listManagement", "\uE8A7"));
+                services.AddSettingsPage<RollCallListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallListSettings);
+                services.AddKeyedTransient<UserControl, RollCallTablePreviewPage>("settings.listManagement.rollCall.preview");
+                services.AddKeyedTransient<UserControl, RollCallListSpecificSettingsPage>("settings.listManagement.rollCall.listSpecific");
+                services.AddSettingsPage<LotteryListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryListSettings);
+                services.AddKeyedTransient<UserControl, LotteryTablePreviewPage>("settings.listManagement.lottery.preview");
+                services.AddKeyedTransient<UserControl, LotteryListSpecificSettingsPage>("settings.listManagement.lottery.listSpecific");
                 
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.DrawSettings, "settings.draw", "\uE07C"));
                 services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
@@ -154,7 +163,6 @@ public partial class App : Application
                 services.AddSettingsPage<ThemeManagementPage>(Langs.Common.Resources.ThemeManagement);
                 services.AddSettingsPage<HistoryPage>(Langs.Common.Resources.History);
                 
-                services.AddSettingsPage<MoreSettingsPage>(Langs.Common.Resources.MoreSettings);
                 services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
                 services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
 
@@ -423,7 +431,11 @@ public partial class App : Application
             weightIndex = 0;
         }
 
-        Current.Resources["AppFontFamily"] = new FontFamily(fontFamilyName);
+        var fontFamily = fontFamilyName == "MiSans"
+            ? new FontFamily("avares://SecRandom/Assets/Fonts/#MiSans")
+            : new FontFamily(fontFamilyName);
+
+        Current.Resources["AppFontFamily"] = fontFamily;
         Current.Resources["AppFontWeight"] = UiFontWeights[weightIndex];
     }
 

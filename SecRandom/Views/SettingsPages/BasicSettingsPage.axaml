@@ -148,11 +148,20 @@
                                          Description="{x:Static pageLangs:Resources.FontWeightDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D2;}">
                     <fa:SettingsExpanderItem.Footer>
-                        <ComboBox SelectedIndex="{Binding UiFontWeightIndex}"
-                                  MinWidth="140">
-                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightRegular}" />
-                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightSemiBold}" />
-                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightBold}" />
+                        <ComboBox Name="FontWeightComboBox"
+                                  SelectedIndex="{Binding UiFontWeightIndex}"
+                                  MinWidth="140"
+                                  SelectionChanged="FontWeightComboBox_OnSelectionChanged">
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightThin}" FontWeight="Thin" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightExtraLight}" FontWeight="ExtraLight" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightLight}" FontWeight="Light" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightNormal}" FontWeight="Normal" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightMedium}" FontWeight="Medium" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightSemiBold}" FontWeight="SemiBold" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightBold}" FontWeight="Bold" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightExtraBold}" FontWeight="ExtraBold" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightBlack}" FontWeight="Black" />
+                            <ComboBoxItem Content="{x:Static pageLangs:Resources.FontWeightExtraBlack}" FontWeight="UltraBlack" />
                         </ComboBox>
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>

@@ -20,7 +20,7 @@ public partial class BasicSettingsPage : UserControl
     public BasicSettingsConfig ViewModel { get; } = IAppHost.GetService<MainConfigHandler>().Data.BasicSettings;
     private ComboBox? _fontFamilyComboBox;
     private List<FontFamily> _fontFamilies = [];
-    private static readonly string[] LegacyUiFontFamilies = ["HarmonyOS Sans SC", "Segoe UI", "Microsoft YaHei UI"];
+    private static readonly string[] LegacyUiFontFamilies = ["MiSans", "HarmonyOS Sans SC", "Segoe UI", "Microsoft YaHei UI"];
     
     public BasicSettingsPage()
     {
@@ -105,6 +105,16 @@ public partial class BasicSettingsPage : UserControl
         {
             ViewModel.UiFontFamilyName = selected.Name;
         }
+    }
+
+     private void FontWeightComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ComboBox comboBox)
+        {
+            return;
+        }
+
+        App.ApplyUiFont(ViewModel.UiFontFamilyName, ViewModel.UiFontFamilyIndex, comboBox.SelectedIndex);
     }
 
     private void OpenThemeManagement_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

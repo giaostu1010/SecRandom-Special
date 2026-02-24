@@ -17,7 +17,7 @@
     
     <Application.Resources>
         <FontFamily x:Key="FluentSystemIconsResizeable">avares://SecRandom/Assets/Fonts/#FluentSystemIcons-Resizable</FontFamily>
-        <FontFamily x:Key="AppFontFamily">HarmonyOS Sans SC</FontFamily>
+        <FontFamily x:Key="AppFontFamily">avares://SecRandom/Assets/Fonts/#MiSans</FontFamily>
         <FontWeight x:Key="AppFontWeight">Normal</FontWeight>
         
         <NativeMenu x:Key="AppMenu" />

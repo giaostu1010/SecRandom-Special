@@ -17,7 +17,7 @@ public partial class BasicSettingsConfig : ObservableObject
     [ObservableProperty] private UiLanguageMode _uiLanguageMode = UiLanguageMode.FollowSystem;
     [ObservableProperty] private int _uiThemeModeIndex = 0;
     [ObservableProperty] private int _uiFontFamilyIndex = 0;
-    [ObservableProperty] private string _uiFontFamilyName = "HarmonyOS Sans SC";
-    [ObservableProperty] private int _uiFontWeightIndex = 0;
+    [ObservableProperty] private string _uiFontFamilyName = "MiSans";
+    [ObservableProperty] private int _uiFontWeightIndex = 5;
     [ObservableProperty] private int _uiDpiScaleIndex = 5;
 }
