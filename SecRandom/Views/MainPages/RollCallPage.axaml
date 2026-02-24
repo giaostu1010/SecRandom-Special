@@ -2,10 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
              xmlns:langs="using:SecRandom.Langs.Pages.RollCallPage"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SecRandom.Views.MainPages.RollCallPage">
     <StackPanel Orientation="Vertical" Margin="12 12 18 12">
         <TextBlock Text="{x:Static langs:Resources.Welcome}" />
+        <u:MultiComboBox>
+            <u:MultiComboBoxItem>111</u:MultiComboBoxItem>
+            <u:MultiComboBoxItem>222</u:MultiComboBoxItem>
+            <u:MultiComboBoxItem>333</u:MultiComboBoxItem>
+            <u:MultiComboBoxItem>444</u:MultiComboBoxItem>
+            <u:MultiComboBoxItem>555</u:MultiComboBoxItem>
+        </u:MultiComboBox>
     </StackPanel>
 </UserControl>

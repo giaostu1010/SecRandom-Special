@@ -19,6 +19,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="DynamicData" Version="9.4.1" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.4.1" />
+        <PackageReference Include="Irihi.Ursa" Version="1.15.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
         <PackageReference Include="Pastel" Version="4.2.0" />
         <PackageReference Include="Xaml.Behaviors" Version="11.3.9.5" />

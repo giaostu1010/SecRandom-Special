@@ -3,7 +3,11 @@
         xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
         xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
         xmlns:controls="clr-namespace:SecRandom.Core.Controls">
-    <styling:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+    <styling:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True"
+                                 TextVerticalAlignmentOverrideBehavior="AlwaysEnabled"
+                                 UseSystemFontOnWindows="True"/>
+    
+    <StyleInclude Source="/Styles/MultiComboBox.axaml" />
     
     <Style Selector=":is(TextBlock):not(#Icon)">
         <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>
