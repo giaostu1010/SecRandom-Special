@@ -118,7 +118,18 @@ public partial class MainView : UserControl, INavigationPageFactory
     
     private void NavigationView_OnItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
     {
-        if (e.InvokedItemContainer is NavigationViewItem { Tag: PageInfo info })
+        PageInfo? info = null;
+        
+        if (e.InvokedItemContainer is NavigationViewItem { Tag: PageInfo containerInfo })
+        {
+            info = containerInfo;
+        }
+        else if (e.InvokedItem is PageInfo invokedInfo)
+        {
+            info = invokedInfo;
+        }
+        
+        if (info != null)
         {
             CoreNavigate(info);
         }

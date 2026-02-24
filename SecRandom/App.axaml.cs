@@ -186,7 +186,10 @@ public partial class App : Application
         var logger = IAppHost.GetService<ILogger<App>>();
         logger.LogInformation("正在停止应用");
 
-        _floatingWindow?.CanClose = true;
+        if (_floatingWindow != null)
+        {
+            _floatingWindow.CanClose = true;
+        }
         
         var configHandler = IAppHost.GetService<MainConfigHandler>();
         configHandler.Save();

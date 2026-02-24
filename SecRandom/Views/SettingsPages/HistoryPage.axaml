@@ -5,7 +5,7 @@
              xmlns:langs="using:SecRandom.Langs.Common"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SecRandom.Views.SettingsPages.HistoryPage">
-    <StackPanel Orientation="Vertical" Margin="12 12 18 12">
+    <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
         <TextBlock Text="{x:Static langs:Resources.History}" />
     </StackPanel>
 </UserControl>

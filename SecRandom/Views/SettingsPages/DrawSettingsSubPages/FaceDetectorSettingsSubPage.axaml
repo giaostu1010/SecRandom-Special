@@ -11,7 +11,7 @@
              x:DataType="configModels:FaceDetectorSettingsConfig">
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
-        <StackPanel Orientation="Vertical" Spacing="12">
+        <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
             <TextBlock Text="{x:Static pageLangs:Resources.FaceDetectorExtractionFunction}"
                        FontSize="14"
                        FontWeight="SemiBold" />

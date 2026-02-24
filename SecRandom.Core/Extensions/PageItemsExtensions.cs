@@ -34,7 +34,7 @@ public static class PageItemsExtensions
                 {
                     IconSource = new FluentIconSource(group.IconGlyph),
                     Content = group.Name,
-                    Tag = i
+                    Tag = group
                 };
 
                 if (groups.FirstOrDefault(x => x.Key == i.GroupId) is {} groupItems)
