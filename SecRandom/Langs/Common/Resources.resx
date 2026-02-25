@@ -55,6 +55,15 @@
     <data name="NotificationSettings" xml:space="preserve">
         <value>通知设置</value>
     </data>
+    <data name="RollCallNotificationSettings" xml:space="preserve">
+        <value>点名通知设置</value>
+    </data>
+    <data name="QuickDrawNotificationSettings" xml:space="preserve">
+        <value>闪抽通知设置</value>
+    </data>
+    <data name="LotteryNotificationSettings" xml:space="preserve">
+        <value>抽奖通知设置</value>
+    </data>
     <data name="SecuritySettings" xml:space="preserve">
         <value>安全设置</value>
     </data>

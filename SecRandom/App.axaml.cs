@@ -33,6 +33,7 @@ using SecRandom.Views.MainPages;
 using SecRandom.Views.SettingsPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
+using SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
 
 namespace SecRandom;
 
@@ -156,7 +157,15 @@ public partial class App : Application
                 services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
                 
                 services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
-                services.AddSettingsPage<NotificationSettingsPage>(Langs.Common.Resources.NotificationSettings);
+               
+                services.AddGroup(new GroupInfo(Langs.Common.Resources.NotificationSettings, "settings.notification", "\uE7E3"));
+                services.AddSettingsPage<RollCallNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.RollCallNotificationSettings);
+                services.AddKeyedTransient<UserControl, RollCallNotificationSettingsPage>("settings.notification.rollCall");
+                services.AddSettingsPage<QuickDrawNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.QuickDrawNotificationSettings);
+                services.AddKeyedTransient<UserControl, QuickDrawNotificationSettingsPage>("settings.notification.quickDraw");
+                services.AddSettingsPage<LotteryNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.LotteryNotificationSettings);
+                services.AddKeyedTransient<UserControl, LotteryNotificationSettingsPage>("settings.notification.lottery");
+                
                 services.AddSettingsPage<SecuritySettingsPage>(Langs.Common.Resources.SecuritySettings);
                 services.AddSettingsPage<LinkageSettingsPage>(Langs.Common.Resources.LinkageSettings);
                 services.AddSettingsPage<VoiceSettingsPage>(Langs.Common.Resources.VoiceSettings);

@@ -43,6 +43,15 @@
     <data name="NotificationSettings" xml:space="preserve">
         <value>Notification Settings</value>
     </data>
+    <data name="RollCallNotificationSettings" xml:space="preserve">
+        <value>Picking Notification Settings</value>
+    </data>
+    <data name="QuickDrawNotificationSettings" xml:space="preserve">
+        <value>Quick Pick Notification Settings</value>
+    </data>
+    <data name="LotteryNotificationSettings" xml:space="preserve">
+        <value>Lottery Notification Settings</value>
+    </data>
     <data name="SecuritySettings" xml:space="preserve">
         <value>Security Settings</value>
     </data>
