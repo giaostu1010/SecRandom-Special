@@ -1,11 +1,7 @@
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree;
-using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
-using SecRandom.Core.Services;
 
 namespace SecRandom.Views.SettingsPages.HistoryManagementSubPages;
 

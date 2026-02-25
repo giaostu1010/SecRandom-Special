@@ -6,12 +6,15 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using FluentAvalonia.UI.Controls;
 using SecRandom.Core.Abstraction;
+using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 using SecRandom.Core.Models;
 using SecRandom.Core.Services;
 using Res = SecRandom.Langs.SettingsPages.ListManagementPage.Resources;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages;
 
+[PageInfo("settings.listManagement.lottery.countSettings", "\uE8A1", "settings.listManagement", PageLocation.Top, true)]
 public partial class CountSettingsPage : UserControl
 {
     private readonly LotteryListService _lotteryListService;

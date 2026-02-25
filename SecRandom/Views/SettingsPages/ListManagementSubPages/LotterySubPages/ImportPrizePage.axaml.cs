@@ -1,5 +1,4 @@
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -7,11 +6,14 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
 using SecRandom.Core.Abstraction;
+using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 using SecRandom.Core.Services;
 using Res = SecRandom.Langs.SettingsPages.ListManagementPage.Resources;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages;
 
+[PageInfo("settings.listManagement.lottery.importPrize", "\uE8E5", "settings.listManagement", PageLocation.Top, true)]
 public partial class ImportPrizePage : UserControl
 {
     private readonly LotteryListService _lotteryListService;

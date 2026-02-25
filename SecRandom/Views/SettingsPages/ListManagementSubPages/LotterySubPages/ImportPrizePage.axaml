@@ -10,9 +10,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12" Spacing="16">
-            <!-- 页面标题 -->
-            <TextBlock Text="{x:Static pageLangs:Resources.ImportPrizePageTitle}" FontSize="20" FontWeight="Bold"/>
-            
             <!-- 选择奖池 -->
             <StackPanel Spacing="8">
                 <TextBlock Text="{x:Static pageLangs:Resources.SelectPoolLabel}" FontWeight="SemiBold" FontSize="14"/>

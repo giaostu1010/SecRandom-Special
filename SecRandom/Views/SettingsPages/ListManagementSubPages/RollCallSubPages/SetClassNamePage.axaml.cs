@@ -4,10 +4,11 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using FluentAvalonia.UI.Controls;
 using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages;
 
-[PageInfo("settings.listManagement.rollCall.setClassName", "\uE8EC", "settings.listManagement")]
+[PageInfo("settings.listManagement.rollCall.setClassName", "\uE8EC", "settings.listManagement", PageLocation.Top, true)]
 public partial class SetClassNamePage : UserControl
 {
     public SetClassNamePage()

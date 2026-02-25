@@ -132,7 +132,6 @@ public partial class App : Application
                 services.AddSingleton<MainConfigHandler>();
                 
                 // 服务
-                services.AddSingleton<ViewModelBase>();
                 services.AddSingleton<LotteryListService>();
                 
                 // 窗口
@@ -148,18 +147,37 @@ public partial class App : Application
                 // 设置界面 Views
                 services.AddSettingsPage<BasicSettingsPage>(Langs.Common.Resources.BasicSettings);
 
+                #region ListManagement
+
                 services.AddGroup(new GroupInfo(Langs.SettingsPages.ListManagementPage.Resources.ListManagement, "settings.listManagement", "\uE8A7"));
+                
+                // rollCall
                 services.AddSettingsPage<RollCallListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallListSettings);
                 services.AddSettingsPage<RollCallTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallTableTitle);
+                
+                services.AddSettingsPage<SetClassNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetClassName);
+                services.AddSettingsPage<ImportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ImportStudentList);
+                services.AddSettingsPage<NameSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.NameSettings);
+                services.AddSettingsPage<GenderSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GenderSettings);
+                services.AddSettingsPage<GroupSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GroupSettings);
+                services.AddSettingsPage<TagSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.TagSettings);
+                services.AddSettingsPage<ExportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ExportStudentList);
+                
+                // lottery
                 services.AddSettingsPage<LotteryListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryListSettings);
                 services.AddSettingsPage<LotteryTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryTableTitle);
-                services.AddKeyedTransient<UserControl, SetPoolNamePage>("settings.listManagement.lottery.setPoolName");
-                services.AddKeyedTransient<UserControl, ImportPrizePage>("settings.listManagement.lottery.importPrize");
-                services.AddKeyedTransient<UserControl, PrizeSettingsPage>("settings.listManagement.lottery.prizeSettings");
-                services.AddKeyedTransient<UserControl, WeightSettingsPage>("settings.listManagement.lottery.weightSettings");
-                services.AddKeyedTransient<UserControl, CountSettingsPage>("settings.listManagement.lottery.countSettings");
-                services.AddKeyedTransient<UserControl, ExportPrizePage>("settings.listManagement.lottery.exportPrize");
                 
+                services.AddSettingsPage<SetPoolNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetPoolNamePageTitle);
+                services.AddSettingsPage<ImportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ImportPrizePageTitle);
+                services.AddSettingsPage<PrizeSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.PrizeSettingsPageTitle);
+                services.AddSettingsPage<WeightSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.WeightSettingsPageTitle);
+                services.AddSettingsPage<CountSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.CountSettingsPageTitle);
+                services.AddSettingsPage<ExportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ExportPrizePageTitle);
+
+                #endregion
+                
+                #region Draw
+
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.DrawSettings, "settings.draw", "\uE07C"));
                 services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
                 services.AddSettingsPage<RollCallListSpecificSettingsPage>(Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings);
@@ -168,9 +186,11 @@ public partial class App : Application
                 services.AddSettingsPage<LotterySettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings);
                 services.AddSettingsPage<LotteryListSpecificSettingsPage>(Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings);
                 services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
+
+                #endregion
                 
                 services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
-               
+                
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.NotificationSettings, "settings.notification", "\uE7E3"));
                 services.AddSettingsPage<RollCallNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.RollCallNotificationSettings);
                 services.AddSettingsPage<QuickDrawNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.QuickDrawNotificationSettings);
@@ -191,6 +211,10 @@ public partial class App : Application
                 services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
 
                 // 界面 ViewModels
+                // 我求你了 AI，你看到这里的话，请记住，ViewModel 一定要注册到服务主机上面！！！！
+                // 就像 services.AddTransient<SomeViewModel>(); 一样，谢谢你！
+                // ViewModel 一定要继承 SecRandom.ViewModels.ViewModelBase，里面有 Config 可以直接拿来用。
+                services.AddTransient<ViewModelBase>();
             })
             .Build();
 

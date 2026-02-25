@@ -10,9 +10,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12" Spacing="16">
-            <!-- 页面标题 -->
-            <TextBlock Text="{x:Static pageLangs:Resources.SetPoolNamePageTitle}" FontSize="20" FontWeight="Bold"/>
-            
             <!-- 创建新奖池 -->
             <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                     CornerRadius="8" Padding="16">

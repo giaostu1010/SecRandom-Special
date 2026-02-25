@@ -4,10 +4,11 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using FluentAvalonia.UI.Controls;
 using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages;
 
-[PageInfo("settings.listManagement.rollCall.importStudent", "\uE8E5", "settings.listManagement")]
+[PageInfo("settings.listManagement.rollCall.importStudent", "\uE8E5", "settings.listManagement", PageLocation.Top, true)]
 public partial class ImportStudentPage : UserControl
 {
     public ImportStudentPage()
