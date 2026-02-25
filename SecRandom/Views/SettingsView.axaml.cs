@@ -83,43 +83,50 @@ public partial class SettingsView : UserControl, INavigationPageFactory
                 .ToNavigationViewItems(ViewModel.FlattenNavigationItems));
     }
 
-    public void SelectNavigationItemById(string id)
+    public void SelectNavigationItemById(string id, bool isBack = false)
     {
         var info = PagesRegistryService.SettingsItems.FirstOrDefault(info => info.Id == id);
         
         if (info != null)
         {
-            CoreNavigate(info);
+            CoreNavigate(info, isBack);
         }
     }
 
-    public void NavigateToPage(PageInfo info, bool selectNavigationItem)
+    private void CoreNavigate(PageInfo info, bool isBack = false)
     {
-        ViewModel.FrameContent = null;
-        if (selectNavigationItem)
+        if (ViewModel.SelectedPageInfo?.Id == info.Id)
         {
-            SelectNavigationItem(info);
+            return;
         }
-        else
+
+        if (ViewModel.SelectedPageInfo != null && !isBack)
         {
-            ViewModel.SelectedNavigationViewItem = null;
+            ViewModel.NavigationHistory.Add(ViewModel.SelectedPageInfo.Id);
+            ViewModel.CanGoBack = true;
         }
-        ViewModel.SelectedPageInfo = info;
-        NavigationFrame.NavigateFromObject(info);
-    }
-    
-    private void SelectNavigationItem(PageInfo info)
-    {
+        
         var item = ViewModel.FlattenNavigationItems.FirstOrDefault(item => Equals(item.Tag, info));
-        ViewModel.SelectedNavigationViewItem = item;
-    }
-
-    private void CoreNavigate(PageInfo info)
-    {
         ViewModel.FrameContent = null;
-        SelectNavigationItem(info);
+        ViewModel.SelectedNavigationViewItem = item;
         ViewModel.SelectedPageInfo = info;
         NavigationFrame.NavigateFromObject(info);
+    }
+
+    private void BackButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var history = ViewModel.NavigationHistory;
+        if (history.Any())
+        {
+            var item = history.Last();
+            history.RemoveAt(history.Count - 1);
+            SelectNavigationItemById(item, true);
+        }
+        
+        if (!history.Any())
+        {
+            ViewModel.CanGoBack = false;
+        }
     }
     
     private void NavigationView_OnItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
@@ -139,11 +146,6 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         {
             CoreNavigate(info);
         }
-    }
-
-    private void TogglePaneButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        NavigationView.IsPaneOpen = !NavigationView.IsPaneOpen;
     }
 
     public Control? GetPage(Type srcType)

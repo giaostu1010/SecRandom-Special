@@ -13,4 +13,7 @@ public partial class SettingsViewModel : ObservableRecipient
     public ObservableCollection<NavigationViewItemBase> FlattenNavigationItems { get; } = [];
     public ObservableCollection<NavigationViewItemBase> NavigationViewItems { get; } = [];
     public ObservableCollection<NavigationViewItemBase> NavigationViewFooterItems { get; } = [];
+
+    public ObservableCollection<string> NavigationHistory { get; } = [];
+    [ObservableProperty] private bool _canGoBack = false;
 }

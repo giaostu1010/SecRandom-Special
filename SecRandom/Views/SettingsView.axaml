@@ -13,16 +13,20 @@
     <Grid RowDefinitions="Auto *">
         <Border Grid.Row="0" Height="48">
             <StackPanel Orientation="Horizontal" Margin="8" Spacing="8">
-                <Button Theme="{StaticResource PaneToggleButtonStyle}"
+                <Button Name="BackButton"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Margin="-7 -8 -15 -8"
+                        Click="BackButton_OnClick"
+                        IsVisible="{Binding ViewModel.CanGoBack}"
                         MinWidth="40" Width="48"
-                        VerticalAlignment="Center"
-                        Margin="-7 -8 -8 -8"
-                        Click="TogglePaneButton_OnClick"/>
+                        Classes="nav-back"
+                        IsHitTestVisible="True">
+                </Button>
                 
                 <Image Source="/Assets/AppLogo.png"
                        Width="18" Height="18"
                        VerticalAlignment="Center"
-                       Margin="0 0 0 2"
+                       Margin="7 0 0 2"
                        IsHitTestVisible="False"/>
 
                 <TextBlock Text="SecRandom"
@@ -36,7 +40,6 @@
                            x:Name="NavigationView"
                            PaneDisplayMode="Auto"
                            IsSettingsVisible="False"
-                           IsPaneToggleButtonVisible="False"
                            MenuItemsSource="{Binding ViewModel.NavigationViewItems, Mode=OneWay}"
                            FooterMenuItemsSource="{Binding ViewModel.NavigationViewFooterItems, Mode=OneWay}"
                            SelectedItem="{Binding ViewModel.SelectedNavigationViewItem, UpdateSourceTrigger=PropertyChanged}"
