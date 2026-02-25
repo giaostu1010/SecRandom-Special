@@ -33,7 +33,7 @@
 ### 基本要求
 
 - ViewModels 一定要注册到服务主机上！可以不继承 `SecRandom.ViewModels.ViewModelBase`
-- 本地化文件要符合要求，建议把每个页面的本地化拆分到单独文件里，不要混一起！我求你了
+- 本地化文件要符合要求，建议把每个页面的本地化拆分到单独文件夹里，不要混一起！我求你了
   - 结构如下
     - `Resources.resx` 基本文件，语言为 zh-hans
     - `Resources.Designer.cs` 设计文件
