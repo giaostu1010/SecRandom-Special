@@ -362,5 +362,455 @@ namespace SecRandom.Langs.SettingsPages.ListManagementPage {
                 return ResourceManager.GetString("Back", resourceCulture);
             }
         }
+
+        public static string SetPoolNamePageTitle {
+            get {
+                return ResourceManager.GetString("SetPoolNamePageTitle", resourceCulture);
+            }
+        }
+
+        public static string CreateNewPool {
+            get {
+                return ResourceManager.GetString("CreateNewPool", resourceCulture);
+            }
+        }
+
+        public static string EnterPoolName {
+            get {
+                return ResourceManager.GetString("EnterPoolName", resourceCulture);
+            }
+        }
+
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+
+        public static string ExistingPools {
+            get {
+                return ResourceManager.GetString("ExistingPools", resourceCulture);
+            }
+        }
+
+        public static string Rename {
+            get {
+                return ResourceManager.GetString("Rename", resourceCulture);
+            }
+        }
+
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+
+        public static string ImportPrizePageTitle {
+            get {
+                return ResourceManager.GetString("ImportPrizePageTitle", resourceCulture);
+            }
+        }
+
+        public static string SelectPoolLabel {
+            get {
+                return ResourceManager.GetString("SelectPoolLabel", resourceCulture);
+            }
+        }
+
+        public static string SelectFile {
+            get {
+                return ResourceManager.GetString("SelectFile", resourceCulture);
+            }
+        }
+
+        public static string SelectFileToImport {
+            get {
+                return ResourceManager.GetString("SelectFileToImport", resourceCulture);
+            }
+        }
+
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+
+        public static string ImportOptions {
+            get {
+                return ResourceManager.GetString("ImportOptions", resourceCulture);
+            }
+        }
+
+        public static string ClearExistingData {
+            get {
+                return ResourceManager.GetString("ClearExistingData", resourceCulture);
+            }
+        }
+
+        public static string SupportedFormats {
+            get {
+                return ResourceManager.GetString("SupportedFormats", resourceCulture);
+            }
+        }
+
+        public static string JsonFormatDesc {
+            get {
+                return ResourceManager.GetString("JsonFormatDesc", resourceCulture);
+            }
+        }
+
+        public static string CsvFormatDesc {
+            get {
+                return ResourceManager.GetString("CsvFormatDesc", resourceCulture);
+            }
+        }
+
+        public static string TxtFormatDesc {
+            get {
+                return ResourceManager.GetString("TxtFormatDesc", resourceCulture);
+            }
+        }
+
+        public static string StartImport {
+            get {
+                return ResourceManager.GetString("StartImport", resourceCulture);
+            }
+        }
+
+        public static string PrizeSettingsPageTitle {
+            get {
+                return ResourceManager.GetString("PrizeSettingsPageTitle", resourceCulture);
+            }
+        }
+
+        public static string AddPrize {
+            get {
+                return ResourceManager.GetString("AddPrize", resourceCulture);
+            }
+        }
+
+        public static string DeleteSelected {
+            get {
+                return ResourceManager.GetString("DeleteSelected", resourceCulture);
+            }
+        }
+
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+
+        public static string WeightSettingsPageTitle {
+            get {
+                return ResourceManager.GetString("WeightSettingsPageTitle", resourceCulture);
+            }
+        }
+
+        public static string CountSettingsPageTitle {
+            get {
+                return ResourceManager.GetString("CountSettingsPageTitle", resourceCulture);
+            }
+        }
+
+        public static string ExportPrizePageTitle {
+            get {
+                return ResourceManager.GetString("ExportPrizePageTitle", resourceCulture);
+            }
+        }
+
+        public static string SaveLocation {
+            get {
+                return ResourceManager.GetString("SaveLocation", resourceCulture);
+            }
+        }
+
+        public static string SelectSaveLocation {
+            get {
+                return ResourceManager.GetString("SelectSaveLocation", resourceCulture);
+            }
+        }
+
+        public static string ExportFormat {
+            get {
+                return ResourceManager.GetString("ExportFormat", resourceCulture);
+            }
+        }
+
+        public static string JsonFormat {
+            get {
+                return ResourceManager.GetString("JsonFormat", resourceCulture);
+            }
+        }
+
+        public static string CsvFormat {
+            get {
+                return ResourceManager.GetString("CsvFormat", resourceCulture);
+            }
+        }
+
+        public static string TxtFormat {
+            get {
+                return ResourceManager.GetString("TxtFormat", resourceCulture);
+            }
+        }
+
+        public static string StartExport {
+            get {
+                return ResourceManager.GetString("StartExport", resourceCulture);
+            }
+        }
+
+        public static string ColumnId {
+            get {
+                return ResourceManager.GetString("ColumnId", resourceCulture);
+            }
+        }
+
+        public static string ColumnEnabled {
+            get {
+                return ResourceManager.GetString("ColumnEnabled", resourceCulture);
+            }
+        }
+
+        public static string PrizeName {
+            get {
+                return ResourceManager.GetString("PrizeName", resourceCulture);
+            }
+        }
+
+        public static string PrizeWeight {
+            get {
+                return ResourceManager.GetString("PrizeWeight", resourceCulture);
+            }
+        }
+
+        public static string PrizeCount {
+            get {
+                return ResourceManager.GetString("PrizeCount", resourceCulture);
+            }
+        }
+
+        public static string EnterPrizeName {
+            get {
+                return ResourceManager.GetString("EnterPrizeName", resourceCulture);
+            }
+        }
+
+        public static string EnterWeight {
+            get {
+                return ResourceManager.GetString("EnterWeight", resourceCulture);
+            }
+        }
+
+        public static string EnterCount {
+            get {
+                return ResourceManager.GetString("EnterCount", resourceCulture);
+            }
+        }
+
+        public static string NameLabel {
+            get {
+                return ResourceManager.GetString("NameLabel", resourceCulture);
+            }
+        }
+
+        public static string WeightLabel {
+            get {
+                return ResourceManager.GetString("WeightLabel", resourceCulture);
+            }
+        }
+
+        public static string CountLabel {
+            get {
+                return ResourceManager.GetString("CountLabel", resourceCulture);
+            }
+        }
+
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+
+        public static string Tip {
+            get {
+                return ResourceManager.GetString("Tip", resourceCulture);
+            }
+        }
+
+        public static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+
+        public static string Failed {
+            get {
+                return ResourceManager.GetString("Failed", resourceCulture);
+            }
+        }
+
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+
+        public static string PleaseEnterPoolName {
+            get {
+                return ResourceManager.GetString("PleaseEnterPoolName", resourceCulture);
+            }
+        }
+
+        public static string PoolCreatedSuccess {
+            get {
+                return ResourceManager.GetString("PoolCreatedSuccess", resourceCulture);
+            }
+        }
+
+        public static string PoolCreateFailed {
+            get {
+                return ResourceManager.GetString("PoolCreateFailed", resourceCulture);
+            }
+        }
+
+        public static string RenamePool {
+            get {
+                return ResourceManager.GetString("RenamePool", resourceCulture);
+            }
+        }
+
+        public static string EnterNewName {
+            get {
+                return ResourceManager.GetString("EnterNewName", resourceCulture);
+            }
+        }
+
+        public static string PoolRenamedSuccess {
+            get {
+                return ResourceManager.GetString("PoolRenamedSuccess", resourceCulture);
+            }
+        }
+
+        public static string RenameFailed {
+            get {
+                return ResourceManager.GetString("RenameFailed", resourceCulture);
+            }
+        }
+
+        public static string ConfirmDelete {
+            get {
+                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
+            }
+        }
+
+        public static string ConfirmDeletePool {
+            get {
+                return ResourceManager.GetString("ConfirmDeletePool", resourceCulture);
+            }
+        }
+
+        public static string PoolDeletedSuccess {
+            get {
+                return ResourceManager.GetString("PoolDeletedSuccess", resourceCulture);
+            }
+        }
+
+        public static string DeletePoolFailed {
+            get {
+                return ResourceManager.GetString("DeletePoolFailed", resourceCulture);
+            }
+        }
+
+        public static string PleaseCreatePoolFirst {
+            get {
+                return ResourceManager.GetString("PleaseCreatePoolFirst", resourceCulture);
+            }
+        }
+
+        public static string PleaseSelectPool {
+            get {
+                return ResourceManager.GetString("PleaseSelectPool", resourceCulture);
+            }
+        }
+
+        public static string PleaseSelectValidFile {
+            get {
+                return ResourceManager.GetString("PleaseSelectValidFile", resourceCulture);
+            }
+        }
+
+        public static string ImportSuccess {
+            get {
+                return ResourceManager.GetString("ImportSuccess", resourceCulture);
+            }
+        }
+
+        public static string ImportFailed {
+            get {
+                return ResourceManager.GetString("ImportFailed", resourceCulture);
+            }
+        }
+
+        public static string PrizeSettingsSaved {
+            get {
+                return ResourceManager.GetString("PrizeSettingsSaved", resourceCulture);
+            }
+        }
+
+        public static string SaveFailed {
+            get {
+                return ResourceManager.GetString("SaveFailed", resourceCulture);
+            }
+        }
+
+        public static string PleaseSelectPrizeToDelete {
+            get {
+                return ResourceManager.GetString("PleaseSelectPrizeToDelete", resourceCulture);
+            }
+        }
+
+        public static string ConfirmDeletePrize {
+            get {
+                return ResourceManager.GetString("ConfirmDeletePrize", resourceCulture);
+            }
+        }
+
+        public static string WeightSettingsSaved {
+            get {
+                return ResourceManager.GetString("WeightSettingsSaved", resourceCulture);
+            }
+        }
+
+        public static string CountSettingsSaved {
+            get {
+                return ResourceManager.GetString("CountSettingsSaved", resourceCulture);
+            }
+        }
+
+        public static string PleaseSelectSaveLocation {
+            get {
+                return ResourceManager.GetString("PleaseSelectSaveLocation", resourceCulture);
+            }
+        }
+
+        public static string ExportSuccess {
+            get {
+                return ResourceManager.GetString("ExportSuccess", resourceCulture);
+            }
+        }
+
+        public static string ExportFailed {
+            get {
+                return ResourceManager.GetString("ExportFailed", resourceCulture);
+            }
+        }
     }
 }

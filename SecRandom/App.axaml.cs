@@ -35,6 +35,8 @@ using SecRandom.Views.SettingsPages;
 using SecRandom.Views.SettingsPages.HistoryManagementSubPages;
 using SecRandom.Views.SettingsPages.HistoryManagementSubPages.TableSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages;
+using SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages;
+using SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
 using SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
 
@@ -131,6 +133,7 @@ public partial class App : Application
                 
                 // 服务
                 services.AddSingleton<ViewModelBase>();
+                services.AddSingleton<LotteryListService>();
                 
                 // 窗口
                 services.AddTransient<MainView>();
@@ -150,6 +153,12 @@ public partial class App : Application
                 services.AddSettingsPage<RollCallTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallTableTitle);
                 services.AddSettingsPage<LotteryListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryListSettings);
                 services.AddSettingsPage<LotteryTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryTableTitle);
+                services.AddKeyedTransient<UserControl, SetPoolNamePage>("settings.listManagement.lottery.setPoolName");
+                services.AddKeyedTransient<UserControl, ImportPrizePage>("settings.listManagement.lottery.importPrize");
+                services.AddKeyedTransient<UserControl, PrizeSettingsPage>("settings.listManagement.lottery.prizeSettings");
+                services.AddKeyedTransient<UserControl, WeightSettingsPage>("settings.listManagement.lottery.weightSettings");
+                services.AddKeyedTransient<UserControl, CountSettingsPage>("settings.listManagement.lottery.countSettings");
+                services.AddKeyedTransient<UserControl, ExportPrizePage>("settings.listManagement.lottery.exportPrize");
                 
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.DrawSettings, "settings.draw", "\uE07C"));
                 services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);

@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.ListManagementPage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages.GenderSettingsPage">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
+            <TextBlock Text="{x:Static pageLangs:Resources.GenderSettings}"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+
+            <TextBlock Text="性别设置功能待实现"
+                       Margin="0 20 0 0"
+                       FontSize="16"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

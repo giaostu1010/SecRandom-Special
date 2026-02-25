@@ -37,7 +37,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         NavigationFrame.NavigationPageFactory = this;
         BuildNavigationMenuItems();
         SelectNavigationItemById(DefaultMainPageId);
-        
+
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.Antialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
         RenderOptions.SetEdgeMode(this, EdgeMode.Antialias);
@@ -159,7 +159,13 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         {
             return null;
         }
-        
-        return IAppHost.Host!.Services.GetKeyedService<UserControl>(info.Id);
+
+        var page = IAppHost.Host!.Services.GetKeyedService<UserControl>(info.Id);
+        if (page == null)
+        {
+            // 如果页面未注册，返回一个占位符控件
+            return new TextBlock { Text = $"页面 {info.Id} 未找到" };
+        }
+        return page;
     }
 }

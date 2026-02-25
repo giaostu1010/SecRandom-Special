@@ -21,7 +21,7 @@ public partial class FloatingWindow : Window
 {
     public ViewModelBase ViewModel { get; } = IAppHost.GetService<ViewModelBase>();
     public bool CanClose { get; set; } = false;
-    
+
     public FloatingWindow()
     {
         DataContext = this;
@@ -209,7 +209,7 @@ public partial class FloatingWindow : Window
         }
         return false;
     }
-    
+
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
