@@ -5,15 +5,11 @@
              xmlns:fa="using:FluentAvalonia.UI.Controls"
              xmlns:controls="clr-namespace:SecRandom.Core.Controls;assembly=SecRandom.Core"
              xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.HistoryPage"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SecRandom.Views.SettingsPages.HistoryManagementSubPages.TableSubPages.LotteryHistoryTableSubPage">
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <TextBlock Text="{x:Static pageLangs:Resources.LotteryHistoryTable}"
-                       FontSize="14"
-                       FontWeight="SemiBold"/>
-            
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SelectPool}"
                                          Description="{x:Static pageLangs:Resources.SelectPoolDesc}"

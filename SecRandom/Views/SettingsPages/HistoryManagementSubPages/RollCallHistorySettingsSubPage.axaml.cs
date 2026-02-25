@@ -24,12 +24,7 @@ public partial class RollCallHistorySettingsSubPage : UserControl
 
     private void ViewRollCallHistory_OnClick(object? sender, RoutedEventArgs e)
     {
-        var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
-        if (settingsView is not null)
-        {
-            var pageInfo = new PageInfo("settings.history.rollCallTable", "\uE81C", "settings.history");
-            settingsView.NavigateToPage(pageInfo, false);
-        }
+        SettingsView.Current?.SelectNavigationItemById("settings.history.rollCallTable");
     }
 
     private void ClearRollCallHistory_OnClick(object? sender, RoutedEventArgs e)

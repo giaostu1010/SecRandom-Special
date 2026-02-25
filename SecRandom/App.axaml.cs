@@ -174,9 +174,9 @@ public partial class App : Application
 
                 services.AddGroup(new GroupInfo(Langs.SettingsPages.HistoryPage.Resources.HistoryManagement, "settings.history", "\uE81C"));
                 services.AddSettingsPage<RollCallHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.RollCallHistory);
-                services.AddKeyedTransient<UserControl, RollCallHistoryTableSubPage>("settings.history.rollCallTable");
+                services.AddSettingsPage<RollCallHistoryTableSubPage>(Langs.SettingsPages.HistoryPage.Resources.RollCallHistoryTable);
                 services.AddSettingsPage<LotteryHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.LotteryHistory);
-                services.AddKeyedTransient<UserControl, LotteryHistoryTableSubPage>("settings.history.lotteryTable");
+                services.AddSettingsPage<LotteryHistoryTableSubPage>(Langs.SettingsPages.HistoryPage.Resources.LotteryHistoryTable);
                 
                 services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
                 services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
