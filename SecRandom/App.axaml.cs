@@ -31,6 +31,8 @@ using SecRandom.ViewModels;
 using SecRandom.Views;
 using SecRandom.Views.MainPages;
 using SecRandom.Views.SettingsPages;
+using SecRandom.Views.SettingsPages.HistoryManagementSubPages;
+using SecRandom.Views.SettingsPages.HistoryManagementSubPages.TableSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
 using SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
@@ -170,7 +172,12 @@ public partial class App : Application
                 services.AddSettingsPage<LinkageSettingsPage>(Langs.Common.Resources.LinkageSettings);
                 services.AddSettingsPage<VoiceSettingsPage>(Langs.Common.Resources.VoiceSettings);
                 services.AddSettingsPage<ThemeManagementPage>(Langs.Common.Resources.ThemeManagement);
-                services.AddSettingsPage<HistoryPage>(Langs.Common.Resources.History);
+
+                services.AddGroup(new GroupInfo(Langs.SettingsPages.HistoryPage.Resources.HistoryManagement, "settings.history", "\uE81C"));
+                services.AddSettingsPage<RollCallHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.RollCallHistory);
+                services.AddKeyedTransient<UserControl, RollCallHistoryTableSubPage>("settings.history.rollCallTable");
+                services.AddSettingsPage<LotteryHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.LotteryHistory);
+                services.AddKeyedTransient<UserControl, LotteryHistoryTableSubPage>("settings.history.lotteryTable");
                 
                 services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
                 services.AddSettingsPage<AboutPage>(Langs.Common.Resources.About);
