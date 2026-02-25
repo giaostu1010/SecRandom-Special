@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 using SecRandom.Helpers;
@@ -17,7 +18,12 @@ public partial class MainWindow : AppWindow
         TitleBar.ExtendsContentIntoTitleBar = true;
         TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
     }
-    
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         var isMicaSupported = OperatingSystem.IsWindows() 

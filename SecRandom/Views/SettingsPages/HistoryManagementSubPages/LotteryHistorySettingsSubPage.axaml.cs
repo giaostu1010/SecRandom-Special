@@ -27,7 +27,10 @@ public partial class LotteryHistorySettingsSubPage : UserControl
         var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
         if (settingsView is not null)
         {
-            var pageInfo = new PageInfo("settings.history.lotteryTable", "\uE8F1", "settings.history");
+            var pageInfo = new PageInfo("settings.history.lotteryTable", "\uE8F1", "settings.history")
+            {
+                Name = "抽奖历史记录表格"
+            };
             settingsView.NavigateToPage(pageInfo, false);
         }
     }

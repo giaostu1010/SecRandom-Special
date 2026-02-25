@@ -178,4 +178,229 @@
     <data name="Back" xml:space="preserve">
         <value>Back</value>
     </data>
+    <data name="SetPoolNamePageTitle" xml:space="preserve">
+        <value>Pool Name Settings</value>
+    </data>
+    <data name="CreateNewPool" xml:space="preserve">
+        <value>Create New Pool</value>
+    </data>
+    <data name="EnterPoolName" xml:space="preserve">
+        <value>Enter new pool name</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="ExistingPools" xml:space="preserve">
+        <value>Existing Pools</value>
+    </data>
+    <data name="Rename" xml:space="preserve">
+        <value>Rename</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ImportPrizePageTitle" xml:space="preserve">
+        <value>Import Prize List</value>
+    </data>
+    <data name="SelectPoolLabel" xml:space="preserve">
+        <value>Select Pool</value>
+    </data>
+    <data name="SelectFile" xml:space="preserve">
+        <value>Select File</value>
+    </data>
+    <data name="SelectFileToImport" xml:space="preserve">
+        <value>Please select a file to import</value>
+    </data>
+    <data name="Browse" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="ImportOptions" xml:space="preserve">
+        <value>Import Options</value>
+    </data>
+    <data name="ClearExistingData" xml:space="preserve">
+        <value>Clear existing data (overwrite import)</value>
+    </data>
+    <data name="SupportedFormats" xml:space="preserve">
+        <value>Supported file formats:</value>
+    </data>
+    <data name="JsonFormatDesc" xml:space="preserve">
+        <value>JSON - Pool format file</value>
+    </data>
+    <data name="CsvFormatDesc" xml:space="preserve">
+        <value>CSV - Name,Weight,Count,Tags</value>
+    </data>
+    <data name="TxtFormatDesc" xml:space="preserve">
+        <value>TXT - One prize name per line</value>
+    </data>
+    <data name="StartImport" xml:space="preserve">
+        <value>Start Import</value>
+    </data>
+    <data name="PrizeSettingsPageTitle" xml:space="preserve">
+        <value>Prize Settings</value>
+    </data>
+    <data name="AddPrize" xml:space="preserve">
+        <value>Add Prize</value>
+    </data>
+    <data name="DeleteSelected" xml:space="preserve">
+        <value>Delete Selected</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="WeightSettingsPageTitle" xml:space="preserve">
+        <value>Weight Settings</value>
+    </data>
+    <data name="CountSettingsPageTitle" xml:space="preserve">
+        <value>Count Settings</value>
+    </data>
+    <data name="ExportPrizePageTitle" xml:space="preserve">
+        <value>Export Prize List</value>
+    </data>
+    <data name="SaveLocation" xml:space="preserve">
+        <value>Save Location</value>
+    </data>
+    <data name="SelectSaveLocation" xml:space="preserve">
+        <value>Please select save location</value>
+    </data>
+    <data name="ExportFormat" xml:space="preserve">
+        <value>Export Format</value>
+    </data>
+    <data name="JsonFormat" xml:space="preserve">
+        <value>JSON Format</value>
+    </data>
+    <data name="CsvFormat" xml:space="preserve">
+        <value>CSV Format</value>
+    </data>
+    <data name="TxtFormat" xml:space="preserve">
+        <value>TXT Format (names only)</value>
+    </data>
+    <data name="StartExport" xml:space="preserve">
+        <value>Start Export</value>
+    </data>
+    <data name="ColumnId" xml:space="preserve">
+        <value>ID</value>
+    </data>
+    <data name="ColumnEnabled" xml:space="preserve">
+        <value>Enabled</value>
+    </data>
+    <data name="PrizeName" xml:space="preserve">
+        <value>Prize Name</value>
+    </data>
+    <data name="PrizeWeight" xml:space="preserve">
+        <value>Weight</value>
+    </data>
+    <data name="PrizeCount" xml:space="preserve">
+        <value>Count</value>
+    </data>
+    <data name="EnterPrizeName" xml:space="preserve">
+        <value>Prize name</value>
+    </data>
+    <data name="EnterWeight" xml:space="preserve">
+        <value>Weight</value>
+    </data>
+    <data name="EnterCount" xml:space="preserve">
+        <value>Count</value>
+    </data>
+    <data name="NameLabel" xml:space="preserve">
+        <value>Name:</value>
+    </data>
+    <data name="WeightLabel" xml:space="preserve">
+        <value>Weight:</value>
+    </data>
+    <data name="CountLabel" xml:space="preserve">
+        <value>Count:</value>
+    </data>
+    <data name="Confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="Tip" xml:space="preserve">
+        <value>Tip</value>
+    </data>
+    <data name="Success" xml:space="preserve">
+        <value>Success</value>
+    </data>
+    <data name="Failed" xml:space="preserve">
+        <value>Failed</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="PleaseEnterPoolName" xml:space="preserve">
+        <value>Please enter pool name</value>
+    </data>
+    <data name="PoolCreatedSuccess" xml:space="preserve">
+        <value>Pool '{0}' created successfully</value>
+    </data>
+    <data name="PoolCreateFailed" xml:space="preserve">
+        <value>Failed to create pool, name may already exist</value>
+    </data>
+    <data name="RenamePool" xml:space="preserve">
+        <value>Rename Pool</value>
+    </data>
+    <data name="EnterNewName" xml:space="preserve">
+        <value>Enter new name</value>
+    </data>
+    <data name="PoolRenamedSuccess" xml:space="preserve">
+        <value>Pool renamed to '{0}'</value>
+    </data>
+    <data name="RenameFailed" xml:space="preserve">
+        <value>Rename failed, name may already exist</value>
+    </data>
+    <data name="ConfirmDelete" xml:space="preserve">
+        <value>Confirm Delete</value>
+    </data>
+    <data name="ConfirmDeletePool" xml:space="preserve">
+        <value>Are you sure you want to delete pool '{0}'? This action cannot be undone.</value>
+    </data>
+    <data name="PoolDeletedSuccess" xml:space="preserve">
+        <value>Pool '{0}' deleted</value>
+    </data>
+    <data name="DeletePoolFailed" xml:space="preserve">
+        <value>Failed to delete pool</value>
+    </data>
+    <data name="PleaseCreatePoolFirst" xml:space="preserve">
+        <value>Please create a pool first</value>
+    </data>
+    <data name="PleaseSelectPool" xml:space="preserve">
+        <value>Please select a pool</value>
+    </data>
+    <data name="PleaseSelectValidFile" xml:space="preserve">
+        <value>Please select a valid file</value>
+    </data>
+    <data name="ImportSuccess" xml:space="preserve">
+        <value>Successfully imported {0} prizes</value>
+    </data>
+    <data name="ImportFailed" xml:space="preserve">
+        <value>Import failed, please check file format</value>
+    </data>
+    <data name="PrizeSettingsSaved" xml:space="preserve">
+        <value>Prize settings saved</value>
+    </data>
+    <data name="SaveFailed" xml:space="preserve">
+        <value>Save failed</value>
+    </data>
+    <data name="PleaseSelectPrizeToDelete" xml:space="preserve">
+        <value>Please select a prize to delete</value>
+    </data>
+    <data name="ConfirmDeletePrize" xml:space="preserve">
+        <value>Are you sure you want to delete prize '{0}'?</value>
+    </data>
+    <data name="WeightSettingsSaved" xml:space="preserve">
+        <value>Weight settings saved</value>
+    </data>
+    <data name="CountSettingsSaved" xml:space="preserve">
+        <value>Count settings saved</value>
+    </data>
+    <data name="PleaseSelectSaveLocation" xml:space="preserve">
+        <value>Please select save location</value>
+    </data>
+    <data name="ExportSuccess" xml:space="preserve">
+        <value>Prize list exported to: {0}</value>
+    </data>
+    <data name="ExportFailed" xml:space="preserve">
+        <value>Export failed</value>
+    </data>
 </root>

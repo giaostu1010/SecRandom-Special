@@ -27,7 +27,10 @@ public partial class RollCallHistorySettingsSubPage : UserControl
         var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
         if (settingsView is not null)
         {
-            var pageInfo = new PageInfo("settings.history.rollCallTable", "\uE81C", "settings.history");
+            var pageInfo = new PageInfo("settings.history.rollCallTable", "\uE81C", "settings.history")
+            {
+                Name = "点名历史记录表格"
+            };
             settingsView.NavigateToPage(pageInfo, false);
         }
     }

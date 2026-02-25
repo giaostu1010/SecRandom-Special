@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.ListManagementPage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages.ImportPrizePage">
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12" Spacing="16">
+            <!-- 页面标题 -->
+            <TextBlock Text="{x:Static pageLangs:Resources.ImportPrizePageTitle}" FontSize="20" FontWeight="Bold"/>
+            
+            <!-- 选择奖池 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.SelectPoolLabel}" FontWeight="SemiBold" FontSize="14"/>
+                <ComboBox x:Name="PoolNameComboBox" MinWidth="200"
+                          HorizontalAlignment="Left"/>
+            </StackPanel>
+            
+            <!-- 选择文件 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.SelectFile}" FontWeight="SemiBold" FontSize="14"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox x:Name="FilePathTextBox" IsReadOnly="True"
+                             Watermark="{x:Static pageLangs:Resources.SelectFileToImport}"/>
+                    <Button Grid.Column="1" Content="{x:Static pageLangs:Resources.Browse}"
+                            Click="BrowseButton_OnClick" Margin="8,0,0,0"/>
+                </Grid>
+            </StackPanel>
+            
+            <!-- 导入选项 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.ImportOptions}" FontWeight="SemiBold" FontSize="14"/>
+                <CheckBox x:Name="ClearExistingCheckBox" 
+                          Content="{x:Static pageLangs:Resources.ClearExistingData}"/>
+            </StackPanel>
+            
+            <!-- 支持的格式说明 -->
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{x:Static pageLangs:Resources.SupportedFormats}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{x:Static pageLangs:Resources.JsonFormatDesc}" 
+                               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    <TextBlock Text="{x:Static pageLangs:Resources.CsvFormatDesc}" 
+                               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    <TextBlock Text="{x:Static pageLangs:Resources.TxtFormatDesc}" 
+                               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- 导入按钮 -->
+            <Button x:Name="ImportButton" Content="{x:Static pageLangs:Resources.StartImport}"
+                    HorizontalAlignment="Left"
+                    IsEnabled="False"
+                    Click="ImportButton_OnClick"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

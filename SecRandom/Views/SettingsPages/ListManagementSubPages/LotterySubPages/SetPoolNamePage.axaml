@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.ListManagementPage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages.SetPoolNamePage">
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12" Spacing="16">
+            <!-- 页面标题 -->
+            <TextBlock Text="{x:Static pageLangs:Resources.SetPoolNamePageTitle}" FontSize="20" FontWeight="Bold"/>
+            
+            <!-- 创建新奖池 -->
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{x:Static pageLangs:Resources.CreateNewPool}" FontWeight="SemiBold" FontSize="14"/>
+                    <TextBox x:Name="NewPoolNameTextBox" Watermark="{x:Static pageLangs:Resources.EnterPoolName}"/>
+                    <Button x:Name="CreatePoolButton" Content="{x:Static pageLangs:Resources.Create}"
+                            HorizontalAlignment="Left"
+                            Click="CreatePoolButton_OnClick"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- 现有奖池列表 -->
+            <TextBlock Text="{x:Static pageLangs:Resources.ExistingPools}" FontWeight="SemiBold" FontSize="14"/>
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    CornerRadius="8">
+                <ScrollViewer MaxHeight="400">
+                    <ItemsControl x:Name="PoolListItemsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" FontSize="14"/>
+                                        <Button Grid.Column="1" Content="{x:Static pageLangs:Resources.Rename}"
+                                                Tag="{Binding}"
+                                                Click="RenamePoolButton_OnClick"
+                                                Margin="8,0"/>
+                                        <Button Grid.Column="2" Content="{x:Static pageLangs:Resources.Delete}"
+                                                Tag="{Binding}"
+                                                Click="DeletePoolButton_OnClick"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

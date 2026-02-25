@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
@@ -16,7 +17,7 @@ public partial class FloatingWindow : Window
 {
     public ViewModelBase ViewModel { get; } = IAppHost.GetService<ViewModelBase>();
     public bool CanClose { get; set; } = false;
-    
+
     public FloatingWindow()
     {
         DataContext = this;
@@ -89,7 +90,12 @@ public partial class FloatingWindow : Window
         }
         return false;
     }
-    
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);

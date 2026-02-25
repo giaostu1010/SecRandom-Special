@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using DynamicData;
@@ -22,19 +23,29 @@ public partial class SettingsView : UserControl, INavigationPageFactory
 {
     public SettingsViewModel ViewModel { get; } = IAppHost.GetService<SettingsViewModel>();
     private const string DefaultMainPageId = "settings.basic";
-    
+
     private AppToastAdorner? _appToastAdorner;
     private bool _isAdornerAdded;
-    
+
+    private Frame? _navigationFrame;
+    private NavigationView? _navigationView;
+
     public SettingsView()
     {
         DataContext = this;
         InitializeComponent();
 
-        NavigationFrame.NavigationPageFactory = this;
+        _navigationFrame = this.FindControl<Frame>("NavigationFrame");
+        _navigationView = this.FindControl<NavigationView>("NavigationView");
+
+        if (_navigationFrame != null)
+        {
+            _navigationFrame.NavigationPageFactory = this;
+        }
+
         BuildNavigationMenuItems();
         SelectNavigationItemById(DefaultMainPageId);
-        
+
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.Antialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
         RenderOptions.SetEdgeMode(this, EdgeMode.Antialias);
@@ -102,7 +113,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
             ViewModel.SelectedNavigationViewItem = null;
         }
         ViewModel.SelectedPageInfo = info;
-        NavigationFrame.NavigateFromObject(info);
+        _navigationFrame?.NavigateFromObject(info);
     }
     
     private void SelectNavigationItem(PageInfo info)
@@ -116,7 +127,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         ViewModel.FrameContent = null;
         SelectNavigationItem(info);
         ViewModel.SelectedPageInfo = info;
-        NavigationFrame.NavigateFromObject(info);
+        _navigationFrame?.NavigateFromObject(info);
     }
     
     private void NavigationView_OnItemInvoked(object? sender, NavigationViewItemInvokedEventArgs e)
@@ -140,7 +151,10 @@ public partial class SettingsView : UserControl, INavigationPageFactory
 
     private void TogglePaneButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        NavigationView.IsPaneOpen = !NavigationView.IsPaneOpen;
+        if (_navigationView != null)
+        {
+            _navigationView.IsPaneOpen = !_navigationView.IsPaneOpen;
+        }
     }
 
     public Control? GetPage(Type srcType)
@@ -154,7 +168,18 @@ public partial class SettingsView : UserControl, INavigationPageFactory
         {
             return null;
         }
-        
-        return IAppHost.Host!.Services.GetKeyedService<UserControl>(info.Id);
+
+        var page = IAppHost.Host!.Services.GetKeyedService<UserControl>(info.Id);
+        if (page == null)
+        {
+            // 如果页面未注册，返回一个占位符控件
+            return new TextBlock { Text = $"页面 {info.Id} 未找到" };
+        }
+        return page;
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

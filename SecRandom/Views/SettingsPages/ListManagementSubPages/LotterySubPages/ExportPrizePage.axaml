@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fa="using:FluentAvalonia.UI.Controls"
+             xmlns:pageLangs="using:SecRandom.Langs.SettingsPages.ListManagementPage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages.ExportPrizePage">
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" Margin="12" Spacing="16">
+            <!-- 页面标题 -->
+            <TextBlock Text="{x:Static pageLangs:Resources.ExportPrizePageTitle}" FontSize="20" FontWeight="Bold"/>
+            
+            <!-- 选择奖池 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.SelectPoolLabel}" FontWeight="SemiBold" FontSize="14"/>
+                <ComboBox x:Name="PoolNameComboBox" MinWidth="200"
+                          HorizontalAlignment="Left"/>
+            </StackPanel>
+            
+            <!-- 选择保存位置 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.SaveLocation}" FontWeight="SemiBold" FontSize="14"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox x:Name="FilePathTextBox" IsReadOnly="True"
+                             Watermark="{x:Static pageLangs:Resources.SelectSaveLocation}"/>
+                    <Button Grid.Column="1" Content="{x:Static pageLangs:Resources.Browse}"
+                            Click="BrowseButton_OnClick" Margin="8,0,0,0"/>
+                </Grid>
+            </StackPanel>
+            
+            <!-- 导出格式 -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{x:Static pageLangs:Resources.ExportFormat}" FontWeight="SemiBold" FontSize="14"/>
+                <RadioButton x:Name="JsonRadioButton" Content="{x:Static pageLangs:Resources.JsonFormat}" IsChecked="True"/>
+                <RadioButton x:Name="CsvRadioButton" Content="{x:Static pageLangs:Resources.CsvFormat}"/>
+                <RadioButton x:Name="TxtRadioButton" Content="{x:Static pageLangs:Resources.TxtFormat}"/>
+            </StackPanel>
+            
+            <!-- 导出按钮 -->
+            <Button x:Name="ExportButton" Content="{x:Static pageLangs:Resources.StartExport}"
+                    HorizontalAlignment="Left"
+                    IsEnabled="False"
+                    Click="ExportButton_OnClick"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
