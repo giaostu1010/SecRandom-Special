@@ -124,11 +124,35 @@
     <data name="FontWeightRegular" xml:space="preserve">
         <value>Regular</value>
     </data>
+    <data name="FontWeightThin" xml:space="preserve">
+        <value>Thin</value>
+    </data>
+    <data name="FontWeightExtraLight" xml:space="preserve">
+        <value>ExtraLight</value>
+    </data>
+    <data name="FontWeightLight" xml:space="preserve">
+        <value>Light</value>
+    </data>
+    <data name="FontWeightNormal" xml:space="preserve">
+        <value>Normal</value>
+    </data>
+    <data name="FontWeightMedium" xml:space="preserve">
+        <value>Medium</value>
+    </data>
     <data name="FontWeightSemiBold" xml:space="preserve">
         <value>Semibold</value>
     </data>
     <data name="FontWeightBold" xml:space="preserve">
         <value>Bold</value>
+    </data>
+    <data name="FontWeightExtraBold" xml:space="preserve">
+        <value>ExtraBold</value>
+    </data>
+    <data name="FontWeightBlack" xml:space="preserve">
+        <value>Black</value>
+    </data>
+    <data name="FontWeightExtraBlack" xml:space="preserve">
+        <value>ExtraBlack</value>
     </data>
     <data name="DpiScale" xml:space="preserve">
         <value>DPI scale</value>

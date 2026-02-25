@@ -45,6 +45,11 @@
           <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
 
+      <EmbeddedResource Update="Langs\SettingsPages\NotificationSettingsSubPages\Resources.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+
       <EmbeddedResource Update="Langs\SettingsPages\FloatingWindowPage\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -86,6 +91,12 @@
       </Compile>
 
       <Compile Update="Langs\SettingsPages\DrawSettingsPage\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+
+      <Compile Update="Langs\SettingsPages\NotificationSettingsSubPages\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>

@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Avalonia.VisualTree;
 using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
+using SecRandom.Core.Services;
 using SecRandom.Core;
 using SecRandom.Models.Config;
 using SecRandom.Services.Config;
@@ -186,11 +187,17 @@ public partial class LotterySettingsSubPage : UserControl
     private void OpenListSpecificSettings_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
-        settingsView?.NavigateToPage(
-            new PageInfo(SecRandom.Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings,
-                "settings.draw.lottery.listSpecific",
-                "\ue8a7"),
-            false);
+        var pageInfo = PagesRegistryService.SettingsItems.FirstOrDefault(x => x.Id == "settings.draw.lottery.listSpecific");
+        if (settingsView is not null && pageInfo is not null)
+        {
+            settingsView.NavigateToPage(pageInfo, false);
+        }
+        else if (settingsView is not null)
+        {
+            settingsView.NavigateToPage(
+                new PageInfo("settings.draw.lottery.listSpecific", "\ue8a7", "settings.draw"),
+                false);
+        }
     }
 
     private void LotterySettingsSubPage_OnDetachedFromVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)

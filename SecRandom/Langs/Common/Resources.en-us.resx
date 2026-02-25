@@ -43,6 +43,15 @@
     <data name="NotificationSettings" xml:space="preserve">
         <value>Notification Settings</value>
     </data>
+    <data name="RollCallNotificationSettings" xml:space="preserve">
+        <value>Picking Notification Settings</value>
+    </data>
+    <data name="QuickDrawNotificationSettings" xml:space="preserve">
+        <value>Quick Pick Notification Settings</value>
+    </data>
+    <data name="LotteryNotificationSettings" xml:space="preserve">
+        <value>Lottery Notification Settings</value>
+    </data>
     <data name="SecuritySettings" xml:space="preserve">
         <value>Security Settings</value>
     </data>
@@ -57,9 +66,6 @@
     </data>
     <data name="History" xml:space="preserve">
         <value>History</value>
-    </data>
-    <data name="MoreSettings" xml:space="preserve">
-        <value>More Settings</value>
     </data>
     <data name="UpdateSettings" xml:space="preserve">
         <value>Update Settings</value>

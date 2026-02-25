@@ -124,11 +124,35 @@
     <data name="FontWeightRegular" xml:space="preserve">
         <value>常规</value>
     </data>
+    <data name="FontWeightThin" xml:space="preserve">
+        <value>极细</value>
+    </data>
+    <data name="FontWeightExtraLight" xml:space="preserve">
+        <value>特细</value>
+    </data>
+    <data name="FontWeightLight" xml:space="preserve">
+        <value>细体</value>
+    </data>
+    <data name="FontWeightNormal" xml:space="preserve">
+        <value>常规</value>
+    </data>
+    <data name="FontWeightMedium" xml:space="preserve">
+        <value>中等</value>
+    </data>
     <data name="FontWeightSemiBold" xml:space="preserve">
         <value>半粗</value>
     </data>
     <data name="FontWeightBold" xml:space="preserve">
         <value>粗体</value>
+    </data>
+    <data name="FontWeightExtraBold" xml:space="preserve">
+        <value>特粗</value>
+    </data>
+    <data name="FontWeightBlack" xml:space="preserve">
+        <value>黑体</value>
+    </data>
+    <data name="FontWeightExtraBlack" xml:space="preserve">
+        <value>特黑</value>
     </data>
     <data name="DpiScale" xml:space="preserve">
         <value>DPI缩放</value>
