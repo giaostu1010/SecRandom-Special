@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SecRandom.Core;
 using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
@@ -24,7 +25,7 @@ public class StudentDisplayItem
     public string Tags { get; set; } = "";
 }
 
-[PageInfo("settings.listManagement.rollCall.preview", "\uE8A1", "settings.listManagement")]
+[PageInfo("settings.listManagement.rollCall.preview", "\uE8A1", "settings.listManagement", PageLocation.Top, true)]
 public partial class RollCallTablePreviewPage : UserControl
 {
     private readonly ListNamesSource _listNamesSource;

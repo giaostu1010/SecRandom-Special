@@ -162,18 +162,7 @@ public partial class RollCallSettingsSubPage : UserControl
 
     private void OpenListSpecificSettings_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
-        var pageInfo = PagesRegistryService.SettingsItems.FirstOrDefault(x => x.Id == "settings.draw.rollCall.listSpecific");
-        if (settingsView is not null && pageInfo is not null)
-        {
-            settingsView.NavigateToPage(pageInfo, false);
-        }
-        else if (settingsView is not null)
-        {
-            settingsView.NavigateToPage(
-                new PageInfo("settings.draw.rollCall.listSpecific", "\ue8a7", "settings.draw"),
-                false);
-        }
+        SettingsView.Current?.SelectNavigationItemById("settings.draw.rollCall.listSpecific");
     }
 
     private void RollCallSettingsSubPage_OnDetachedFromVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)

@@ -186,18 +186,7 @@ public partial class LotterySettingsSubPage : UserControl
     
     private void OpenListSpecificSettings_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
-        var pageInfo = PagesRegistryService.SettingsItems.FirstOrDefault(x => x.Id == "settings.draw.lottery.listSpecific");
-        if (settingsView is not null && pageInfo is not null)
-        {
-            settingsView.NavigateToPage(pageInfo, false);
-        }
-        else if (settingsView is not null)
-        {
-            settingsView.NavigateToPage(
-                new PageInfo("settings.draw.lottery.listSpecific", "\ue8a7", "settings.draw"),
-                false);
-        }
+        SettingsView.Current?.SelectNavigationItemById("settings.draw.lottery.listSpecific");
     }
 
     private void LotterySettingsSubPage_OnDetachedFromVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)

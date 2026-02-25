@@ -20,6 +20,7 @@ namespace SecRandom.Views;
 
 public partial class MainView : UserControl, INavigationPageFactory
 {
+    public static MainView? Current { get; private set; }
     public MainViewModel ViewModel { get; } = IAppHost.GetService<MainViewModel>();
     private const string DefaultMainPageId = "main.rollCall";
     
@@ -28,6 +29,7 @@ public partial class MainView : UserControl, INavigationPageFactory
     
     public MainView()
     {
+        Current = this;
         DataContext = this;
         InitializeComponent();
 

@@ -13,8 +13,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <TextBlock Text="{x:Static pageLangs:Resources.ListSpecificSettings}"
-                       FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 20"/>
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ListSpecificSettingsSelectList}"
                                          Description="{x:Static pageLangs:Resources.ListSpecificSettingsSelectListDesc}"

@@ -20,6 +20,8 @@ namespace SecRandom.Views;
 
 public partial class SettingsView : UserControl, INavigationPageFactory
 {
+    public static SettingsView? Current { get; private set; }
+    
     public SettingsViewModel ViewModel { get; } = IAppHost.GetService<SettingsViewModel>();
     private const string DefaultMainPageId = "settings.basic";
     
@@ -28,6 +30,7 @@ public partial class SettingsView : UserControl, INavigationPageFactory
     
     public SettingsView()
     {
+        Current = this;
         DataContext = this;
         InitializeComponent();
 

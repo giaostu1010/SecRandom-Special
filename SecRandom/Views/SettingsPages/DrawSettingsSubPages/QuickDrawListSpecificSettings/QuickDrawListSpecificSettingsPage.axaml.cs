@@ -10,12 +10,13 @@ using Avalonia.Media;
 using SecRandom.Core.Abstraction;
 using SecRandom.Core.Attributes;
 using SecRandom.Core;
+using SecRandom.Core.Enums;
 using SecRandom.Services.Config;
 using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages;
 
-[PageInfo("settings.draw.quickDraw.listSpecific", "\ue8a7")]
+[PageInfo("settings.draw.quickDraw.listSpecific", "\ue8a7", "settings.draw", PageLocation.Top, true)]
 public partial class QuickDrawListSpecificSettingsPage : UserControl
 {
     private readonly MainConfigHandler _mainConfigHandler;

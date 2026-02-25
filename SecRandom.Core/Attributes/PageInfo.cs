@@ -13,8 +13,9 @@ public class PageInfo : Attribute
     public string Id { get; }
     public string IconGlyph { get; }
     public string? GroupId { get; }
-    
     public PageLocation Location { get; }
+    
+    public bool IsHide { get; }
     public bool UseFullWidth { get; }
     public bool HidePageTitle { get; }
 
@@ -26,8 +27,9 @@ public class PageInfo : Attribute
             
             Id = "separator";
             IconGlyph = "";
-
             Location = location;
+
+            IsHide = false;
             UseFullWidth = false;
             HidePageTitle = false;
         }
@@ -37,15 +39,16 @@ public class PageInfo : Attribute
         }
     }
     
-    public PageInfo(string id, string iconGlyph, string? groupId = null, PageLocation location = PageLocation.Top, bool useFullWidth = false, bool hidePageTitle = false)
+    public PageInfo(string id, string iconGlyph, string? groupId = null, PageLocation location = PageLocation.Top, bool isHide = false, bool useFullWidth = false, bool hidePageTitle = false)
     {
         IsSeparator = false;
         
         Id = id;
         IconGlyph = iconGlyph;
         GroupId = groupId;
-
         Location = location;
+
+        IsHide = isHide;
         UseFullWidth = useFullWidth;
         HidePageTitle = hidePageTitle;
     }

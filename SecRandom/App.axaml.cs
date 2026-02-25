@@ -145,30 +145,25 @@ public partial class App : Application
 
                 services.AddGroup(new GroupInfo(Langs.SettingsPages.ListManagementPage.Resources.ListManagement, "settings.listManagement", "\uE8A7"));
                 services.AddSettingsPage<RollCallListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallListSettings);
-                services.AddKeyedTransient<UserControl, RollCallTablePreviewPage>("settings.listManagement.rollCall.preview");
-                services.AddKeyedTransient<UserControl, RollCallListSpecificSettingsPage>("settings.listManagement.rollCall.listSpecific");
+                services.AddSettingsPage<RollCallTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallTableTitle);
                 services.AddSettingsPage<LotteryListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryListSettings);
-                services.AddKeyedTransient<UserControl, LotteryTablePreviewPage>("settings.listManagement.lottery.preview");
-                services.AddKeyedTransient<UserControl, LotteryListSpecificSettingsPage>("settings.listManagement.lottery.listSpecific");
+                services.AddSettingsPage<LotteryTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryTableTitle);
                 
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.DrawSettings, "settings.draw", "\uE07C"));
                 services.AddSettingsPage<RollCallSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.RollCallSettings);
-                services.AddKeyedTransient<UserControl, RollCallListSpecificSettingsPage>("settings.draw.rollCall.listSpecific");
+                services.AddSettingsPage<RollCallListSpecificSettingsPage>(Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings);
                 services.AddSettingsPage<QuickDrawSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.QuickDrawSettings);
-                services.AddKeyedTransient<UserControl, QuickDrawListSpecificSettingsPage>("settings.draw.quickDraw.listSpecific");
+                services.AddSettingsPage<QuickDrawListSpecificSettingsPage>(Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings);
                 services.AddSettingsPage<LotterySettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.LotterySettings);
-                services.AddKeyedTransient<UserControl, LotteryListSpecificSettingsPage>("settings.draw.lottery.listSpecific");
+                services.AddSettingsPage<LotteryListSpecificSettingsPage>(Langs.SettingsPages.DrawSettingsPage.Resources.ListSpecificSettings);
                 services.AddSettingsPage<FaceDetectorSettingsSubPage>(Langs.SettingsPages.DrawSettingsPage.Resources.FaceDetectorSettings);
                 
                 services.AddSettingsPage<FloatingWindowPage>(Langs.Common.Resources.FloatingWindowManagement);
                
                 services.AddGroup(new GroupInfo(Langs.Common.Resources.NotificationSettings, "settings.notification", "\uE7E3"));
                 services.AddSettingsPage<RollCallNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.RollCallNotificationSettings);
-                services.AddKeyedTransient<UserControl, RollCallNotificationSettingsPage>("settings.notification.rollCall");
                 services.AddSettingsPage<QuickDrawNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.QuickDrawNotificationSettings);
-                services.AddKeyedTransient<UserControl, QuickDrawNotificationSettingsPage>("settings.notification.quickDraw");
                 services.AddSettingsPage<LotteryNotificationSettingsPage>(Langs.SettingsPages.NotificationSettingsPage.Resources.LotteryNotificationSettings);
-                services.AddKeyedTransient<UserControl, LotteryNotificationSettingsPage>("settings.notification.lottery");
                 
                 services.AddSettingsPage<SecuritySettingsPage>(Langs.Common.Resources.SecuritySettings);
                 services.AddSettingsPage<LinkageSettingsPage>(Langs.Common.Resources.LinkageSettings);

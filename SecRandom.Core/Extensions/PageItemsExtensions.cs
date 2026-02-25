@@ -11,7 +11,9 @@ public static class PageItemsExtensions
 {
     public static List<NavigationViewItemBase> ToNavigationViewItems(this IEnumerable<PageInfo> infosEnumerable, ObservableCollection<NavigationViewItemBase> flattenNavigationItems)
     {
-        var infos = infosEnumerable.ToList();
+        var infos = infosEnumerable
+            .Where(info => !info.IsHide)
+            .ToList();
         var groups = infos
             .GroupBy(x => x.GroupId)
             .ToList();
@@ -20,7 +22,7 @@ public static class PageItemsExtensions
         
         foreach (var i in infos)
         {
-            if (i.GroupId != null && (addedGroups.Contains(i.GroupId)))
+            if (i.GroupId != null && addedGroups.Contains(i.GroupId))
             {
                 continue;
             }
@@ -39,7 +41,9 @@ public static class PageItemsExtensions
 
                 if (groups.FirstOrDefault(x => x.Key == i.GroupId) is {} groupItems)
                 {
-                    var children = groupItems.Select(x => x.ToNavigationViewItemBase()).ToList();
+                    var children = groupItems
+                        .Select(x => x.ToNavigationViewItemBase())
+                        .ToList();
                     flattenNavigationItems.AddRange(children);
                     groupItem.MenuItems.AddRange(children);
                 }

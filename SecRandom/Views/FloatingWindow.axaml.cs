@@ -106,8 +106,7 @@ public partial class FloatingWindow : Window
         b.Click += (sender, args) =>
         {
             App.ShowMainWindow();
-            var view = IAppHost.GetService<MainView>();
-            view.SelectNavigationItemById("main.rollCall");
+            MainView.Current?.SelectNavigationItemById("main.rollCall");
         };
 
         return b;

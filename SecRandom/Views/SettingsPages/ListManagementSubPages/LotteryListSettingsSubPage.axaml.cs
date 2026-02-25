@@ -26,18 +26,7 @@ public partial class LotteryListSettingsSubPage : UserControl
 
     private void OpenPreviewTable_OnClick(object? sender, RoutedEventArgs e)
     {
-        var settingsView = this.GetVisualAncestors().OfType<SettingsView>().FirstOrDefault();
-        var pageInfo = PagesRegistryService.SettingsItems.FirstOrDefault(x => x.Id == "settings.listManagement.lottery.preview");
-        if (settingsView is not null && pageInfo is not null)
-        {
-            settingsView.NavigateToPage(pageInfo, false);
-        }
-        else if (settingsView is not null)
-        {
-            settingsView.NavigateToPage(
-                new PageInfo("settings.listManagement.lottery.preview", "\uE8A1", "settings.listManagement"),
-                false);
-        }
+        SettingsView.Current?.SelectNavigationItemById("settings.listManagement.lottery.preview");
     }
 
     private void OpenSetPoolNameWindow_OnClick(object? sender, RoutedEventArgs e)

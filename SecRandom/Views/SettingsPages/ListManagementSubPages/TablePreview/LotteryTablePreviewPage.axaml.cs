@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SecRandom.Core;
 using SecRandom.Core.Attributes;
+using SecRandom.Core.Enums;
 using SecRandom.ViewModels;
 
 namespace SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
@@ -23,7 +24,7 @@ public class PrizeDisplayItem
     public string Count { get; set; } = "";
 }
 
-[PageInfo("settings.listManagement.lottery.preview", "\uE8A1", "settings.listManagement")]
+[PageInfo("settings.listManagement.lottery.preview", "\uE8A1", "settings.listManagement", PageLocation.Top, true)]
 public partial class LotteryTablePreviewPage : UserControl
 {
     private readonly ListNamesSource _listNamesSource;
