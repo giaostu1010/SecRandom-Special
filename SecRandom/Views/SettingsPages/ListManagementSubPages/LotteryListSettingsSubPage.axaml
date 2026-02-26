@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -32,7 +32,7 @@
                        FontWeight="SemiBold"/>
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetPoolName}"
-                                         Description="{x:Static pageLangs:Resources.SetPoolNameDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SetPoolNameDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -42,7 +42,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportPrizeList}"
-                                         Description="{x:Static pageLangs:Resources.ImportPrizeListDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ImportPrizeListDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8E5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -52,7 +52,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PrizeSettings}"
-                                         Description="{x:Static pageLangs:Resources.PrizeSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PrizeSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -62,7 +62,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.WeightSettings}"
-                                         Description="{x:Static pageLangs:Resources.WeightSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_WeightSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -72,7 +72,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CountSettings}"
-                                         Description="{x:Static pageLangs:Resources.CountSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_CountSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -82,7 +82,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportPrizeList}"
-                                         Description="{x:Static pageLangs:Resources.ExportPrizeListDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExportPrizeListDesc}"
                                          IconSource="{controls:FluentIconSource &#xEDE1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"

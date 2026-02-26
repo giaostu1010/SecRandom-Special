@@ -68,6 +68,7 @@ services.AddSettingsPage<LotteryTablePreviewPage>(
   - `Resources.resx`（zh-hans）
   - `Resources.Designer.cs`
   - `Resources.en-us.resx`
+  - `Resources.ja-jp.resx`
 - `SecRandom/SecRandom.csproj` 只需要注册 `Resources.resx` 和 `Resources.Designer.cs`（照现有条目追加，不要把所有语言文件都注册进去）。
 - 页面标题/菜单标题优先直接用 `Langs.*.Resources.*`。
 

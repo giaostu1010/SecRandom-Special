@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -34,7 +34,7 @@
     <data name="BackgroundType" xml:space="preserve">
         <value>Background Type</value>
     </data>
-    <data name="BackgroundTypeDesc" xml:space="preserve">
+    <data name="Settings_BackgroundTypeDesc" xml:space="preserve">
         <value>Choose background type</value>
     </data>
     <data name="BackgroundDefault" xml:space="preserve">
@@ -49,22 +49,22 @@
     <data name="BackgroundColorSolid" xml:space="preserve">
         <value>Background Color</value>
     </data>
-    <data name="BackgroundColorSolidDesc" xml:space="preserve">
+    <data name="Settings_BackgroundColorSolidDesc" xml:space="preserve">
         <value>Set background color</value>
     </data>
     <data name="BackgroundImageFile" xml:space="preserve">
         <value>Background Image</value>
     </data>
-    <data name="BackgroundImageFileDesc" xml:space="preserve">
+    <data name="Settings_BackgroundImageFileDesc" xml:space="preserve">
         <value>Select an image file</value>
     </data>
     <data name="ImageBrightness" xml:space="preserve">
         <value>Image Brightness</value>
     </data>
-    <data name="ImageBrightnessDesc" xml:space="preserve">
+    <data name="Settings_ImageBrightnessDesc" xml:space="preserve">
         <value>Adjust image brightness</value>
     </data>
-    <data name="SelectImage" xml:space="preserve">
+    <data name="Settings_SelectImage" xml:space="preserve">
         <value>Select</value>
     </data>
 </root>

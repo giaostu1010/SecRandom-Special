@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,7 +22,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ViewMode}"
-                                         Description="{x:Static pageLangs:Resources.ViewModeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ViewModeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="ViewModeComboBox"
@@ -32,7 +32,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SelectSubject}"
-                                         Description="{x:Static pageLangs:Resources.SelectSubjectDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SelectSubjectDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C3;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="SubjectComboBox"
@@ -42,7 +42,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowWeight}"
-                                         Description="{x:Static pageLangs:Resources.ShowWeightDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ShowWeightDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch x:Name="ShowWeightSwitch"

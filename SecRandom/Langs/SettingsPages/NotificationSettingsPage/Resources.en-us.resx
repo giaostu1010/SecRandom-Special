@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
@@ -56,7 +56,7 @@
     <data name="BasicSettings" xml:space="preserve">
         <value>Basic settings</value>
     </data>
-    <data name="BasicSettingsDesc" xml:space="preserve">
+    <data name="Settings_BasicSettingsDesc" xml:space="preserve">
         <value>Configure notification display base parameters</value>
     </data>
     <data name="FloatingWindowMode" xml:space="preserve">
@@ -68,13 +68,13 @@
     <data name="ClassIslandNotificationServiceSettings" xml:space="preserve">
         <value>ClassIsland notification service</value>
     </data>
-    <data name="ClassIslandNotificationServiceSettingsDesc" xml:space="preserve">
+    <data name="Settings_ClassIslandNotificationServiceSettingsDesc" xml:space="preserve">
         <value>Configure ClassIsland notification service parameters</value>
     </data>
     <data name="CallNotificationService" xml:space="preserve">
         <value>Call notification service</value>
     </data>
-    <data name="CallNotificationServiceDesc" xml:space="preserve">
+    <data name="Settings_CallNotificationServiceDesc" xml:space="preserve">
         <value>Call the system notification service to send the result when enabled</value>
     </data>
     <data name="Animation" xml:space="preserve">
@@ -86,7 +86,7 @@
     <data name="FloatingWindowEnabledMonitor" xml:space="preserve">
         <value>Monitor select</value>
     </data>
-    <data name="FloatingWindowEnabledMonitorDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowEnabledMonitorDesc" xml:space="preserve">
         <value>Select the display monitor for notification floating windows</value>
     </data>
     <data name="FloatingWindowPosition" xml:space="preserve">
@@ -125,31 +125,31 @@
     <data name="FloatingWindowHorizontalOffset" xml:space="preserve">
         <value>Horizontal offset</value>
     </data>
-    <data name="FloatingWindowHorizontalOffsetDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowHorizontalOffsetDesc" xml:space="preserve">
         <value>Configure the horizontal offset (in pixels) for the notification floating window relative to the default position</value>
     </data>
     <data name="FloatingWindowVerticalOffset" xml:space="preserve">
         <value>Vertical offset</value>
     </data>
-    <data name="FloatingWindowVerticalOffsetDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowVerticalOffsetDesc" xml:space="preserve">
         <value>Configure the vertical offset (in pixels) for the notification floating window relative to the default position</value>
     </data>
     <data name="FloatingWindowTransparency" xml:space="preserve">
         <value>Transparency</value>
     </data>
-    <data name="FloatingWindowTransparencyDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowTransparencyDesc" xml:space="preserve">
         <value>Configure notification floating window transparency, where a smaller value indicates higher transparency (0-100)</value>
     </data>
     <data name="FloatingWindowAutoCloseTime" xml:space="preserve">
         <value>Floating window auto-close time</value>
     </data>
-    <data name="FloatingWindowAutoCloseTimeDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowAutoCloseTimeDesc" xml:space="preserve">
         <value>Set the time to close the floating window automatically (second), set to 0 to not close automatically</value>
     </data>
     <data name="UseMainWindowWhenExceedThreshold" xml:space="preserve">
         <value>Use main window when exceeding threshold</value>
     </data>
-    <data name="UseMainWindowWhenExceedThresholdDesc" xml:space="preserve">
+    <data name="Settings_UseMainWindowWhenExceedThresholdDesc" xml:space="preserve">
         <value>When the picked count exceeds the threshold, show results in the main window only (no floating notification)</value>
     </data>
     <data name="MainWindowDisplayThreshold" xml:space="preserve">
@@ -161,7 +161,7 @@
     <data name="NotificationServiceType" xml:space="preserve">
         <value>Notification service type</value>
     </data>
-    <data name="NotificationServiceTypeDesc" xml:space="preserve">
+    <data name="Settings_NotificationServiceTypeDesc" xml:space="preserve">
         <value>Select notification service type, SecRandom or ClassIsland</value>
     </data>
     <data name="NotificationServiceType0" xml:space="preserve">
@@ -176,7 +176,7 @@
     <data name="NotificationDisplayDuration" xml:space="preserve">
         <value>Notification display duration</value>
     </data>
-    <data name="NotificationDisplayDurationDesc" xml:space="preserve">
+    <data name="Settings_NotificationDisplayDurationDesc" xml:space="preserve">
         <value>Set notification display duration (seconds)</value>
     </data>
     <data name="DoNotStealFocus" xml:space="preserve">

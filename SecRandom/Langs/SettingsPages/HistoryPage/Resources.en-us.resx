@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -45,25 +45,25 @@
   <data name="HistoryManagement" xml:space="preserve">
     <value>History management</value>
   </data>
-  <data name="HistoryManagementDesc" xml:space="preserve">
+  <data name="Settings_HistoryManagementDesc" xml:space="preserve">
     <value>Manage the pick and lottery history</value>
   </data>
-  <data name="RollCallHistory" xml:space="preserve">
+  <data name="Settings_RollCallHistory" xml:space="preserve">
     <value>Picking history</value>
   </data>
-  <data name="RollCallHistoryDesc" xml:space="preserve">
+  <data name="Settings_RollCallHistoryDesc" xml:space="preserve">
     <value>View and manage the pick history</value>
   </data>
-  <data name="LotteryHistory" xml:space="preserve">
+  <data name="Settings_LotteryHistory" xml:space="preserve">
     <value>Lottery history</value>
   </data>
-  <data name="LotteryHistoryDesc" xml:space="preserve">
+  <data name="Settings_LotteryHistoryDesc" xml:space="preserve">
     <value>View and manage the lottery history</value>
   </data>
   <data name="EnableRollCallHistory" xml:space="preserve">
     <value>Enable picking history</value>
   </data>
-  <data name="EnableRollCallHistoryDesc" xml:space="preserve">
+  <data name="Settings_EnableRollCallHistoryDesc" xml:space="preserve">
     <value>Control whether pick history is enabled</value>
   </data>
   <data name="SelectClass" xml:space="preserve">
@@ -75,13 +75,13 @@
   <data name="ClearRollCallHistory" xml:space="preserve">
     <value>Clear pick history</value>
   </data>
-  <data name="ClearRollCallHistoryDesc" xml:space="preserve">
+  <data name="Settings_ClearRollCallHistoryDesc" xml:space="preserve">
     <value>Clear the pick history of the selected class</value>
   </data>
   <data name="EnableLotteryHistory" xml:space="preserve">
     <value>Enable lottery history</value>
   </data>
-  <data name="EnableLotteryHistoryDesc" xml:space="preserve">
+  <data name="Settings_EnableLotteryHistoryDesc" xml:space="preserve">
     <value>Control whether lottery history is enabled</value>
   </data>
   <data name="SelectPool" xml:space="preserve">
@@ -93,37 +93,37 @@
   <data name="ClearLotteryHistory" xml:space="preserve">
     <value>Clear lottery history</value>
   </data>
-  <data name="ClearLotteryHistoryDesc" xml:space="preserve">
+  <data name="Settings_ClearLotteryHistoryDesc" xml:space="preserve">
     <value>Clear the lottery history of the selected pool</value>
   </data>
   <data name="RollCallHistoryTable" xml:space="preserve">
     <value>Picking history table</value>
   </data>
-  <data name="RollCallHistoryTableDesc" xml:space="preserve">
+  <data name="Settings_RollCallHistoryTableDesc" xml:space="preserve">
     <value>Display lists of pick history in table form</value>
   </data>
   <data name="LotteryHistoryTable" xml:space="preserve">
     <value>Lottery history table</value>
   </data>
-  <data name="LotteryHistoryTableDesc" xml:space="preserve">
+  <data name="Settings_LotteryHistoryTableDesc" xml:space="preserve">
     <value>Display lists of lottery history in table form</value>
   </data>
   <data name="ViewMode" xml:space="preserve">
     <value>View mode</value>
   </data>
-  <data name="ViewModeDesc" xml:space="preserve">
+  <data name="Settings_ViewModeDesc" xml:space="preserve">
     <value>Choose how history is viewed</value>
   </data>
   <data name="SelectSubject" xml:space="preserve">
     <value>Select subject</value>
   </data>
-  <data name="SelectSubjectDesc" xml:space="preserve">
+  <data name="Settings_SelectSubjectDesc" xml:space="preserve">
     <value>Choose a subject to view</value>
   </data>
   <data name="ShowWeight" xml:space="preserve">
     <value>Show weight</value>
   </data>
-  <data name="ShowWeightDesc" xml:space="preserve">
+  <data name="Settings_ShowWeightDesc" xml:space="preserve">
     <value>Whether to show weight in table</value>
   </data>
   <data name="AllHistory" xml:space="preserve">

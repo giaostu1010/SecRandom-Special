@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,8 +19,8 @@
                        FontWeight="SemiBold"/>
             
             <StackPanel Orientation="Vertical" Spacing="0">
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowFloatingWindowOnStartup}"
-                                         Description="{x:Static pageLangs:Resources.ShowFloatingWindowOnStartupDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ShowFloatingWindowOnStartup}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ShowFloatingWindowOnStartupDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsShowFloatingWindowOnStartupEnabled}"
@@ -29,8 +29,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowOpacity}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowOpacityDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_FloatingWindowOpacity}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowOpacityDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7F0;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding FloatingWindowOpacityPercent}"
@@ -41,8 +41,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowTopmostMode}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowTopmostModeDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_FloatingWindowTopmostMode}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowTopmostModeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE840;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowTopmostMode}"
@@ -54,8 +54,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowDraggable}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowDraggableDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_FloatingWindowDraggable}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowDraggableDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsFloatingWindowDraggableEnabled}"
@@ -64,8 +64,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowLongPressDuration}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowLongPressDurationDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_FloatingWindowLongPressDuration}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowLongPressDurationDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding FloatingWindowLongPressDuration}"
@@ -87,7 +87,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExtendQuickDrawComponent}"
-                                         Description="{x:Static pageLangs:Resources.ExtendQuickDrawComponentDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExtendQuickDrawComponentDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D9;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsExtendQuickDrawComponentEnabled}"
@@ -97,7 +97,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AcrylicBackground}"
-                                         Description="{x:Static pageLangs:Resources.AcrylicBackgroundDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_AcrylicBackgroundDesc}"
                                          IconSource="{controls:FluentIconSource &#xE51F;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsAcrylicBackgroundEnabled}"
@@ -107,7 +107,7 @@
                 </fa:SettingsExpanderItem>
                 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ResetFloatingWindowPosition}"
-                                         Description="{x:Static pageLangs:Resources.ResetFloatingWindowPositionDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ResetFloatingWindowPositionDesc}"
                                          IconSource="{controls:FluentIconSource &#xE777;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ResetFloatingWindowPositionButton}"
@@ -124,7 +124,7 @@
             
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowButtonControl}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowButtonControlDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowButtonControlDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8FD;}">
                     <fa:SettingsExpanderItem.Footer>
                         <u:MultiComboBox SelectedItems="{Binding FloatingWindowButtonControl}"
@@ -144,7 +144,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowPlacement}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowPlacementDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowPlacementDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8E9;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowPlacement}"
@@ -157,7 +157,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowDisplayStyle}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowDisplayStyleDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowDisplayStyleDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8F2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowDisplayStyle}"
@@ -170,7 +170,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowSize}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowSizeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowSizeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A3;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowSize}"
@@ -187,7 +187,7 @@
                 </fa:SettingsExpanderItem>
                 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowTheme}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowThemeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowThemeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE790;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowThemeMode}"
@@ -208,7 +208,7 @@
             
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowStickToEdge}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowStickToEdgeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowStickToEdgeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE840;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsFloatingWindowStickToEdgeEnabled}"
@@ -218,7 +218,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowStickToEdgeRecoverSeconds}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowStickToEdgeRecoverSecondsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowStickToEdgeRecoverSecondsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding FloatingWindowStickToEdgeRecoverSeconds}"
@@ -230,7 +230,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowStickToEdgeDisplayStyle}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowStickToEdgeDisplayStyleDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowStickToEdgeDisplayStyleDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8E9;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding FloatingWindowStickToEdgeDisplayStyle}"
@@ -250,7 +250,7 @@
             
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HideFloatingWindowOnForeground}"
-                                         Description="{x:Static pageLangs:Resources.HideFloatingWindowOnForegroundDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_HideFloatingWindowOnForegroundDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsHideFloatingWindowOnForegroundEnabled}"
@@ -260,7 +260,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HideFloatingWindowOnForegroundWindowTitles}"
-                                         Description="{x:Static pageLangs:Resources.HideFloatingWindowOnForegroundWindowTitlesDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_HideFloatingWindowOnForegroundWindowTitlesDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <TextBox Text="{Binding HideFloatingWindowOnForegroundWindowTitles}"
@@ -270,7 +270,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HideFloatingWindowOnForegroundProcessNames}"
-                                         Description="{x:Static pageLangs:Resources.HideFloatingWindowOnForegroundProcessNamesDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_HideFloatingWindowOnForegroundProcessNamesDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <TextBox Text="{Binding HideFloatingWindowOnForegroundProcessNames}"

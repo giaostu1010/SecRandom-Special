@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -23,7 +23,7 @@
     <data name="SetClassNameTitle" xml:space="preserve">
         <value>Set Class Name</value>
     </data>
-    <data name="SetClassNameDesc" xml:space="preserve">
+    <data name="Settings_SetClassNameDesc" xml:space="preserve">
         <value>Enter class names here, one per line. Corresponding class files will be created automatically after saving.</value>
     </data>
     <data name="ClassNameList" xml:space="preserve">
@@ -141,10 +141,10 @@
     <data name="NameSettingsTitle" xml:space="preserve">
         <value>Name Settings</value>
     </data>
-    <data name="NameSettingsDesc" xml:space="preserve">
+    <data name="Settings_NameSettingsDesc" xml:space="preserve">
         <value>Set student names here. Select a student to modify their name.</value>
     </data>
-    <data name="StudentList" xml:space="preserve">
+    <data name="Settings_StudentList" xml:space="preserve">
         <value>Student List</value>
     </data>
     <data name="EditName" xml:space="preserve">
@@ -158,10 +158,10 @@
     </data>
 
     <!-- GenderSettingsPage -->
-    <data name="GenderSettingsTitle" xml:space="preserve">
+    <data name="Settings_GenderSettingsTitle" xml:space="preserve">
         <value>Gender Settings</value>
     </data>
-    <data name="GenderSettingsDesc" xml:space="preserve">
+    <data name="Settings_GenderSettingsDesc" xml:space="preserve">
         <value>Set student gender here. Select a student to modify their gender.</value>
     </data>
     <data name="Male" xml:space="preserve">
@@ -173,15 +173,15 @@
     <data name="Unknown" xml:space="preserve">
         <value>Unknown</value>
     </data>
-    <data name="GenderSettingsSaved" xml:space="preserve">
+    <data name="Settings_GenderSettingsSaved" xml:space="preserve">
         <value>Gender settings saved</value>
     </data>
 
     <!-- GroupSettingsPage -->
-    <data name="GroupSettingsTitle" xml:space="preserve">
+    <data name="Settings_GroupSettingsTitle" xml:space="preserve">
         <value>Group Settings</value>
     </data>
-    <data name="GroupSettingsDesc" xml:space="preserve">
+    <data name="Settings_GroupSettingsDesc" xml:space="preserve">
         <value>Set student groups here. Select a student to modify their group.</value>
     </data>
     <data name="Group" xml:space="preserve">
@@ -190,7 +190,7 @@
     <data name="EnterGroupName" xml:space="preserve">
         <value>Enter group name</value>
     </data>
-    <data name="GroupSettingsSaved" xml:space="preserve">
+    <data name="Settings_GroupSettingsSaved" xml:space="preserve">
         <value>Group settings saved</value>
     </data>
 
@@ -198,7 +198,7 @@
     <data name="TagSettingsTitle" xml:space="preserve">
         <value>Tag Settings</value>
     </data>
-    <data name="TagSettingsDesc" xml:space="preserve">
+    <data name="Settings_TagSettingsDesc" xml:space="preserve">
         <value>Set student tags here. Select a student to add or remove tags.</value>
     </data>
     <data name="Tags" xml:space="preserve">
@@ -213,7 +213,7 @@
     <data name="EnterTag" xml:space="preserve">
         <value>Enter tag name</value>
     </data>
-    <data name="TagSettingsSaved" xml:space="preserve">
+    <data name="Settings_TagSettingsSaved" xml:space="preserve">
         <value>Tag settings saved</value>
     </data>
 

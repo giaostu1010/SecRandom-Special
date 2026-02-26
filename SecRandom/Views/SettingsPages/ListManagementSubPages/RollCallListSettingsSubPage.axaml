@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -32,7 +32,7 @@
                        FontWeight="SemiBold"/>
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetClassName}"
-                                         Description="{x:Static pageLangs:Resources.SetClassNameDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SetClassNameDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -42,7 +42,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportStudentList}"
-                                         Description="{x:Static pageLangs:Resources.ImportStudentListDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ImportStudentListDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8E5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -52,7 +52,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.NameSettings}"
-                                         Description="{x:Static pageLangs:Resources.NameSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_NameSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -62,7 +62,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.GenderSettings}"
-                                         Description="{x:Static pageLangs:Resources.GenderSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_GenderSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C3;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -72,7 +72,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.GroupSettings}"
-                                         Description="{x:Static pageLangs:Resources.GroupSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_GroupSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE902;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -82,7 +82,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.TagSettings}"
-                                         Description="{x:Static pageLangs:Resources.TagSettingsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_TagSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"
@@ -92,7 +92,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportStudentList}"
-                                         Description="{x:Static pageLangs:Resources.ExportStudentListDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExportStudentListDesc}"
                                          IconSource="{controls:FluentIconSource &#xEDE1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static basicLangs:Resources.Open}"

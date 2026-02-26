@@ -6,6 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SecRandom.Views.SettingsPages.UpdateSettingsPage">
     <StackPanel Orientation="Vertical" Margin="12 12 18 12">
-        <TextBlock Text="{x:Static langs:Resources.UpdateSettings}" />
+        <TextBlock>
+            <Run Text="Welcome to Avalonia!" />
+            <Run Text="{x:Static langs:Resources.UpdateSettings}" />
+        </TextBlock>
     </StackPanel>
 </UserControl>

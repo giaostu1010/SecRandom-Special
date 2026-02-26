@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -34,19 +34,19 @@
     <data name="ClassManagement" xml:space="preserve">
         <value>Class Management</value>
     </data>
-    <data name="ClassManagementDesc" xml:space="preserve">
+    <data name="Settings_ClassManagementDesc" xml:space="preserve">
         <value>Manage student list for picking</value>
     </data>
     <data name="PoolManagement" xml:space="preserve">
         <value>Pool Management</value>
     </data>
-    <data name="PoolManagementDesc" xml:space="preserve">
+    <data name="Settings_PoolManagementDesc" xml:space="preserve">
         <value>Manage prize list for lottery</value>
     </data>
     <data name="SetClassName" xml:space="preserve">
         <value>Set class name</value>
     </data>
-    <data name="SetClassNameDesc" xml:space="preserve">
+    <data name="Settings_SetClassNameDesc" xml:space="preserve">
         <value>Set current class name</value>
     </data>
     <data name="SelectClass" xml:space="preserve">
@@ -58,43 +58,43 @@
     <data name="ImportStudentList" xml:space="preserve">
         <value>Import student list</value>
     </data>
-    <data name="ImportStudentListDesc" xml:space="preserve">
+    <data name="Settings_ImportStudentListDesc" xml:space="preserve">
         <value>Import student list from file</value>
     </data>
     <data name="NameSettings" xml:space="preserve">
         <value>Name settings</value>
     </data>
-    <data name="NameSettingsDesc" xml:space="preserve">
+    <data name="Settings_NameSettingsDesc" xml:space="preserve">
         <value>Set student name</value>
     </data>
     <data name="GenderSettings" xml:space="preserve">
         <value>Gender settings</value>
     </data>
-    <data name="GenderSettingsDesc" xml:space="preserve">
+    <data name="Settings_GenderSettingsDesc" xml:space="preserve">
         <value>Set student gender</value>
     </data>
     <data name="GroupSettings" xml:space="preserve">
         <value>Group settings</value>
     </data>
-    <data name="GroupSettingsDesc" xml:space="preserve">
+    <data name="Settings_GroupSettingsDesc" xml:space="preserve">
         <value>Set group of students</value>
     </data>
     <data name="TagSettings" xml:space="preserve">
         <value>Tag settings</value>
     </data>
-    <data name="TagSettingsDesc" xml:space="preserve">
+    <data name="Settings_TagSettingsDesc" xml:space="preserve">
         <value>Set student tags</value>
     </data>
     <data name="ExportStudentList" xml:space="preserve">
         <value>Export student list</value>
     </data>
-    <data name="ExportStudentListDesc" xml:space="preserve">
+    <data name="Settings_ExportStudentListDesc" xml:space="preserve">
         <value>Export student list to file</value>
     </data>
     <data name="SetPoolName" xml:space="preserve">
         <value>Set pool name</value>
     </data>
-    <data name="SetPoolNameDesc" xml:space="preserve">
+    <data name="Settings_SetPoolNameDesc" xml:space="preserve">
         <value>Set current pool name</value>
     </data>
     <data name="SelectPool" xml:space="preserve">
@@ -106,31 +106,31 @@
     <data name="ImportPrizeList" xml:space="preserve">
         <value>Import prize list</value>
     </data>
-    <data name="ImportPrizeListDesc" xml:space="preserve">
+    <data name="Settings_ImportPrizeListDesc" xml:space="preserve">
         <value>Import prize list from file</value>
     </data>
     <data name="PrizeSettings" xml:space="preserve">
         <value>Set prize</value>
     </data>
-    <data name="PrizeSettingsDesc" xml:space="preserve">
+    <data name="Settings_PrizeSettingsDesc" xml:space="preserve">
         <value>Set prize name</value>
     </data>
     <data name="WeightSettings" xml:space="preserve">
         <value>Weight settings</value>
     </data>
-    <data name="WeightSettingsDesc" xml:space="preserve">
+    <data name="Settings_WeightSettingsDesc" xml:space="preserve">
         <value>Set prize weight</value>
     </data>
     <data name="CountSettings" xml:space="preserve">
         <value>Count settings</value>
     </data>
-    <data name="CountSettingsDesc" xml:space="preserve">
+    <data name="Settings_CountSettingsDesc" xml:space="preserve">
         <value>Set prize count</value>
     </data>
     <data name="ExportPrizeList" xml:space="preserve">
         <value>Export prize list</value>
     </data>
-    <data name="ExportPrizeListDesc" xml:space="preserve">
+    <data name="Settings_ExportPrizeListDesc" xml:space="preserve">
         <value>Export prize list to file</value>
     </data>
     <data name="Open" xml:space="preserve">

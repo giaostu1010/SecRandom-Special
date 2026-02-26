@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -25,19 +25,19 @@
     <data name="GitHub" xml:space="preserve">
         <value>跳转</value>
     </data>
-    <data name="GitHubDesc" xml:space="preserve">
+    <data name="Settings_GitHubDesc" xml:space="preserve">
         <value>访问项目代码仓库</value>
     </data>
     <data name="Bilibili" xml:space="preserve">
         <value>跳转</value>
     </data>
-    <data name="BilibiliDesc" xml:space="preserve">
+    <data name="Settings_BilibiliDesc" xml:space="preserve">
         <value>访问黎泽懿_Aionflux的Bilibili账号</value>
     </data>
     <data name="Contributors" xml:space="preserve">
         <value>贡献人员</value>
     </data>
-    <data name="ContributorsDesc" xml:space="preserve">
+    <data name="Settings_ContributorsDesc" xml:space="preserve">
         <value>点击查看详细贡献者信息</value>
     </data>
     <data name="ContributorsRole1" xml:space="preserve">
@@ -70,31 +70,31 @@
     <data name="Donation" xml:space="preserve">
         <value>捐赠支持</value>
     </data>
-    <data name="DonationDesc" xml:space="preserve">
+    <data name="Settings_DonationDesc" xml:space="preserve">
         <value>支持项目发展，感谢您的捐赠</value>
     </data>
     <data name="Website" xml:space="preserve">
         <value>跳转</value>
     </data>
-    <data name="WebsiteDesc" xml:space="preserve">
+    <data name="Settings_WebsiteDesc" xml:space="preserve">
         <value>访问SecRandom软件官网</value>
     </data>
     <data name="OrganizationWebsite" xml:space="preserve">
         <value>跳转</value>
     </data>
-    <data name="OrganizationWebsiteDesc" xml:space="preserve">
+    <data name="Settings_OrganizationWebsiteDesc" xml:space="preserve">
         <value>访问 SECTL 组织官网</value>
     </data>
     <data name="Copyright" xml:space="preserve">
         <value>版权</value>
     </data>
-    <data name="CopyrightDesc" xml:space="preserve">
+    <data name="Settings_CopyrightDesc" xml:space="preserve">
         <value>SecRandom遵循GPL-3.0协议</value>
     </data>
     <data name="Version" xml:space="preserve">
         <value>版本</value>
     </data>
-    <data name="VersionDesc" xml:space="preserve">
+    <data name="Settings_VersionDesc" xml:space="preserve">
         <value>显示当前软件版本号</value>
     </data>
     <data name="UserId" xml:space="preserve">
@@ -142,13 +142,13 @@
     <data name="CheckUpdate" xml:space="preserve">
         <value>检查更新</value>
     </data>
-    <data name="CheckUpdateDesc" xml:space="preserve">
+    <data name="Settings_CheckUpdateDesc" xml:space="preserve">
         <value>检查更新</value>
     </data>
     <data name="UpdateChannel" xml:space="preserve">
         <value>更新频道</value>
     </data>
-    <data name="UpdateChannelDesc" xml:space="preserve">
+    <data name="Settings_UpdateChannelDesc" xml:space="preserve">
         <value>选择SecRandom软件更新频道</value>
     </data>
     <data name="UpdateChannelOfficial" xml:space="preserve">

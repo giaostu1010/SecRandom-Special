@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,17 +19,17 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SafetySwitch}"
-                                         Description="{x:Static pageLangs:Resources.SafetySwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SafetySwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}">
                     <fa:SettingsExpanderItem.Footer>
-                        <ToggleSwitch IsChecked="{Binding SafetySwitch}"
+                        <ToggleSwitch IsChecked="{Binding IsSafetyEnabled}"
                                       OnContent=""
                                       OffContent=""/>
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetPassword}"
-                                         Description="{x:Static pageLangs:Resources.SetPasswordDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SetPasswordDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.SetPassword}"
@@ -39,7 +39,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.TotpSwitch}"
-                                         Description="{x:Static pageLangs:Resources.TotpSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_TotpSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -50,7 +50,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SetTotp}"
-                                         Description="{x:Static pageLangs:Resources.SetTotpDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SetTotpDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -61,7 +61,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.UsbSwitch}"
-                                         Description="{x:Static pageLangs:Resources.UsbSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_UsbSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -72,7 +72,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BindUsb}"
-                                         Description="{x:Static pageLangs:Resources.BindUsbDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_BindUsbDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -83,7 +83,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.UnbindUsb}"
-                                         Description="{x:Static pageLangs:Resources.UnbindUsbDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_UnbindUsbDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -101,7 +101,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.VerificationProcess}"
-                                         Description="{x:Static pageLangs:Resources.VerificationProcessDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_VerificationProcessDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -128,7 +128,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PreviewSettingsSwitch}"
-                                         Description="{x:Static pageLangs:Resources.PreviewSettingsSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PreviewSettingsSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -139,7 +139,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowHideFloatingWindowSwitch}"
-                                         Description="{x:Static pageLangs:Resources.ShowHideFloatingWindowSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ShowHideFloatingWindowSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -150,7 +150,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.RestartSwitch}"
-                                         Description="{x:Static pageLangs:Resources.RestartSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_RestartSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -161,7 +161,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExitSwitch}"
-                                         Description="{x:Static pageLangs:Resources.ExitSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExitSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>
@@ -172,7 +172,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OpenSettingsSwitch}"
-                                         Description="{x:Static pageLangs:Resources.OpenSettingsSwitchDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_OpenSettingsSwitchDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B6;}"
                                          IsEnabled="{Binding IsSafetyEnabled}">
                     <fa:SettingsExpanderItem.Footer>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -40,25 +40,25 @@
     <data name="ListSpecificSettingsSelectClass" xml:space="preserve">
         <value>Select Class</value>
     </data>
-    <data name="ListSpecificSettingsSelectClassDesc" xml:space="preserve">
+    <data name="Settings_ListSpecificSettingsSelectClassDesc" xml:space="preserve">
         <value>Configure settings for the selected class</value>
     </data>
     <data name="ListSpecificSettingsSelectList" xml:space="preserve">
         <value>Select List</value>
     </data>
-    <data name="ListSpecificSettingsSelectListDesc" xml:space="preserve">
+    <data name="Settings_ListSpecificSettingsSelectListDesc" xml:space="preserve">
         <value>Configure settings for the selected list</value>
     </data>
     <data name="ListSpecificSettingsSelectPool" xml:space="preserve">
         <value>Select Pool</value>
     </data>
-    <data name="ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
+    <data name="Settings_ListSpecificSettingsSelectPoolDesc" xml:space="preserve">
         <value>Configure settings for the selected pool</value>
     </data>
     <data name="ListSpecificSettingsSync" xml:space="preserve">
         <value>Reset to Global</value>
     </data>
-    <data name="ListSpecificSettingsSyncDesc" xml:space="preserve">
+    <data name="Settings_ListSpecificSettingsSyncDesc" xml:space="preserve">
         <value>Remove list-specific overrides and use global settings</value>
     </data>
     <data name="ListSpecificSettingsSyncButton" xml:space="preserve">
@@ -79,13 +79,13 @@
     <data name="CameraSource" xml:space="preserve">
         <value>Camera</value>
     </data>
-    <data name="CameraSourceDesc" xml:space="preserve">
+    <data name="Settings_CameraSourceDesc" xml:space="preserve">
         <value>Select the camera device for face picking</value>
     </data>
     <data name="CameraDisplayResolution" xml:space="preserve">
         <value>Camera Resolution</value>
     </data>
-    <data name="CameraDisplayResolutionDesc" xml:space="preserve">
+    <data name="Settings_CameraDisplayResolutionDesc" xml:space="preserve">
         <value>Auto uses the maximum resolution</value>
     </data>
     <data name="CameraDisplayResolutionPlaceholder" xml:space="preserve">
@@ -100,7 +100,7 @@
     <data name="CameraPreviewMode" xml:space="preserve">
         <value>Mode</value>
     </data>
-    <data name="CameraPreviewModeDesc" xml:space="preserve">
+    <data name="Settings_CameraPreviewModeDesc" xml:space="preserve">
         <value>Select camera preview mode</value>
     </data>
     <data name="CameraPreviewModePicking" xml:space="preserve">
@@ -115,7 +115,7 @@
     <data name="DetectorType" xml:space="preserve">
         <value>Detector Model</value>
     </data>
-    <data name="DetectorTypeDesc" xml:space="preserve">
+    <data name="Settings_DetectorTypeDesc" xml:space="preserve">
         <value>Set the face detector model file</value>
     </data>
     <data name="DetectorTypePlaceholder" xml:space="preserve">
@@ -124,7 +124,7 @@
     <data name="OpenModelFolder" xml:space="preserve">
         <value>Model folder</value>
     </data>
-    <data name="OpenModelFolderDesc" xml:space="preserve">
+    <data name="Settings_OpenModelFolderDesc" xml:space="preserve">
         <value>Open data/cv_models to add ONNX model files</value>
     </data>
     <data name="OpenModelFolderButton" xml:space="preserve">
@@ -133,7 +133,7 @@
     <data name="ModelInputSize" xml:space="preserve">
         <value>Model input size</value>
     </data>
-    <data name="ModelInputSizeDesc" xml:space="preserve">
+    <data name="Settings_ModelInputSizeDesc" xml:space="preserve">
         <value>Set input width/height for the detector (0 = original frame)</value>
     </data>
     <data name="FaceDetectorPickerAnimationSettings" xml:space="preserve">
@@ -142,31 +142,31 @@
     <data name="PickerFrameColor" xml:space="preserve">
         <value>Frame color</value>
     </data>
-    <data name="PickerFrameColorDesc" xml:space="preserve">
+    <data name="Settings_PickerFrameColorDesc" xml:space="preserve">
         <value>Color of circle frames during picking</value>
     </data>
     <data name="PickingDurationSeconds" xml:space="preserve">
         <value>Duration</value>
     </data>
-    <data name="PickingDurationSecondsDesc" xml:space="preserve">
+    <data name="Settings_PickingDurationSecondsDesc" xml:space="preserve">
         <value>Face picking animation duration (seconds)</value>
     </data>
     <data name="PlayProcessAudio" xml:space="preserve">
         <value>Process audio</value>
     </data>
-    <data name="PlayProcessAudioDesc" xml:space="preserve">
+    <data name="Settings_PlayProcessAudioDesc" xml:space="preserve">
         <value>Play audio during picking</value>
     </data>
     <data name="PlayResultAudio" xml:space="preserve">
         <value>Result audio</value>
     </data>
-    <data name="PlayResultAudioDesc" xml:space="preserve">
+    <data name="Settings_PlayResultAudioDesc" xml:space="preserve">
         <value>Play audio when showing result</value>
     </data>
     <data name="DrawMode" xml:space="preserve">
         <value>Picking Mode</value>
     </data>
-    <data name="DrawModeDesc" xml:space="preserve">
+    <data name="Settings_DrawModeDesc" xml:space="preserve">
         <value>Set picking mode</value>
     </data>
     <data name="DrawModeRepeat" xml:space="preserve">
@@ -181,7 +181,7 @@
     <data name="ClearRecord" xml:space="preserve">
         <value>Clear History Method</value>
     </data>
-    <data name="ClearRecordDesc" xml:space="preserve">
+    <data name="Settings_ClearRecordDesc" xml:space="preserve">
         <value>Set the time to clean picking history</value>
     </data>
     <data name="ClearRecordRestart" xml:space="preserve">
@@ -193,13 +193,13 @@
     <data name="HalfRepeat" xml:space="preserve">
         <value>Semi-repeated Pick Count</value>
     </data>
-    <data name="HalfRepeatDesc" xml:space="preserve">
+    <data name="Settings_HalfRepeatDesc" xml:space="preserve">
         <value>Set the maximum picked times of each person to clean history</value>
     </data>
     <data name="DrawType" xml:space="preserve">
         <value>Picking Method</value>
     </data>
-    <data name="DrawTypeDesc" xml:space="preserve">
+    <data name="Settings_DrawTypeDesc" xml:space="preserve">
         <value>Set picking method</value>
     </data>
     <data name="DrawTypeRandom" xml:space="preserve">
@@ -211,7 +211,7 @@
     <data name="DefaultClass" xml:space="preserve">
         <value>Default Class</value>
     </data>
-    <data name="DefaultClassDesc" xml:space="preserve">
+    <data name="Settings_DefaultClassDesc" xml:space="preserve">
         <value>Set the default class to use for drawing</value>
     </data>
     <data name="DefaultClassPlaceholder" xml:space="preserve">
@@ -220,7 +220,7 @@
     <data name="DefaultPool" xml:space="preserve">
         <value>Default Pool</value>
     </data>
-    <data name="DefaultPoolDesc" xml:space="preserve">
+    <data name="Settings_DefaultPoolDesc" xml:space="preserve">
         <value>Set the default pool to use for drawing</value>
     </data>
     <data name="DefaultPoolPlaceholder" xml:space="preserve">
@@ -229,13 +229,13 @@
     <data name="DrawCount" xml:space="preserve">
         <value>Draw Count</value>
     </data>
-    <data name="DrawCountDesc" xml:space="preserve">
+    <data name="Settings_DrawCountDesc" xml:space="preserve">
         <value>Set the number of people to draw each time</value>
     </data>
     <data name="DisableAfterClick" xml:space="preserve">
         <value>Disable Time After Click</value>
     </data>
-    <data name="DisableAfterClickDesc" xml:space="preserve">
+    <data name="Settings_DisableAfterClickDesc" xml:space="preserve">
         <value>Set the time to disable button after click (seconds)</value>
     </data>
     <data name="RollCallDisplaySettings" xml:space="preserve">
@@ -250,7 +250,7 @@
     <data name="UseGlobalFont" xml:space="preserve">
         <value>Use Global Font</value>
     </data>
-    <data name="UseGlobalFontDesc" xml:space="preserve">
+    <data name="Settings_UseGlobalFontDesc" xml:space="preserve">
         <value>Whether to use global font settings</value>
     </data>
     <data name="UseGlobalFontFollow" xml:space="preserve">
@@ -262,19 +262,19 @@
     <data name="CustomFont" xml:space="preserve">
         <value>Custom Font</value>
     </data>
-    <data name="CustomFontDesc" xml:space="preserve">
+    <data name="Settings_CustomFontDesc" xml:space="preserve">
         <value>Select custom font</value>
     </data>
     <data name="FontSize" xml:space="preserve">
         <value>Font Size</value>
     </data>
-    <data name="FontSizeDesc" xml:space="preserve">
+    <data name="Settings_FontSizeDesc" xml:space="preserve">
         <value>Set font size</value>
     </data>
     <data name="DisplayFormat" xml:space="preserve">
         <value>Result Display Format</value>
     </data>
-    <data name="DisplayFormatDesc" xml:space="preserve">
+    <data name="Settings_DisplayFormatDesc" xml:space="preserve">
         <value>Set the results display format</value>
     </data>
     <data name="DisplayFormatIdName" xml:space="preserve">
@@ -289,7 +289,7 @@
     <data name="DisplayStyle" xml:space="preserve">
         <value>Result Display Style</value>
     </data>
-    <data name="DisplayStyleDesc" xml:space="preserve">
+    <data name="Settings_DisplayStyleDesc" xml:space="preserve">
         <value>Set the result display style</value>
     </data>
     <data name="DisplayStyleDefault" xml:space="preserve">
@@ -301,7 +301,7 @@
     <data name="ShowRandom" xml:space="preserve">
         <value>Format of Showing Random Group Member</value>
     </data>
-    <data name="ShowRandomDesc" xml:space="preserve">
+    <data name="Settings_ShowRandomDesc" xml:space="preserve">
         <value>Set random group member display format</value>
     </data>
     <data name="ShowRandomHide" xml:space="preserve">
@@ -316,7 +316,7 @@
     <data name="ShowTags" xml:space="preserve">
         <value>Show Tags</value>
     </data>
-    <data name="ShowTagsDesc" xml:space="preserve">
+    <data name="Settings_ShowTagsDesc" xml:space="preserve">
         <value>Whether to show tags in results</value>
     </data>
     <data name="RollCallAnimationSettings" xml:space="preserve">
@@ -346,25 +346,25 @@
     <data name="AnimationInterval" xml:space="preserve">
         <value>Animation Interval</value>
     </data>
-    <data name="AnimationIntervalDesc" xml:space="preserve">
+    <data name="Settings_AnimationIntervalDesc" xml:space="preserve">
         <value>Set the interval between animations (ms)</value>
     </data>
     <data name="AutoplayCount" xml:space="preserve">
         <value>Autoplay Count</value>
     </data>
-    <data name="AutoplayCountDesc" xml:space="preserve">
+    <data name="Settings_AutoplayCountDesc" xml:space="preserve">
         <value>Set the number of times to animate</value>
     </data>
     <data name="ResultFlowAnimationStyle" xml:space="preserve">
         <value>Result Layout Animation</value>
     </data>
-    <data name="ResultFlowAnimationStyleDesc" xml:space="preserve">
+    <data name="Settings_ResultFlowAnimationStyleDesc" xml:space="preserve">
         <value>Set result flow layout intro animation</value>
     </data>
     <data name="ResultFlowAnimationDuration" xml:space="preserve">
         <value>Result Layout Duration</value>
     </data>
-    <data name="ResultFlowAnimationDurationDesc" xml:space="preserve">
+    <data name="Settings_ResultFlowAnimationDurationDesc" xml:space="preserve">
         <value>Set result layout animation duration (ms)</value>
     </data>
     <data name="RollCallColorThemeSettings" xml:space="preserve">
@@ -379,7 +379,7 @@
     <data name="AnimationColorTheme" xml:space="preserve">
         <value>Animation/Result Color Theme</value>
     </data>
-    <data name="AnimationColorThemeDesc" xml:space="preserve">
+    <data name="Settings_AnimationColorThemeDesc" xml:space="preserve">
         <value>Set the animate/result color theme</value>
     </data>
     <data name="AnimationColorThemeOff" xml:space="preserve">
@@ -394,7 +394,7 @@
     <data name="AnimationFixedColor" xml:space="preserve">
         <value>Animation/Result Fixed Color</value>
     </data>
-    <data name="AnimationFixedColorDesc" xml:space="preserve">
+    <data name="Settings_AnimationFixedColorDesc" xml:space="preserve">
         <value>Set the animation/result color</value>
     </data>
     <data name="LotteryImageSettings" xml:space="preserve">
@@ -403,13 +403,13 @@
     <data name="LotteryImage" xml:space="preserve">
         <value>Show prize image</value>
     </data>
-    <data name="LotteryImageDesc" xml:space="preserve">
+    <data name="Settings_LotteryImageDesc" xml:space="preserve">
         <value>Toggle displaying prize image</value>
     </data>
     <data name="LotteryImagePosition" xml:space="preserve">
         <value>Image Position</value>
     </data>
-    <data name="LotteryImagePositionDesc" xml:space="preserve">
+    <data name="Settings_LotteryImagePositionDesc" xml:space="preserve">
         <value>Set prize image position in result</value>
     </data>
     <data name="LotteryImagePositionLeft" xml:space="preserve">
@@ -427,7 +427,7 @@
     <data name="LotteryImageFolder" xml:space="preserve">
         <value>Prize image folder</value>
     </data>
-    <data name="LotteryImageFolderDesc" xml:space="preserve">
+    <data name="Settings_LotteryImageFolderDesc" xml:space="preserve">
         <value>Manage prize image files</value>
     </data>
     <data name="LotteryImageFolderButton" xml:space="preserve">
@@ -439,13 +439,13 @@
     <data name="StudentImage" xml:space="preserve">
         <value>Show Student Images</value>
     </data>
-    <data name="StudentImageDesc" xml:space="preserve">
+    <data name="Settings_StudentImageDesc" xml:space="preserve">
         <value>Set whether to show student images</value>
     </data>
     <data name="StudentImagePosition" xml:space="preserve">
         <value>Image Position</value>
     </data>
-    <data name="StudentImagePositionDesc" xml:space="preserve">
+    <data name="Settings_StudentImagePositionDesc" xml:space="preserve">
         <value>Set the position of student images in results</value>
     </data>
     <data name="StudentImagePositionLeft" xml:space="preserve">
@@ -463,7 +463,7 @@
     <data name="StudentImageFolder" xml:space="preserve">
         <value>Student Images Folder</value>
     </data>
-    <data name="StudentImageFolderDesc" xml:space="preserve">
+    <data name="Settings_StudentImageFolderDesc" xml:space="preserve">
         <value>Manage student images; filenames must match student names</value>
     </data>
     <data name="StudentImageFolderButton" xml:space="preserve">

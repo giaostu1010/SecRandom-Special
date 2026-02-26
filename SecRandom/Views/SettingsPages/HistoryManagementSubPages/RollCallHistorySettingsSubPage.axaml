@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,10 +11,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <TextBlock Text="{x:Static pageLangs:Resources.RollCallHistory}"
-                       FontSize="14"
-                       FontWeight="SemiBold"/>
-            
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ViewHistory}"
                                          Description="{x:Static pageLangs:Resources.ViewHistoryDesc}"
@@ -27,7 +23,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.EnableRollCallHistory}"
-                                         Description="{x:Static pageLangs:Resources.EnableRollCallHistoryDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_EnableRollCallHistoryDesc}"
                                          IconSource="{controls:FluentIconSource &#xE81C;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch x:Name="EnableRollCallHistorySwitch"
@@ -46,7 +42,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ClearRollCallHistory}"
-                                         Description="{x:Static pageLangs:Resources.ClearRollCallHistoryDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ClearRollCallHistoryDesc}"
                                          IconSource="{controls:FluentIconSource &#xE74D;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Clear}"

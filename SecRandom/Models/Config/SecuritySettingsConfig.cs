@@ -7,7 +7,7 @@ namespace SecRandom.Models.Config;
 /// </summary>
 public partial class SecuritySettingsConfig : ObservableObject
 {
-    [ObservableProperty] private bool _safetySwitch = false;
+    [ObservableProperty] private bool _isSafetyEnabled = false;
     [ObservableProperty] private bool _totpSwitch = false;
     [ObservableProperty] private bool _usbSwitch = false;
     [ObservableProperty] private int _verificationProcess = 0;
@@ -16,6 +16,4 @@ public partial class SecuritySettingsConfig : ObservableObject
     [ObservableProperty] private bool _exitSwitch = false;
     [ObservableProperty] private bool _openSettingsSwitch = false;
     [ObservableProperty] private bool _previewSettingsSwitch = false;
-
-    public bool IsSafetyEnabled => SafetySwitch;
 }

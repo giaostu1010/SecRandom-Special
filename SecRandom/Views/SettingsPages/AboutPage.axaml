@@ -18,7 +18,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Bilibili}"
-                                         Description="{x:Static pageLangs:Resources.BilibiliDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_BilibiliDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8C1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Bilibili}"
@@ -27,7 +27,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.GitHub}"
-                                         Description="{x:Static pageLangs:Resources.GitHubDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_GitHubDesc}"
                                          IconSource="{controls:FluentIconSource &#xE774;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.GitHub}"
@@ -36,7 +36,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Contributors}"
-                                         Description="{x:Static pageLangs:Resources.ContributorsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ContributorsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE716;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Contributors}"
@@ -45,7 +45,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Donation}"
-                                         Description="{x:Static pageLangs:Resources.DonationDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_DonationDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Donation}"
@@ -54,7 +54,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Website}"
-                                         Description="{x:Static pageLangs:Resources.WebsiteDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_WebsiteDesc}"
                                          IconSource="{controls:FluentIconSource &#xE774;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Website}"
@@ -63,7 +63,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OrganizationWebsite}"
-                                         Description="{x:Static pageLangs:Resources.OrganizationWebsiteDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_OrganizationWebsiteDesc}"
                                          IconSource="{controls:FluentIconSource &#xE774;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.OrganizationWebsite}"
@@ -72,7 +72,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Copyright}"
-                                         Description="{x:Static pageLangs:Resources.CopyrightDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_CopyrightDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <TextBlock x:Name="CopyrightText" VerticalAlignment="Center"/>
@@ -80,7 +80,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Version}"
-                                         Description="{x:Static pageLangs:Resources.VersionDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_VersionDesc}"
                                          IconSource="{controls:FluentIconSource &#xE73E;}">
                     <fa:SettingsExpanderItem.Footer>
                         <TextBlock x:Name="VersionText" VerticalAlignment="Center"/>

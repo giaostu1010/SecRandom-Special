@@ -69,15 +69,6 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 控制是否使用亚克力背景，仅在 Windows 10.0.18362.0 及以上版本可用。.
-        /// </summary>
-        public static string AcrylicBackgroundDesc {
-            get {
-                return ResourceManager.GetString("AcrylicBackgroundDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 外观设置.
         /// </summary>
         public static string AppearanceSettings {
@@ -186,15 +177,6 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 在悬浮窗中显示更多快速抽取信息.
-        /// </summary>
-        public static string ExtendQuickDrawComponentDesc {
-            get {
-                return ResourceManager.GetString("ExtendQuickDrawComponentDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 人脸抽取.
         /// </summary>
         public static string FaceDrawButton {
@@ -213,83 +195,11 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 选择在悬浮窗中显示的功能按钮.
-        /// </summary>
-        public static string FloatingWindowButtonControlDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowButtonControlDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 显示样式.
         /// </summary>
         public static string FloatingWindowDisplayStyle {
             get {
                 return ResourceManager.GetString("FloatingWindowDisplayStyle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置按钮的展示方式.
-        /// </summary>
-        public static string FloatingWindowDisplayStyleDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowDisplayStyleDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 允许拖动.
-        /// </summary>
-        public static string FloatingWindowDraggable {
-            get {
-                return ResourceManager.GetString("FloatingWindowDraggable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 允许拖动移动悬浮窗.
-        /// </summary>
-        public static string FloatingWindowDraggableDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowDraggableDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 长按触发时长.
-        /// </summary>
-        public static string FloatingWindowLongPressDuration {
-            get {
-                return ResourceManager.GetString("FloatingWindowLongPressDuration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 拖动前需要长按的时长（毫秒）.
-        /// </summary>
-        public static string FloatingWindowLongPressDurationDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowLongPressDurationDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 悬浮窗透明度.
-        /// </summary>
-        public static string FloatingWindowOpacity {
-            get {
-                return ResourceManager.GetString("FloatingWindowOpacity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置悬浮窗的不透明度（0~100）.
-        /// </summary>
-        public static string FloatingWindowOpacityDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowOpacityDesc", resourceCulture);
             }
         }
         
@@ -303,29 +213,11 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 设置悬浮窗的布局方向.
-        /// </summary>
-        public static string FloatingWindowPlacementDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowPlacementDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 尺寸.
         /// </summary>
         public static string FloatingWindowSize {
             get {
                 return ResourceManager.GetString("FloatingWindowSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置悬浮窗整体尺寸.
-        /// </summary>
-        public static string FloatingWindowSizeDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowSizeDesc", resourceCulture);
             }
         }
         
@@ -339,29 +231,11 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 停止操作后自动贴到屏幕边缘.
-        /// </summary>
-        public static string FloatingWindowStickToEdgeDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowStickToEdgeDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 贴边显示样式.
         /// </summary>
         public static string FloatingWindowStickToEdgeDisplayStyle {
             get {
                 return ResourceManager.GetString("FloatingWindowStickToEdgeDisplayStyle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 贴边状态下的显示方式.
-        /// </summary>
-        public static string FloatingWindowStickToEdgeDisplayStyleDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowStickToEdgeDisplayStyleDesc", resourceCulture);
             }
         }
         
@@ -375,47 +249,11 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 贴边后恢复显示的延迟（秒）.
-        /// </summary>
-        public static string FloatingWindowStickToEdgeRecoverSecondsDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowStickToEdgeRecoverSecondsDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 主题.
         /// </summary>
         public static string FloatingWindowTheme {
             get {
                 return ResourceManager.GetString("FloatingWindowTheme", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置悬浮窗的主题模式.
-        /// </summary>
-        public static string FloatingWindowThemeDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowThemeDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 置顶模式.
-        /// </summary>
-        public static string FloatingWindowTopmostMode {
-            get {
-                return ResourceManager.GetString("FloatingWindowTopmostMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置悬浮窗的置顶方式.
-        /// </summary>
-        public static string FloatingWindowTopmostModeDesc {
-            get {
-                return ResourceManager.GetString("FloatingWindowTopmostModeDesc", resourceCulture);
             }
         }
         
@@ -438,15 +276,6 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 当特定窗口位于前台时自动隐藏悬浮窗.
-        /// </summary>
-        public static string HideFloatingWindowOnForegroundDesc {
-            get {
-                return ResourceManager.GetString("HideFloatingWindowOnForegroundDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 进程名包含.
         /// </summary>
         public static string HideFloatingWindowOnForegroundProcessNames {
@@ -456,29 +285,11 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 用英文逗号分隔，匹配进程名关键字.
-        /// </summary>
-        public static string HideFloatingWindowOnForegroundProcessNamesDesc {
-            get {
-                return ResourceManager.GetString("HideFloatingWindowOnForegroundProcessNamesDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 窗口标题包含.
         /// </summary>
         public static string HideFloatingWindowOnForegroundWindowTitles {
             get {
                 return ResourceManager.GetString("HideFloatingWindowOnForegroundWindowTitles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 用英文逗号分隔，匹配标题关键字.
-        /// </summary>
-        public static string HideFloatingWindowOnForegroundWindowTitlesDesc {
-            get {
-                return ResourceManager.GetString("HideFloatingWindowOnForegroundWindowTitlesDesc", resourceCulture);
             }
         }
         
@@ -546,15 +357,6 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 将悬浮窗位置重置为默认值.
-        /// </summary>
-        public static string ResetFloatingWindowPositionDesc {
-            get {
-                return ResourceManager.GetString("ResetFloatingWindowPositionDesc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 点名.
         /// </summary>
         public static string RollCallButton {
@@ -564,20 +366,218 @@ namespace SecRandom.Langs.SettingsPages.FloatingWindowPage {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 控制是否使用亚克力背景，仅在 Windows 10.0.18362.0 及以上版本可用。.
+        /// </summary>
+        public static string Settings_AcrylicBackgroundDesc {
+            get {
+                return ResourceManager.GetString("Settings_AcrylicBackgroundDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 在悬浮窗中显示更多快速抽取信息.
+        /// </summary>
+        public static string Settings_ExtendQuickDrawComponentDesc {
+            get {
+                return ResourceManager.GetString("Settings_ExtendQuickDrawComponentDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择在悬浮窗中显示的功能按钮.
+        /// </summary>
+        public static string Settings_FloatingWindowButtonControlDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowButtonControlDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置按钮的展示方式.
+        /// </summary>
+        public static string Settings_FloatingWindowDisplayStyleDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowDisplayStyleDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 允许拖动.
+        /// </summary>
+        public static string Settings_FloatingWindowDraggable {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowDraggable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 允许拖动移动悬浮窗.
+        /// </summary>
+        public static string Settings_FloatingWindowDraggableDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowDraggableDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 长按触发时长.
+        /// </summary>
+        public static string Settings_FloatingWindowLongPressDuration {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowLongPressDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 拖动前需要长按的时长（毫秒）.
+        /// </summary>
+        public static string Settings_FloatingWindowLongPressDurationDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowLongPressDurationDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 悬浮窗透明度.
+        /// </summary>
+        public static string Settings_FloatingWindowOpacity {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowOpacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置悬浮窗的不透明度（0~100）.
+        /// </summary>
+        public static string Settings_FloatingWindowOpacityDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowOpacityDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置悬浮窗的布局方向.
+        /// </summary>
+        public static string Settings_FloatingWindowPlacementDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowPlacementDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置悬浮窗整体尺寸.
+        /// </summary>
+        public static string Settings_FloatingWindowSizeDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowSizeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 停止操作后自动贴到屏幕边缘.
+        /// </summary>
+        public static string Settings_FloatingWindowStickToEdgeDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowStickToEdgeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 贴边状态下的显示方式.
+        /// </summary>
+        public static string Settings_FloatingWindowStickToEdgeDisplayStyleDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowStickToEdgeDisplayStyleDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 贴边后恢复显示的延迟（秒）.
+        /// </summary>
+        public static string Settings_FloatingWindowStickToEdgeRecoverSecondsDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowStickToEdgeRecoverSecondsDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置悬浮窗的主题模式.
+        /// </summary>
+        public static string Settings_FloatingWindowThemeDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowThemeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 置顶模式.
+        /// </summary>
+        public static string Settings_FloatingWindowTopmostMode {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowTopmostMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置悬浮窗的置顶方式.
+        /// </summary>
+        public static string Settings_FloatingWindowTopmostModeDesc {
+            get {
+                return ResourceManager.GetString("Settings_FloatingWindowTopmostModeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 当特定窗口位于前台时自动隐藏悬浮窗.
+        /// </summary>
+        public static string Settings_HideFloatingWindowOnForegroundDesc {
+            get {
+                return ResourceManager.GetString("Settings_HideFloatingWindowOnForegroundDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 用英文逗号分隔，匹配进程名关键字.
+        /// </summary>
+        public static string Settings_HideFloatingWindowOnForegroundProcessNamesDesc {
+            get {
+                return ResourceManager.GetString("Settings_HideFloatingWindowOnForegroundProcessNamesDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 用英文逗号分隔，匹配标题关键字.
+        /// </summary>
+        public static string Settings_HideFloatingWindowOnForegroundWindowTitlesDesc {
+            get {
+                return ResourceManager.GetString("Settings_HideFloatingWindowOnForegroundWindowTitlesDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 将悬浮窗位置重置为默认值.
+        /// </summary>
+        public static string Settings_ResetFloatingWindowPositionDesc {
+            get {
+                return ResourceManager.GetString("Settings_ResetFloatingWindowPositionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 启动时显示悬浮窗.
         /// </summary>
-        public static string ShowFloatingWindowOnStartup {
+        public static string Settings_ShowFloatingWindowOnStartup {
             get {
-                return ResourceManager.GetString("ShowFloatingWindowOnStartup", resourceCulture);
+                return ResourceManager.GetString("Settings_ShowFloatingWindowOnStartup", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to 软件启动后自动显示悬浮窗.
         /// </summary>
-        public static string ShowFloatingWindowOnStartupDesc {
+        public static string Settings_ShowFloatingWindowOnStartupDesc {
             get {
-                return ResourceManager.GetString("ShowFloatingWindowOnStartupDesc", resourceCulture);
+                return ResourceManager.GetString("Settings_ShowFloatingWindowOnStartupDesc", resourceCulture);
             }
         }
         

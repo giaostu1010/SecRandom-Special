@@ -8,11 +8,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <!-- 标题 -->
-            <TextBlock Text="导出奖品名单"
-                       FontSize="20"
-                       FontWeight="SemiBold"/>
-            
             <!-- 当前奖池 -->
             <TextBlock x:Name="CurrentPoolTextBlock"
                        Text="当前奖池：未选择"

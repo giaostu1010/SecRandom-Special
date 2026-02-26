@@ -8,7 +8,7 @@ using SecRandom.Services.Config;
 
 namespace SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
 
-[PageInfo("settings.quickDrawNotificationSettings", "\uE7E3", "settings.notification")]
+[PageInfo("settings.notification.quickDraw", "\uE7E3", "settings.notification")]
 public partial class QuickDrawNotificationSettingsPage : UserControl
 {
     public NotificationSettingsConfig ViewModel { get; } =

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -29,7 +29,7 @@
     <data name="ScheduleImport" xml:space="preserve">
         <value>课程表导入</value>
     </data>
-    <data name="ScheduleImportDesc" xml:space="preserve">
+    <data name="Settings_ScheduleImportDesc" xml:space="preserve">
         <value>从CSES格式文件导入上课时间段，用于课间禁用功能</value>
     </data>
     <data name="NoScheduleImported" xml:space="preserve">
@@ -69,19 +69,19 @@
     <data name="EnableClassBreak" xml:space="preserve">
         <value>课间禁用功能</value>
     </data>
-    <data name="EnableClassBreakDesc" xml:space="preserve">
+    <data name="Settings_EnableClassBreakDesc" xml:space="preserve">
         <value>开启后，在下课时间段内抽取需要安全验证</value>
     </data>
     <data name="PreClassEnableTime" xml:space="preserve">
         <value>上课前提前解禁时间</value>
     </data>
-    <data name="PreClassEnableTimeDesc" xml:space="preserve">
+    <data name="Settings_PreClassEnableTimeDesc" xml:space="preserve">
         <value>在上课前多少秒提前解禁（0-1440秒）</value>
     </data>
     <data name="PostClassDisableDelay" xml:space="preserve">
         <value>下课后延迟禁用时间</value>
     </data>
-    <data name="PostClassDisableDelayDesc" xml:space="preserve">
+    <data name="Settings_PostClassDisableDelayDesc" xml:space="preserve">
         <value>下课后多少秒内延迟触发课间禁用（0-1440秒）</value>
     </data>
 
@@ -91,7 +91,7 @@
     <data name="EnableVerificationFlow" xml:space="preserve">
         <value>验证流程功能</value>
     </data>
-    <data name="EnableVerificationFlowDesc" xml:space="preserve">
+    <data name="Settings_EnableVerificationFlowDesc" xml:space="preserve">
         <value>启用后，在非上课时段触发时将弹出安全验证；若关闭则直接禁用控件</value>
     </data>
 
@@ -101,13 +101,13 @@
     <data name="EnablePreClassReset" xml:space="preserve">
         <value>课前重置功能</value>
     </data>
-    <data name="EnablePreClassResetDesc" xml:space="preserve">
+    <data name="Settings_EnablePreClassResetDesc" xml:space="preserve">
         <value>启用后，在上课前指定秒数内自动清除临时记录和界面结果</value>
     </data>
     <data name="PreClassResetTime" xml:space="preserve">
         <value>课前重置时间</value>
     </data>
-    <data name="PreClassResetTimeDesc" xml:space="preserve">
+    <data name="Settings_PreClassResetTimeDesc" xml:space="preserve">
         <value>在上课前多少秒清除临时记录和界面结果（1-1440秒）</value>
     </data>
 
@@ -117,13 +117,13 @@
     <data name="EnableSubjectHistoryFilter" xml:space="preserve">
         <value>科目历史记录过滤</value>
     </data>
-    <data name="EnableSubjectHistoryFilterDesc" xml:space="preserve">
+    <data name="Settings_EnableSubjectHistoryFilterDesc" xml:space="preserve">
         <value>启用后，计算权重时只使用当前科目的历史记录</value>
     </data>
     <data name="SubjectHistoryBreakAssignment" xml:space="preserve">
         <value>课间归属</value>
     </data>
-    <data name="SubjectHistoryBreakAssignmentDesc" xml:space="preserve">
+    <data name="Settings_SubjectHistoryBreakAssignmentDesc" xml:space="preserve">
         <value>课间时段的科目历史记录归属到哪一类</value>
     </data>
     <data name="BreakAssignmentOff" xml:space="preserve">
@@ -142,7 +142,7 @@
     <data name="DataSourceMode" xml:space="preserve">
         <value>数据源选择</value>
     </data>
-    <data name="DataSourceModeDesc" xml:space="preserve">
+    <data name="Settings_DataSourceModeDesc" xml:space="preserve">
         <value>选择课程数据的来源</value>
     </data>
     <data name="DataSourceModeManual" xml:space="preserve">
@@ -161,7 +161,7 @@
     <data name="HideFloatingWindowOnClassEnd" xml:space="preserve">
         <value>下课时隐藏悬浮窗</value>
     </data>
-    <data name="HideFloatingWindowOnClassEndDesc" xml:space="preserve">
+    <data name="Settings_HideFloatingWindowOnClassEndDesc" xml:space="preserve">
         <value>当检测到下课（非上课时段）时自动隐藏浮窗</value>
     </data>
 </root>

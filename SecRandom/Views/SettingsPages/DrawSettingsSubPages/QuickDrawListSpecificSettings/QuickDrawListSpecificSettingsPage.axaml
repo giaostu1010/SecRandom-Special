@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,7 +15,7 @@
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ListSpecificSettingsSelectList}"
-                                         Description="{x:Static pageLangs:Resources.ListSpecificSettingsSelectListDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ListSpecificSettingsSelectListDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="ListSpecificListComboBox"
@@ -25,7 +25,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ListSpecificSettingsSync}"
-                                         Description="{x:Static pageLangs:Resources.ListSpecificSettingsSyncDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ListSpecificSettingsSyncDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8CE;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ListSpecificSettingsSyncButton}"
@@ -42,7 +42,7 @@
                                Margin="0 8 0 0" />
                     <StackPanel Orientation="Vertical" Spacing="0">
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DrawMode}"
-                                                 Description="{x:Static pageLangs:Resources.DrawModeDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_DrawModeDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D4;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding DrawMode}"
@@ -55,7 +55,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HalfRepeat}"
-                                                 Description="{x:Static pageLangs:Resources.HalfRepeatDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_HalfRepeatDesc}"
                                                  IconSource="{controls:FluentIconSource &#xF187;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding HalfRepeat}"
@@ -67,7 +67,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DrawType}"
-                                                 Description="{x:Static pageLangs:Resources.DrawTypeDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_DrawTypeDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE97C;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding DrawType}"
@@ -79,7 +79,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DrawCount}"
-                                                 Description="{x:Static pageLangs:Resources.DrawCountDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_DrawCountDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE823;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding DrawCount}"
@@ -91,7 +91,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DisableAfterClick}"
-                                                 Description="{x:Static pageLangs:Resources.DisableAfterClickDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_DisableAfterClickDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE823;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding DisableAfterClick}"
@@ -109,7 +109,7 @@
                                Margin="0 8 0 0" />
                     <StackPanel Orientation="Vertical" Spacing="0">
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.UseGlobalFont}"
-                                                 Description="{x:Static pageLangs:Resources.UseGlobalFontDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_UseGlobalFontDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D2;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding UseGlobalFont}"
@@ -121,7 +121,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CustomFont}"
-                                                 Description="{x:Static pageLangs:Resources.CustomFontDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_CustomFontDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D2;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox Name="ListSpecificCustomFontComboBox"
@@ -140,7 +140,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FontSize}"
-                                                 Description="{x:Static pageLangs:Resources.FontSizeDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_FontSizeDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D2;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding FontSize}"
@@ -152,7 +152,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DisplayFormat}"
-                                                 Description="{x:Static pageLangs:Resources.DisplayFormatDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_DisplayFormatDesc}"
                                                  IconSource="{controls:FluentIconSource &#xF166;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding DisplayFormat}"
@@ -165,7 +165,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowRandom}"
-                                                 Description="{x:Static pageLangs:Resources.ShowRandomDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_ShowRandomDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE9C6;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding ShowRandom}"
@@ -178,7 +178,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowTags}"
-                                                 Description="{x:Static pageLangs:Resources.ShowTagsDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_ShowTagsDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8EC;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ToggleSwitch IsChecked="{Binding ShowTags}"
@@ -207,7 +207,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AnimationInterval}"
-                                                 Description="{x:Static pageLangs:Resources.AnimationIntervalDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_AnimationIntervalDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE823;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding AnimationInterval}"
@@ -219,7 +219,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AutoplayCount}"
-                                                 Description="{x:Static pageLangs:Resources.AutoplayCountDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_AutoplayCountDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE823;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding AutoplayCount}"
@@ -231,7 +231,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ResultFlowAnimationStyle}"
-                                                 Description="{x:Static pageLangs:Resources.ResultFlowAnimationStyleDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_ResultFlowAnimationStyleDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE9B3;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ToggleSwitch IsChecked="{Binding ResultFlowAnimationStyle}"
@@ -241,7 +241,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ResultFlowAnimationDuration}"
-                                                 Description="{x:Static pageLangs:Resources.ResultFlowAnimationDurationDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_ResultFlowAnimationDurationDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE823;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <NumericUpDown Value="{Binding ResultFlowAnimationDuration}"
@@ -259,7 +259,7 @@
                                Margin="0 8 0 0" />
                     <StackPanel Orientation="Vertical" Spacing="0">
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AnimationColorTheme}"
-                                                 Description="{x:Static pageLangs:Resources.AnimationColorThemeDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_AnimationColorThemeDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D7;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding AnimationColorTheme}"
@@ -272,7 +272,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AnimationFixedColor}"
-                                                 Description="{x:Static pageLangs:Resources.AnimationFixedColorDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_AnimationFixedColorDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8D7;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <TextBox Text="{Binding AnimationFixedColor}"
@@ -287,7 +287,7 @@
                                Margin="0 8 0 0" />
                     <StackPanel Orientation="Vertical" Spacing="0">
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.StudentImage}"
-                                                 Description="{x:Static pageLangs:Resources.StudentImageDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_StudentImageDesc}"
                                                  IconSource="{controls:FluentIconSource &#xEB9F;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ToggleSwitch IsChecked="{Binding StudentImage}"
@@ -297,7 +297,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.StudentImagePosition}"
-                                                 Description="{x:Static pageLangs:Resources.StudentImagePositionDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_StudentImagePositionDesc}"
                                                  IconSource="{controls:FluentIconSource &#xEB9F;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <ComboBox SelectedIndex="{Binding StudentImagePosition}"
@@ -311,7 +311,7 @@
                         </fa:SettingsExpanderItem>
 
                         <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.StudentImageFolder}"
-                                                 Description="{x:Static pageLangs:Resources.StudentImageFolderDesc}"
+                                                 Description="{x:Static pageLangs:Resources.Settings_StudentImageFolderDesc}"
                                                  IconSource="{controls:FluentIconSource &#xE8B7;}">
                             <fa:SettingsExpanderItem.Footer>
                                 <Button Content="{x:Static pageLangs:Resources.StudentImageFolderButton}"

@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,7 +18,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CameraSource}"
-                                         Description="{x:Static pageLangs:Resources.CameraSourceDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_CameraSourceDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="CameraSourceComboBox"
@@ -30,7 +30,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CameraDisplayResolution}"
-                                         Description="{x:Static pageLangs:Resources.CameraDisplayResolutionDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_CameraDisplayResolutionDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="CameraResolutionComboBox"
@@ -41,7 +41,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.CameraPreviewMode}"
-                                         Description="{x:Static pageLangs:Resources.CameraPreviewModeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_CameraPreviewModeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D4;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding CameraPreviewMode}"
@@ -58,7 +58,7 @@
                        FontWeight="SemiBold" />
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DetectorType}"
-                                         Description="{x:Static pageLangs:Resources.DetectorTypeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_DetectorTypeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE9CE;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox x:Name="DetectorTypeComboBox"
@@ -70,7 +70,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OpenModelFolder}"
-                                         Description="{x:Static pageLangs:Resources.OpenModelFolderDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_OpenModelFolderDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8B7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.OpenModelFolderButton}"
@@ -80,7 +80,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ModelInputSize}"
-                                         Description="{x:Static pageLangs:Resources.ModelInputSizeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ModelInputSizeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -105,7 +105,7 @@
                        FontWeight="SemiBold" />
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PickerFrameColor}"
-                                         Description="{x:Static pageLangs:Resources.PickerFrameColorDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PickerFrameColorDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <TextBox Text="{Binding PickerFrameColor}"
@@ -114,7 +114,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PickingDurationSeconds}"
-                                         Description="{x:Static pageLangs:Resources.PickingDurationSecondsDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PickingDurationSecondsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding PickingDurationSeconds}"
@@ -126,7 +126,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PlayProcessAudio}"
-                                         Description="{x:Static pageLangs:Resources.PlayProcessAudioDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PlayProcessAudioDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D4;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding PlayProcessAudio}"
@@ -136,7 +136,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PlayResultAudio}"
-                                         Description="{x:Static pageLangs:Resources.PlayResultAudioDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PlayResultAudioDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D4;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding PlayResultAudio}"

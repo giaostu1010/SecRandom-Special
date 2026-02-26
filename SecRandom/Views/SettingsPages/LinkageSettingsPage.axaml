@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,7 +18,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DataSourceMode}"
-                                         Description="{x:Static pageLangs:Resources.DataSourceModeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_DataSourceModeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8F1;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding DataSourceMode}"
@@ -38,7 +38,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ScheduleImport}"
-                                         Description="{x:Static pageLangs:Resources.ScheduleImportDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ScheduleImportDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <StackPanel Orientation="Vertical" Spacing="6" MinWidth="180">
@@ -64,7 +64,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.EnableClassBreak}"
-                                         Description="{x:Static pageLangs:Resources.EnableClassBreakDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_EnableClassBreakDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7A6;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsClassBreakEnabled}"
@@ -74,7 +74,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.EnableVerificationFlow}"
-                                         Description="{x:Static pageLangs:Resources.EnableVerificationFlowDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_EnableVerificationFlowDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D4;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsVerificationFlowEnabled}"
@@ -84,7 +84,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PreClassEnableTime}"
-                                         Description="{x:Static pageLangs:Resources.PreClassEnableTimeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PreClassEnableTimeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding PreClassEnableTimeSeconds}"
@@ -96,7 +96,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PostClassDisableDelay}"
-                                         Description="{x:Static pageLangs:Resources.PostClassDisableDelayDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PostClassDisableDelayDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding PostClassDisableDelaySeconds}"
@@ -108,7 +108,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.HideFloatingWindowOnClassEnd}"
-                                         Description="{x:Static pageLangs:Resources.HideFloatingWindowOnClassEndDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_HideFloatingWindowOnClassEndDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7AC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsHideFloatingWindowOnClassEndEnabled}"
@@ -125,7 +125,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.EnablePreClassReset}"
-                                         Description="{x:Static pageLangs:Resources.EnablePreClassResetDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_EnablePreClassResetDesc}"
                                          IconSource="{controls:FluentIconSource &#xE777;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsPreClassResetEnabled}"
@@ -135,7 +135,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.PreClassResetTime}"
-                                         Description="{x:Static pageLangs:Resources.PreClassResetTimeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_PreClassResetTimeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding PreClassResetTimeSeconds}"
@@ -155,7 +155,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.EnableSubjectHistoryFilter}"
-                                         Description="{x:Static pageLangs:Resources.EnableSubjectHistoryFilterDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_EnableSubjectHistoryFilterDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsSubjectHistoryFilterEnabled}"
@@ -165,7 +165,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.SubjectHistoryBreakAssignment}"
-                                         Description="{x:Static pageLangs:Resources.SubjectHistoryBreakAssignmentDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_SubjectHistoryBreakAssignmentDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8EC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding SubjectHistoryBreakAssignment}"

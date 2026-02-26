@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,10 +12,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <TextBlock Text="{x:Static pageLangs:Resources.QuickDrawNotificationTitle}"
-                       FontSize="14"
-                       FontWeight="SemiBold"/>
-
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Animation}"
                                          Description="{x:Static pageLangs:Resources.AnimationDesc}"
@@ -28,7 +24,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.NotificationServiceType}"
-                                         Description="{x:Static pageLangs:Resources.NotificationServiceTypeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_NotificationServiceTypeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE753;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding ViewModel.NotificationServiceType}"
@@ -43,7 +39,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowEnabledMonitor}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowEnabledMonitorDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowEnabledMonitorDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7F4;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox ItemsSource="{Binding MonitorList}"
@@ -72,7 +68,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowHorizontalOffset}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowHorizontalOffsetDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowHorizontalOffsetDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8CB;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding ViewModel.FloatingWindowHorizontalOffset}"
@@ -84,7 +80,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowVerticalOffset}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowVerticalOffsetDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowVerticalOffsetDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8CC;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding ViewModel.FloatingWindowVerticalOffset}"
@@ -96,7 +92,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowTransparency}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowTransparencyDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowTransparencyDesc}"
                                          IconSource="{controls:FluentIconSource &#xE790;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding ViewModel.FloatingWindowTransparencyPercent}"
@@ -108,7 +104,7 @@
                 </fa:SettingsExpanderItem>
 
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FloatingWindowAutoCloseTime}"
-                                         Description="{x:Static pageLangs:Resources.FloatingWindowAutoCloseTimeDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FloatingWindowAutoCloseTimeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE823;}">
                     <fa:SettingsExpanderItem.Footer>
                         <NumericUpDown Value="{Binding ViewModel.FloatingWindowAutoCloseTime}"
@@ -122,7 +118,7 @@
 
             <StackPanel Orientation="Vertical" Spacing="0">
                 <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.NotificationDisplayDuration}"
-                                         Description="{x:Static pageLangs:Resources.NotificationDisplayDurationDesc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_NotificationDisplayDurationDesc}"
                                          IconSource="{controls:FluentIconSource &#xE916;}">
                     <fa:SettingsExpanderItem.Footer>
                         <StackPanel Orientation="Horizontal" Spacing="4">

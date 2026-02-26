@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -32,24 +32,24 @@
         <value>前台隐藏</value>
     </data>
 
-    <data name="ShowFloatingWindowOnStartup" xml:space="preserve">
+    <data name="Settings_ShowFloatingWindowOnStartup" xml:space="preserve">
         <value>启动时显示悬浮窗</value>
     </data>
-    <data name="ShowFloatingWindowOnStartupDesc" xml:space="preserve">
+    <data name="Settings_ShowFloatingWindowOnStartupDesc" xml:space="preserve">
         <value>软件启动后自动显示悬浮窗</value>
     </data>
 
-    <data name="FloatingWindowOpacity" xml:space="preserve">
+    <data name="Settings_FloatingWindowOpacity" xml:space="preserve">
         <value>悬浮窗透明度</value>
     </data>
-    <data name="FloatingWindowOpacityDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowOpacityDesc" xml:space="preserve">
         <value>设置悬浮窗的不透明度（0~100）</value>
     </data>
 
-    <data name="FloatingWindowTopmostMode" xml:space="preserve">
+    <data name="Settings_FloatingWindowTopmostMode" xml:space="preserve">
         <value>置顶模式</value>
     </data>
-    <data name="FloatingWindowTopmostModeDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowTopmostModeDesc" xml:space="preserve">
         <value>设置悬浮窗的置顶方式</value>
     </data>
     <data name="TopmostModeOff" xml:space="preserve">
@@ -62,17 +62,17 @@
         <value>UIA置顶</value>
     </data>
 
-    <data name="FloatingWindowDraggable" xml:space="preserve">
+    <data name="Settings_FloatingWindowDraggable" xml:space="preserve">
         <value>允许拖动</value>
     </data>
-    <data name="FloatingWindowDraggableDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowDraggableDesc" xml:space="preserve">
         <value>允许拖动移动悬浮窗</value>
     </data>
 
-    <data name="FloatingWindowLongPressDuration" xml:space="preserve">
+    <data name="Settings_FloatingWindowLongPressDuration" xml:space="preserve">
         <value>长按触发时长</value>
     </data>
-    <data name="FloatingWindowLongPressDurationDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowLongPressDurationDesc" xml:space="preserve">
         <value>拖动前需要长按的时长（毫秒）</value>
     </data>
 
@@ -86,14 +86,14 @@
     <data name="ExtendQuickDrawComponent" xml:space="preserve">
         <value>扩展快速抽取组件</value>
     </data>
-    <data name="ExtendQuickDrawComponentDesc" xml:space="preserve">
+    <data name="Settings_ExtendQuickDrawComponentDesc" xml:space="preserve">
         <value>在悬浮窗中显示更多快速抽取信息</value>
     </data>
 
     <data name="ResetFloatingWindowPosition" xml:space="preserve">
         <value>重置悬浮窗位置</value>
     </data>
-    <data name="ResetFloatingWindowPositionDesc" xml:space="preserve">
+    <data name="Settings_ResetFloatingWindowPositionDesc" xml:space="preserve">
         <value>将悬浮窗位置重置为默认值</value>
     </data>
     <data name="ResetFloatingWindowPositionButton" xml:space="preserve">
@@ -103,7 +103,7 @@
     <data name="FloatingWindowButtonControl" xml:space="preserve">
         <value>按钮显示</value>
     </data>
-    <data name="FloatingWindowButtonControlDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowButtonControlDesc" xml:space="preserve">
         <value>选择在悬浮窗中显示的功能按钮</value>
     </data>
     <data name="RollCallButton" xml:space="preserve">
@@ -125,7 +125,7 @@
     <data name="FloatingWindowPlacement" xml:space="preserve">
         <value>布局模式</value>
     </data>
-    <data name="FloatingWindowPlacementDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowPlacementDesc" xml:space="preserve">
         <value>设置悬浮窗的布局方向</value>
     </data>
     <data name="PlacementRectangle" xml:space="preserve">
@@ -141,7 +141,7 @@
     <data name="FloatingWindowDisplayStyle" xml:space="preserve">
         <value>显示样式</value>
     </data>
-    <data name="FloatingWindowDisplayStyleDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowDisplayStyleDesc" xml:space="preserve">
         <value>设置按钮的展示方式</value>
     </data>
     <data name="DisplayStyleIconText" xml:space="preserve">
@@ -157,7 +157,7 @@
     <data name="FloatingWindowSize" xml:space="preserve">
         <value>尺寸</value>
     </data>
-    <data name="FloatingWindowSizeDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowSizeDesc" xml:space="preserve">
         <value>设置悬浮窗整体尺寸</value>
     </data>
     <data name="SizeExtraExtraSmall" xml:space="preserve">
@@ -185,7 +185,7 @@
     <data name="FloatingWindowTheme" xml:space="preserve">
         <value>主题</value>
     </data>
-    <data name="FloatingWindowThemeDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowThemeDesc" xml:space="preserve">
         <value>设置悬浮窗的主题模式</value>
     </data>
     <data name="ThemeFollowGlobal" xml:space="preserve">
@@ -204,21 +204,21 @@
     <data name="FloatingWindowStickToEdge" xml:space="preserve">
         <value>自动贴边</value>
     </data>
-    <data name="FloatingWindowStickToEdgeDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowStickToEdgeDesc" xml:space="preserve">
         <value>停止操作后自动贴到屏幕边缘</value>
     </data>
 
     <data name="FloatingWindowStickToEdgeRecoverSeconds" xml:space="preserve">
         <value>贴边恢复延迟</value>
     </data>
-    <data name="FloatingWindowStickToEdgeRecoverSecondsDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowStickToEdgeRecoverSecondsDesc" xml:space="preserve">
         <value>贴边后恢复显示的延迟（秒）</value>
     </data>
 
     <data name="FloatingWindowStickToEdgeDisplayStyle" xml:space="preserve">
         <value>贴边显示样式</value>
     </data>
-    <data name="FloatingWindowStickToEdgeDisplayStyleDesc" xml:space="preserve">
+    <data name="Settings_FloatingWindowStickToEdgeDisplayStyleDesc" xml:space="preserve">
         <value>贴边状态下的显示方式</value>
     </data>
     <data name="EdgeDisplayStyleIcon" xml:space="preserve">
@@ -234,27 +234,27 @@
     <data name="HideFloatingWindowOnForeground" xml:space="preserve">
         <value>前台窗口时隐藏</value>
     </data>
-    <data name="HideFloatingWindowOnForegroundDesc" xml:space="preserve">
+    <data name="Settings_HideFloatingWindowOnForegroundDesc" xml:space="preserve">
         <value>当特定窗口位于前台时自动隐藏悬浮窗</value>
     </data>
 
     <data name="HideFloatingWindowOnForegroundWindowTitles" xml:space="preserve">
         <value>窗口标题包含</value>
     </data>
-    <data name="HideFloatingWindowOnForegroundWindowTitlesDesc" xml:space="preserve">
+    <data name="Settings_HideFloatingWindowOnForegroundWindowTitlesDesc" xml:space="preserve">
         <value>用英文逗号分隔，匹配标题关键字</value>
     </data>
 
     <data name="HideFloatingWindowOnForegroundProcessNames" xml:space="preserve">
         <value>进程名包含</value>
     </data>
-    <data name="HideFloatingWindowOnForegroundProcessNamesDesc" xml:space="preserve">
+    <data name="Settings_HideFloatingWindowOnForegroundProcessNamesDesc" xml:space="preserve">
         <value>用英文逗号分隔，匹配进程名关键字</value>
     </data>
     <data name="AcrylicBackground" xml:space="preserve">
         <value>亚克力背景</value>
     </data>
-    <data name="AcrylicBackgroundDesc" xml:space="preserve">
+    <data name="Settings_AcrylicBackgroundDesc" xml:space="preserve">
         <value>控制是否使用亚克力背景，仅在 Windows 10.0.18362.0 及以上版本可用。</value>
     </data>
 </root>

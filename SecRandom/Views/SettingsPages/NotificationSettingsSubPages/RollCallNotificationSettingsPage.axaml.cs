@@ -8,7 +8,7 @@ using SecRandom.Services.Config;
 
 namespace SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
 
-[PageInfo("settings.rollCallNotificationSettings", "\uE7E3", "settings.notification")]
+[PageInfo("settings.notification.rollCall", "\uE7E3", "settings.notification")]
 public partial class RollCallNotificationSettingsPage : UserControl
 {
     public NotificationSettingsConfig ViewModel { get; } =

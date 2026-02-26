@@ -9,11 +9,6 @@
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical" Margin="12 12 18 12" Spacing="12">
-            <!-- 标题 -->
-            <TextBlock Text="设置奖池名称"
-                       FontSize="20"
-                       FontWeight="SemiBold"/>
-            
             <!-- 说明 -->
             <TextBlock Text="在此输入奖池名称，每行一个奖池名称。保存后将自动创建对应的奖池文件。"
                        TextWrapping="Wrap"

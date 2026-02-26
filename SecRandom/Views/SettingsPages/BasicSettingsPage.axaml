@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,8 +19,8 @@
                        FontWeight="SemiBold"/>
             
             <StackPanel Orientation="Vertical" Spacing="0">
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AutoStart}"
-                                         Description="{x:Static pageLangs:Resources.AutoStartDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_AutoStart}"
+                                         Description="{x:Static pageLangs:Resources.Settings_AutoStartDesc}"
                                          IconSource="{controls:FluentIconSource &#xE945;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsAutoStartEnabled}"
@@ -29,8 +29,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ShowMainWindowOnStartup}"
-                                         Description="{x:Static pageLangs:Resources.ShowMainWindowOnStartupDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ShowMainWindowOnStartup}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ShowMainWindowOnStartupDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A7;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsShowMainWindowOnStartupEnabled}"
@@ -39,8 +39,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.AutoSaveWindowSize}"
-                                         Description="{x:Static pageLangs:Resources.AutoSaveWindowSizeDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_AutoSaveWindowSize}"
+                                         Description="{x:Static pageLangs:Resources.Settings_AutoSaveWindowSizeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE74D;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsAutoSaveWindowSizeEnabled}"
@@ -49,8 +49,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.MainWindowTopmost}"
-                                         Description="{x:Static pageLangs:Resources.MainWindowTopmostDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_MainWindowTopmost}"
+                                         Description="{x:Static pageLangs:Resources.Settings_MainWindowTopmostDesc}"
                                          IconSource="{controls:FluentIconSource &#xE840;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding MainWindowTopmostMode}"
@@ -62,8 +62,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BackgroundResident}"
-                                         Description="{x:Static pageLangs:Resources.BackgroundResidentDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_BackgroundResident}"
+                                         Description="{x:Static pageLangs:Resources.Settings_BackgroundResidentDesc}"
                                          IconSource="{controls:FluentIconSource &#xECCE;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsBackgroundResidentEnabled}"
@@ -72,8 +72,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.RegisterUrlProtocolAndIpc}"
-                                         Description="{x:Static pageLangs:Resources.RegisterUrlProtocolAndIpcDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_RegisterUrlProtocolAndIpc}"
+                                         Description="{x:Static pageLangs:Resources.Settings_RegisterUrlProtocolAndIpcDesc}"
                                          IconSource="{controls:FluentIconSource &#xE71B;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding IsUrlProtocolAndIpcEnabled}"
@@ -89,8 +89,8 @@
                        Margin="0 8 0 0"/>
             
             <StackPanel Orientation="Vertical" Spacing="0">
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Theme}"
-                                         Description="{x:Static pageLangs:Resources.ThemeDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_Theme}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ThemeDesc}"
                                          IconSource="{controls:FluentIconSource &#xE790;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding UiThemeModeIndex}"
@@ -102,8 +102,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.OpenThemeManagement}"
-                                         Description="{x:Static pageLangs:Resources.OpenThemeManagementDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_OpenThemeManagement}"
+                                         Description="{x:Static pageLangs:Resources.Settings_OpenThemeManagementDesc}"
                                          IconSource="{controls:FluentIconSource &#xE790;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.Open}"
@@ -112,8 +112,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Language}"
-                                         Description="{x:Static pageLangs:Resources.LanguageDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_Language}"
+                                         Description="{x:Static pageLangs:Resources.Settings_LanguageDesc}"
                                          IconSource="{controls:FluentIconSource &#xE774;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding UiLanguageMode}"
@@ -125,8 +125,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Font}"
-                                         Description="{x:Static pageLangs:Resources.FontDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_Font}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FontDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox Name="FontFamilyComboBox"
@@ -144,8 +144,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.FontWeight}"
-                                         Description="{x:Static pageLangs:Resources.FontWeightDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_FontWeight}"
+                                         Description="{x:Static pageLangs:Resources.Settings_FontWeightDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8D2;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox Name="FontWeightComboBox"
@@ -166,8 +166,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.DpiScale}"
-                                         Description="{x:Static pageLangs:Resources.DpiScaleDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_DpiScale}"
+                                         Description="{x:Static pageLangs:Resources.Settings_DpiScaleDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7B5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <ComboBox SelectedIndex="{Binding UiDpiScaleIndex}"
@@ -189,8 +189,8 @@
                        Margin="0 8 0 0"/>
             
             <StackPanel Orientation="Vertical" Spacing="0">
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.LogViewer}"
-                                         Description="{x:Static pageLangs:Resources.LogViewerDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_LogViewer}"
+                                         Description="{x:Static pageLangs:Resources.Settings_LogViewerDesc}"
                                          IconSource="{controls:FluentIconSource &#xE9F9;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.LogViewerButton}"
@@ -199,8 +199,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.BackupManager}"
-                                         Description="{x:Static pageLangs:Resources.BackupManagerDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_BackupManager}"
+                                         Description="{x:Static pageLangs:Resources.Settings_BackupManagerDesc}"
                                          IconSource="{controls:FluentIconSource &#xE74D;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.BackupManagerButton}"
@@ -209,8 +209,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportDiagnosticData}"
-                                         Description="{x:Static pageLangs:Resources.ExportDiagnosticDataDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ExportDiagnosticData}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExportDiagnosticDataDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ExportDiagnosticDataButton}"
@@ -219,8 +219,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportSettings}"
-                                         Description="{x:Static pageLangs:Resources.ExportSettingsDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ExportSettings}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExportSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ExportSettingsButton}"
@@ -229,8 +229,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportSettings}"
-                                         Description="{x:Static pageLangs:Resources.ImportSettingsDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ImportSettings}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ImportSettingsDesc}"
                                          IconSource="{controls:FluentIconSource &#xE8A5;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ImportSettingsButton}"
@@ -239,8 +239,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ExportAllData}"
-                                         Description="{x:Static pageLangs:Resources.ExportAllDataDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ExportAllData}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ExportAllDataDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C3;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ExportAllDataButton}"
@@ -249,8 +249,8 @@
                     </fa:SettingsExpanderItem.Footer>
                 </fa:SettingsExpanderItem>
                 
-                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.ImportAllData}"
-                                         Description="{x:Static pageLangs:Resources.ImportAllDataDesc}"
+                <fa:SettingsExpanderItem Content="{x:Static pageLangs:Resources.Settings_ImportAllData}"
+                                         Description="{x:Static pageLangs:Resources.Settings_ImportAllDataDesc}"
                                          IconSource="{controls:FluentIconSource &#xE7C3;}">
                     <fa:SettingsExpanderItem.Footer>
                         <Button Content="{x:Static pageLangs:Resources.ImportAllDataButton}"

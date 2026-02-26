@@ -203,9 +203,9 @@ public partial class App : Application
                 services.AddSettingsPage<ThemeManagementPage>(Langs.Common.Resources.ThemeManagement);
 
                 services.AddGroup(new GroupInfo(Langs.SettingsPages.HistoryPage.Resources.HistoryManagement, "settings.history", "\uE81C"));
-                services.AddSettingsPage<RollCallHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.RollCallHistory);
+                services.AddSettingsPage<RollCallHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.Settings_RollCallHistory);
                 services.AddSettingsPage<RollCallHistoryTableSubPage>(Langs.SettingsPages.HistoryPage.Resources.RollCallHistoryTable);
-                services.AddSettingsPage<LotteryHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.LotteryHistory);
+                services.AddSettingsPage<LotteryHistorySettingsSubPage>(Langs.SettingsPages.HistoryPage.Resources.Settings_LotteryHistory);
                 services.AddSettingsPage<LotteryHistoryTableSubPage>(Langs.SettingsPages.HistoryPage.Resources.LotteryHistoryTable);
                 
                 services.AddSettingsPage<UpdateSettingsPage>(Langs.Common.Resources.UpdateSettings);
@@ -390,6 +390,11 @@ public partial class App : Application
         {
             UpdateRegisteredPageName(info);
         }
+
+        foreach (var info in PagesRegistryService.GroupItems)
+        {
+            UpdateRegisteredGroup(info);
+        }
     }
 
     private static void UpdateRegisteredPageName(PageInfo info)
@@ -399,6 +404,14 @@ public partial class App : Application
             return;
         }
 
+        if (PageNameProviders.TryGetValue(info.Id, out var provider))
+        {
+            info.Name = provider();
+        }
+    }
+
+    private static void UpdateRegisteredGroup(GroupInfo info)
+    {
         if (PageNameProviders.TryGetValue(info.Id, out var provider))
         {
             info.Name = provider();

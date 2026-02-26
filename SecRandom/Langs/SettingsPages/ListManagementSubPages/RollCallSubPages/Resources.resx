@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -23,7 +23,7 @@
     <data name="SetClassNameTitle" xml:space="preserve">
         <value>设置班级名称</value>
     </data>
-    <data name="SetClassNameDesc" xml:space="preserve">
+    <data name="Settings_SetClassNameDesc" xml:space="preserve">
         <value>在此输入班级名称，每行一个班级名称。保存后将自动创建对应的班级文件。</value>
     </data>
     <data name="ClassNameList" xml:space="preserve">
@@ -141,10 +141,10 @@
     <data name="NameSettingsTitle" xml:space="preserve">
         <value>设置姓名</value>
     </data>
-    <data name="NameSettingsDesc" xml:space="preserve">
+    <data name="Settings_NameSettingsDesc" xml:space="preserve">
         <value>在此设置学生姓名。选择学生后可以修改其姓名。</value>
     </data>
-    <data name="StudentList" xml:space="preserve">
+    <data name="Settings_StudentList" xml:space="preserve">
         <value>学生列表</value>
     </data>
     <data name="EditName" xml:space="preserve">
@@ -158,10 +158,10 @@
     </data>
 
     <!-- GenderSettingsPage -->
-    <data name="GenderSettingsTitle" xml:space="preserve">
+    <data name="Settings_GenderSettingsTitle" xml:space="preserve">
         <value>设置性别</value>
     </data>
-    <data name="GenderSettingsDesc" xml:space="preserve">
+    <data name="Settings_GenderSettingsDesc" xml:space="preserve">
         <value>在此设置学生性别。选择学生后可以修改其性别。</value>
     </data>
     <data name="Male" xml:space="preserve">
@@ -173,15 +173,15 @@
     <data name="Unknown" xml:space="preserve">
         <value>未知</value>
     </data>
-    <data name="GenderSettingsSaved" xml:space="preserve">
+    <data name="Settings_GenderSettingsSaved" xml:space="preserve">
         <value>性别设置已保存</value>
     </data>
 
     <!-- GroupSettingsPage -->
-    <data name="GroupSettingsTitle" xml:space="preserve">
+    <data name="Settings_GroupSettingsTitle" xml:space="preserve">
         <value>设置小组</value>
     </data>
-    <data name="GroupSettingsDesc" xml:space="preserve">
+    <data name="Settings_GroupSettingsDesc" xml:space="preserve">
         <value>在此设置学生所属小组。选择学生后可以修改其小组。</value>
     </data>
     <data name="Group" xml:space="preserve">
@@ -190,7 +190,7 @@
     <data name="EnterGroupName" xml:space="preserve">
         <value>输入小组名称</value>
     </data>
-    <data name="GroupSettingsSaved" xml:space="preserve">
+    <data name="Settings_GroupSettingsSaved" xml:space="preserve">
         <value>小组设置已保存</value>
     </data>
 
@@ -198,7 +198,7 @@
     <data name="TagSettingsTitle" xml:space="preserve">
         <value>标签设置</value>
     </data>
-    <data name="TagSettingsDesc" xml:space="preserve">
+    <data name="Settings_TagSettingsDesc" xml:space="preserve">
         <value>在此设置学生标签。选择学生后可以添加或删除标签。</value>
     </data>
     <data name="Tags" xml:space="preserve">
@@ -213,7 +213,7 @@
     <data name="EnterTag" xml:space="preserve">
         <value>输入标签名称</value>
     </data>
-    <data name="TagSettingsSaved" xml:space="preserve">
+    <data name="Settings_TagSettingsSaved" xml:space="preserve">
         <value>标签设置已保存</value>
     </data>
 

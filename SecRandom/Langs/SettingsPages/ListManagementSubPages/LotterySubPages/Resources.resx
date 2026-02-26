@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -23,7 +23,7 @@
     <data name="SetPoolNameTitle" xml:space="preserve">
         <value>设置奖池名称</value>
     </data>
-    <data name="SetPoolNameDesc" xml:space="preserve">
+    <data name="Settings_SetPoolNameDesc" xml:space="preserve">
         <value>在此输入奖池名称，每行一个奖池名称。保存后将自动创建对应的奖池文件。</value>
     </data>
     <data name="PoolNameList" xml:space="preserve">
@@ -141,7 +141,7 @@
     <data name="PrizeSettingsTitle" xml:space="preserve">
         <value>奖品设置</value>
     </data>
-    <data name="PrizeSettingsDesc" xml:space="preserve">
+    <data name="Settings_PrizeSettingsDesc" xml:space="preserve">
         <value>在此设置奖品名称。选择奖品后可以修改其名称。</value>
     </data>
     <data name="PrizeList" xml:space="preserve">
@@ -173,7 +173,7 @@
     <data name="WeightSettingsTitle" xml:space="preserve">
         <value>权重设置</value>
     </data>
-    <data name="WeightSettingsDesc" xml:space="preserve">
+    <data name="Settings_WeightSettingsDesc" xml:space="preserve">
         <value>在此设置奖品中奖权重。权重越高，中奖概率越大。</value>
     </data>
     <data name="PrizeName" xml:space="preserve">
@@ -193,7 +193,7 @@
     <data name="CountSettingsTitle" xml:space="preserve">
         <value>数量设置</value>
     </data>
-    <data name="CountSettingsDesc" xml:space="preserve">
+    <data name="Settings_CountSettingsDesc" xml:space="preserve">
         <value>在此设置奖品中奖数量。</value>
     </data>
     <data name="Count" xml:space="preserve">
@@ -210,7 +210,7 @@
     <data name="TagSettingsTitle" xml:space="preserve">
         <value>标签设置</value>
     </data>
-    <data name="TagSettingsDesc" xml:space="preserve">
+    <data name="Settings_TagSettingsDesc" xml:space="preserve">
         <value>在此设置奖品标签。选择奖品后可以添加或删除标签。</value>
     </data>
     <data name="Tags" xml:space="preserve">
@@ -225,15 +225,15 @@
     <data name="EnterTag" xml:space="preserve">
         <value>输入标签名称</value>
     </data>
-    <data name="TagSettingsSaved" xml:space="preserve">
+    <data name="Settings_TagSettingsSaved" xml:space="preserve">
         <value>标签设置已保存</value>
     </data>
 
     <!-- GenderSettingsPage -->
-    <data name="GenderSettingsTitle" xml:space="preserve">
+    <data name="Settings_GenderSettingsTitle" xml:space="preserve">
         <value>性别设置</value>
     </data>
-    <data name="GenderSettingsDesc" xml:space="preserve">
+    <data name="Settings_GenderSettingsDesc" xml:space="preserve">
         <value>在此设置奖品适用性别。</value>
     </data>
     <data name="Male" xml:space="preserve">
@@ -245,15 +245,15 @@
     <data name="All" xml:space="preserve">
         <value>全部</value>
     </data>
-    <data name="GenderSettingsSaved" xml:space="preserve">
+    <data name="Settings_GenderSettingsSaved" xml:space="preserve">
         <value>性别设置已保存</value>
     </data>
 
     <!-- GroupSettingsPage -->
-    <data name="GroupSettingsTitle" xml:space="preserve">
+    <data name="Settings_GroupSettingsTitle" xml:space="preserve">
         <value>分组设置</value>
     </data>
-    <data name="GroupSettingsDesc" xml:space="preserve">
+    <data name="Settings_GroupSettingsDesc" xml:space="preserve">
         <value>在此设置奖品所属分组。</value>
     </data>
     <data name="Group" xml:space="preserve">
@@ -262,7 +262,7 @@
     <data name="EnterGroupName" xml:space="preserve">
         <value>输入分组名称</value>
     </data>
-    <data name="GroupSettingsSaved" xml:space="preserve">
+    <data name="Settings_GroupSettingsSaved" xml:space="preserve">
         <value>分组设置已保存</value>
     </data>
 
@@ -270,7 +270,7 @@
     <data name="NameSettingsTitle" xml:space="preserve">
         <value>名称设置</value>
     </data>
-    <data name="NameSettingsDesc" xml:space="preserve">
+    <data name="Settings_NameSettingsDesc" xml:space="preserve">
         <value>在此设置奖品名称。选择奖品后可以修改其名称。</value>
     </data>
     <data name="EditName" xml:space="preserve">
