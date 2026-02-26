@@ -14,7 +14,7 @@
   - `Assets` 资产文件
   - `Helpers` 小帮手集合
   - `Models` 模型
-    - `Config` 
+    - `Config` 子配置
   - `Services` 服务
   - `Themes` 主题
   - `Views` 界面
