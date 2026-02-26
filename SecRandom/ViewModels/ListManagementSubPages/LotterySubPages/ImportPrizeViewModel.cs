@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ public partial class ImportPrizeViewModel : ObservableObject
     [ObservableProperty]
     private int _selectedFormatIndex;
 
-    public ObservableCollection<string> Pools { get; } = new();
+    public ObservableCollection<string> Pools { get; } = [];
 
     public ImportPrizeViewModel(MainConfigHandler configHandler, ILogger<ImportPrizeViewModel>? logger = null)
     {

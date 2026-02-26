@@ -74,14 +74,14 @@ public partial class ImportStudentPage : UserControl
             {
                 Title = "选择学生名单文件",
                 AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("所有支持格式") { Patterns = new[] { "*.xlsx", "*.xls", "*.csv", "*.txt", "*.json" } },
-                    new FilePickerFileType("Excel 文件") { Patterns = new[] { "*.xlsx", "*.xls" } },
-                    new FilePickerFileType("CSV 文件") { Patterns = new[] { "*.csv" } },
-                    new FilePickerFileType("文本文件") { Patterns = new[] { "*.txt" } },
-                    new FilePickerFileType("JSON 文件") { Patterns = new[] { "*.json" } }
-                }
+                FileTypeFilter =
+                [
+                    new FilePickerFileType("所有支持格式") { Patterns = ["*.xlsx", "*.xls", "*.csv", "*.txt", "*.json"] },
+                    new FilePickerFileType("Excel 文件") { Patterns = ["*.xlsx", "*.xls"] },
+                    new FilePickerFileType("CSV 文件") { Patterns = ["*.csv"] },
+                    new FilePickerFileType("文本文件") { Patterns = ["*.txt"] },
+                    new FilePickerFileType("JSON 文件") { Patterns = ["*.json"] }
+                ]
             });
 
             if (files.Count == 0) return;
@@ -190,7 +190,7 @@ public partial class ImportStudentPage : UserControl
         _columns = lines[0].Split(',').Select(c => c.Trim()).ToList();
 
         // 读取数据
-        _rawData = new List<Dictionary<string, string>>();
+        _rawData = [];
         for (var i = 1; i < lines.Length; i++)
         {
             var values = lines[i].Split(',');
@@ -229,8 +229,8 @@ public partial class ImportStudentPage : UserControl
         if (lines == null || lines.Length == 0) return;
 
         // TXT文件只有姓名列
-        _columns = new List<string> { "姓名" };
-        _rawData = new List<Dictionary<string, string>>();
+        _columns = ["姓名"];
+        _rawData = [];
 
         for (var i = 0; i < lines.Length; i++)
         {
@@ -247,7 +247,7 @@ public partial class ImportStudentPage : UserControl
         try
         {
             // 使用 MiniExcel 读取 Excel 文件
-            var rows = filePath.Query().ToList();
+            var rows = MiniExcel.Query(filePath).ToList();
             if (rows.Count == 0) return;
 
             // 第一行作为列名
@@ -255,7 +255,7 @@ public partial class ImportStudentPage : UserControl
             _columns = firstRow.Keys.ToList();
 
             // 读取数据
-            _rawData = new List<Dictionary<string, string>>();
+            _rawData = [];
             for (var i = 1; i < rows.Count; i++)
             {
                 var row = (IDictionary<string, object>)rows[i];
@@ -288,8 +288,8 @@ public partial class ImportStudentPage : UserControl
         if (data == null) return;
 
         // JSON格式：姓名 -> 学生信息
-        _columns = new List<string> { "姓名", "学号", "性别", "小组", "标签" };
-        _rawData = new List<Dictionary<string, string>>();
+        _columns = ["姓名", "学号", "性别", "小组", "标签"];
+        _rawData = [];
 
         foreach (var (name, value) in data)
         {
@@ -510,7 +510,7 @@ public partial class ImportStudentPage : UserControl
 
     private static List<string> ParseTags(string tagsText)
     {
-        if (string.IsNullOrWhiteSpace(tagsText)) return new List<string>();
+        if (string.IsNullOrWhiteSpace(tagsText)) return [];
         
         var separators = new[] { "，", ",", "；", ";", "|", "/", "\\", "\n", "\t" };
         foreach (var sep in separators)

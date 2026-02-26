@@ -17,9 +17,9 @@ public partial class RollCallTablePreviewViewModel : ObservableObject
     [ObservableProperty]
     private int _totalStudents;
 
-    public ObservableCollection<string> Classes { get; } = new();
+    public ObservableCollection<string> Classes { get; } = [];
 
-    public ObservableCollection<StudentTableRow> Students { get; } = new();
+    public ObservableCollection<StudentTableRow> Students { get; } = [];
 
     public RollCallTablePreviewViewModel(MainConfigHandler configHandler, ILogger<RollCallTablePreviewViewModel>? logger = null)
     {

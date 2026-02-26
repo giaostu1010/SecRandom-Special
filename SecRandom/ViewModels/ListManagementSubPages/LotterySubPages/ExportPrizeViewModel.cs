@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ public partial class ExportPrizeViewModel : ObservableObject
     [ObservableProperty]
     private string _selectedPool = string.Empty;
 
-    public ObservableCollection<string> Pools { get; } = new();
+    public ObservableCollection<string> Pools { get; } = [];
 
     public ExportPrizeViewModel(MainConfigHandler configHandler, ILogger<ExportPrizeViewModel>? logger = null)
     {

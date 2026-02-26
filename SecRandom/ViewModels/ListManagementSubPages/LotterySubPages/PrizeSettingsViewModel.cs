@@ -17,7 +17,7 @@ public partial class PrizeSettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _newPrizeName = string.Empty;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
     public PrizeSettingsViewModel(MainConfigHandler configHandler, ILogger<PrizeSettingsViewModel>? logger = null)
     {

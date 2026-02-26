@@ -21,7 +21,7 @@ public partial class GroupSettingsPage : UserControl
     private readonly RollCallListService _service;
     private readonly ILogger<GroupSettingsPage>? _logger;
     private string? _currentClassName;
-    private ObservableCollection<StudentItem> _students = new();
+    private ObservableCollection<StudentItem> _students = [];
     private bool _saved = false;
 
     public GroupSettingsPage()

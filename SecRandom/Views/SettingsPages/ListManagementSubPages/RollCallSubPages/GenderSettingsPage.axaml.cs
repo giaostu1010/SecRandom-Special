@@ -21,7 +21,7 @@ public partial class GenderSettingsPage : UserControl
     private readonly RollCallListService _service;
     private readonly ILogger<GenderSettingsPage>? _logger;
     private string? _currentClassName;
-    private ObservableCollection<StudentItem> _students = new();
+    private ObservableCollection<StudentItem> _students = [];
     private bool _saved = false;
 
     public GenderSettingsPage()

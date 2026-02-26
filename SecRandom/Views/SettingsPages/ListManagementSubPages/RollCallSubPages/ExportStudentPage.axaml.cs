@@ -24,7 +24,7 @@ public partial class ExportStudentPage : UserControl
     private readonly RollCallListService _service;
     private readonly ILogger<ExportStudentPage>? _logger;
     private string? _currentClassName;
-    private List<StudentItem> _students = new();
+    private List<StudentItem> _students = [];
 
     public ExportStudentPage()
     {
@@ -149,10 +149,10 @@ public partial class ExportStudentPage : UserControl
             {
                 Title = "导出学生名单",
                 SuggestedFileName = $"{_currentClassName}_学生名单-SecRandom{extension}",
-                FileTypeChoices = new[]
-                {
-                    new FilePickerFileType(filterName) { Patterns = new[] { $"*{extension}" } }
-                }
+                FileTypeChoices =
+                [
+                    new FilePickerFileType(filterName) { Patterns = [$"*{extension}"] }
+                ]
             });
 
             if (file == null) return;

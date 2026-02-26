@@ -64,7 +64,7 @@ public partial class NameSettingsPage : UserControl
 
         try
         {
-            var prizes = _service.GetPrizeList(_currentPoolName);
+            var prizes = _service.GetPoolList(_currentPoolName);
             _initialNames = prizes.Select(p => p.Name).ToList();
 
             var textBox = this.FindControl<TextBox>("NamesTextBox");
@@ -136,7 +136,7 @@ public partial class NameSettingsPage : UserControl
             }
 
             // 获取现有奖品数据
-            var existingPrizes = _service.GetPrizeList(_currentPoolName);
+            var existingPrizes = _service.GetPoolList(_currentPoolName);
             var existingDict = existingPrizes.ToDictionary(p => p.Name, p => p);
 
             // 创建新的奖品列表
@@ -159,7 +159,7 @@ public partial class NameSettingsPage : UserControl
                         Count = 1,
                         Weight = 1.0,
                         Exist = true,
-                        Tags = new List<string>()
+                        Tags = []
                     });
                 }
                 id++;

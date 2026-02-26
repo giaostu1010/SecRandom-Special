@@ -21,7 +21,7 @@ public partial class TagSettingsPage : UserControl
     private readonly LotteryListService _service;
     private readonly ILogger<TagSettingsPage>? _logger;
     private string? _currentPoolName;
-    private ObservableCollection<PrizeTagItem> _prizes = new();
+    private ObservableCollection<PrizeTagItem> _prizes = [];
     private bool _saved = false;
 
     public TagSettingsPage()
@@ -64,7 +64,7 @@ public partial class TagSettingsPage : UserControl
 
         try
         {
-            var prizes = _service.GetPrizeList(_currentPoolName);
+            var prizes = _service.GetPoolList(_currentPoolName);
             _prizes.Clear();
             foreach (var prize in prizes)
             {
@@ -106,7 +106,7 @@ public partial class TagSettingsPage : UserControl
             }
 
             // 获取原始奖品数据
-            var originalPrizes = _service.GetPrizeList(_currentPoolName);
+            var originalPrizes = _service.GetPoolList(_currentPoolName);
             var originalDict = originalPrizes.ToDictionary(p => p.Id);
 
             // 更新标签
@@ -154,7 +154,7 @@ public partial class TagSettingsPage : UserControl
 
     private static List<string> ParseTags(string tagsText)
     {
-        if (string.IsNullOrWhiteSpace(tagsText)) return new List<string>();
+        if (string.IsNullOrWhiteSpace(tagsText)) return [];
         
         var separators = new[] { "，", ",", "；", ";", "|", "/", "\\", "\n", "\t" };
         foreach (var sep in separators)
@@ -200,6 +200,6 @@ public class PrizeTagItem
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public List<string> Tags { get; set; } = new();
+    public List<string> Tags { get; set; } = [];
     public string TagsDisplay { get; set; } = string.Empty;
 }

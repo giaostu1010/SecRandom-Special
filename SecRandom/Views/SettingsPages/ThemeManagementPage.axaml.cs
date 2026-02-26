@@ -34,13 +34,13 @@ public partial class ThemeManagementPage : UserControl
         {
             Title = "选择背景图片",
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
+            FileTypeFilter =
+            [
                 new FilePickerFileType("图片文件")
                 {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                    Patterns = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
                 }
-            }
+            ]
         });
 
         if (files.Count > 0)
@@ -62,13 +62,13 @@ public partial class ThemeManagementPage : UserControl
         {
             Title = "选择背景图片",
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
+            FileTypeFilter =
+            [
                 new FilePickerFileType("图片文件")
                 {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                    Patterns = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
                 }
-            }
+            ]
         });
 
         if (files.Count > 0)
@@ -90,13 +90,13 @@ public partial class ThemeManagementPage : UserControl
         {
             Title = "选择背景图片",
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
+            FileTypeFilter =
+            [
                 new FilePickerFileType("图片文件")
                 {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                    Patterns = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"]
                 }
-            }
+            ]
         });
 
         if (files.Count > 0)

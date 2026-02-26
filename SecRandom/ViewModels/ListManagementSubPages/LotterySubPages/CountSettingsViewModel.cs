@@ -14,7 +14,7 @@ public partial class CountSettingsViewModel : ObservableObject
     [ObservableProperty]
     private PrizeItem? _selectedPrize;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
     public CountSettingsViewModel(MainConfigHandler configHandler, ILogger<CountSettingsViewModel>? logger = null)
     {

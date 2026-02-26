@@ -35,10 +35,11 @@ using SecRandom.Views.SettingsPages;
 using SecRandom.Views.SettingsPages.HistoryManagementSubPages;
 using SecRandom.Views.SettingsPages.HistoryManagementSubPages.TableSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages;
-using SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages;
-using SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages;
 using SecRandom.Views.SettingsPages.ListManagementSubPages.TablePreview;
 using SecRandom.Views.SettingsPages.NotificationSettingsSubPages;
+
+using RollCallSubPages = SecRandom.Views.SettingsPages.ListManagementSubPages.RollCallSubPages;
+using LotterySubPages = SecRandom.Views.SettingsPages.ListManagementSubPages.LotterySubPages;
 
 namespace SecRandom;
 
@@ -154,25 +155,25 @@ public partial class App : Application
                 // rollCall
                 services.AddSettingsPage<RollCallListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallListSettings);
                 services.AddSettingsPage<RollCallTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.RollCallTableTitle);
-                
-                services.AddSettingsPage<SetClassNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetClassName);
-                services.AddSettingsPage<ImportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ImportStudentList);
-                services.AddSettingsPage<NameSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.NameSettings);
-                services.AddSettingsPage<GenderSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GenderSettings);
-                services.AddSettingsPage<GroupSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GroupSettings);
-                services.AddSettingsPage<TagSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.TagSettings);
-                services.AddSettingsPage<ExportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ExportStudentList);
+
+                services.AddSettingsPage<RollCallSubPages.SetClassNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetClassName);
+                services.AddSettingsPage<RollCallSubPages.ImportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ImportStudentList);
+                services.AddSettingsPage<RollCallSubPages.NameSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.NameSettings);
+                services.AddSettingsPage<RollCallSubPages.GenderSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GenderSettings);
+                services.AddSettingsPage<RollCallSubPages.GroupSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.GroupSettings);
+                services.AddSettingsPage<RollCallSubPages.TagSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.TagSettings);
+                services.AddSettingsPage<RollCallSubPages.ExportStudentPage>(Langs.SettingsPages.ListManagementPage.Resources.ExportStudentList);
                 
                 // lottery
                 services.AddSettingsPage<LotteryListSettingsSubPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryListSettings);
                 services.AddSettingsPage<LotteryTablePreviewPage>(Langs.SettingsPages.ListManagementPage.Resources.LotteryTableTitle);
                 
-                services.AddSettingsPage<SetPoolNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetPoolNamePageTitle);
-                services.AddSettingsPage<ImportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ImportPrizePageTitle);
-                services.AddSettingsPage<PrizeSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.PrizeSettingsPageTitle);
-                services.AddSettingsPage<WeightSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.WeightSettingsPageTitle);
-                services.AddSettingsPage<CountSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.CountSettingsPageTitle);
-                services.AddSettingsPage<ExportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ExportPrizePageTitle);
+                services.AddSettingsPage<LotterySubPages.SetPoolNamePage>(Langs.SettingsPages.ListManagementPage.Resources.SetPoolNamePageTitle);
+                services.AddSettingsPage<LotterySubPages.ImportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ImportPrizePageTitle);
+                services.AddSettingsPage<LotterySubPages.PrizeSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.PrizeSettingsPageTitle);
+                services.AddSettingsPage<LotterySubPages.WeightSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.WeightSettingsPageTitle);
+                services.AddSettingsPage<LotterySubPages.CountSettingsPage>(Langs.SettingsPages.ListManagementPage.Resources.CountSettingsPageTitle);
+                services.AddSettingsPage<LotterySubPages.ExportPrizePage>(Langs.SettingsPages.ListManagementPage.Resources.ExportPrizePageTitle);
 
                 #endregion
                 

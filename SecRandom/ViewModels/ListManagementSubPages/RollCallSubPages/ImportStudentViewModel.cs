@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ public partial class ImportStudentViewModel : ObservableObject
     [ObservableProperty]
     private int _selectedFormatIndex;
 
-    public ObservableCollection<string> Classes { get; } = new();
+    public ObservableCollection<string> Classes { get; } = [];
 
     public ImportStudentViewModel(MainConfigHandler configHandler, ILogger<ImportStudentViewModel>? logger = null)
     {

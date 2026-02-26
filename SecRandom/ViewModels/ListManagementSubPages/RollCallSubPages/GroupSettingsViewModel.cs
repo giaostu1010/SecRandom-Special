@@ -17,7 +17,7 @@ public partial class GroupSettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _newGroup = string.Empty;
 
-    public ObservableCollection<StudentItem> Students { get; } = new();
+    public ObservableCollection<StudentItem> Students { get; } = [];
 
     public GroupSettingsViewModel(MainConfigHandler configHandler, ILogger<GroupSettingsViewModel>? logger = null)
     {

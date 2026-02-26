@@ -17,9 +17,9 @@ public partial class LotteryTablePreviewViewModel : ObservableObject
     [ObservableProperty]
     private int _totalPrizes;
 
-    public ObservableCollection<string> Pools { get; } = new();
+    public ObservableCollection<string> Pools { get; } = [];
 
-    public ObservableCollection<PrizeTableRow> Prizes { get; } = new();
+    public ObservableCollection<PrizeTableRow> Prizes { get; } = [];
 
     public LotteryTablePreviewViewModel(MainConfigHandler configHandler, ILogger<LotteryTablePreviewViewModel>? logger = null)
     {

@@ -159,7 +159,7 @@ public partial class NameSettingsPage : UserControl
                         Gender = string.Empty,
                         Group = string.Empty,
                         Exist = true,
-                        Tags = new List<string>()
+                        Tags = []
                     });
                 }
                 id++;

@@ -17,7 +17,7 @@ public partial class GroupSettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _newGroup = string.Empty;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
     public GroupSettingsViewModel(MainConfigHandler configHandler, ILogger<GroupSettingsViewModel>? logger = null)
     {

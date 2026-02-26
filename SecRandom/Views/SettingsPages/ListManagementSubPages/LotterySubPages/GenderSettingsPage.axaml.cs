@@ -21,7 +21,7 @@ public partial class GenderSettingsPage : UserControl
     private readonly LotteryListService _service;
     private readonly ILogger<GenderSettingsPage>? _logger;
     private string? _currentPoolName;
-    private ObservableCollection<PrizeItem> _prizes = new();
+    private ObservableCollection<PrizeItem> _prizes = [];
     private bool _saved = false;
 
     public GenderSettingsPage()
@@ -64,7 +64,7 @@ public partial class GenderSettingsPage : UserControl
 
         try
         {
-            var prizes = _service.GetPrizeList(_currentPoolName);
+            var prizes = _service.GetPoolList(_currentPoolName);
             _prizes.Clear();
             foreach (var prize in prizes)
             {

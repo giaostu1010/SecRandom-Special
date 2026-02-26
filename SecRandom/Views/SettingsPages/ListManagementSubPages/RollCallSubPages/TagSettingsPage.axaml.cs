@@ -21,7 +21,7 @@ public partial class TagSettingsPage : UserControl
     private readonly RollCallListService _service;
     private readonly ILogger<TagSettingsPage>? _logger;
     private string? _currentClassName;
-    private ObservableCollection<StudentTagItem> _students = new();
+    private ObservableCollection<StudentTagItem> _students = [];
     private bool _saved = false;
 
     public TagSettingsPage()
@@ -154,7 +154,7 @@ public partial class TagSettingsPage : UserControl
 
     private static List<string> ParseTags(string tagsText)
     {
-        if (string.IsNullOrWhiteSpace(tagsText)) return new List<string>();
+        if (string.IsNullOrWhiteSpace(tagsText)) return [];
         
         var separators = new[] { "，", ",", "；", ";", "|", "/", "\\", "\n", "\t" };
         foreach (var sep in separators)
@@ -200,6 +200,6 @@ public class StudentTagItem
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public List<string> Tags { get; set; } = new();
+    public List<string> Tags { get; set; } = [];
     public string TagsDisplay { get; set; } = string.Empty;
 }

@@ -17,9 +17,9 @@ public partial class TagSettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _newTag = string.Empty;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
-    public ObservableCollection<string> AvailableTags { get; } = new();
+    public ObservableCollection<string> AvailableTags { get; } = [];
 
     public TagSettingsViewModel(MainConfigHandler configHandler, ILogger<TagSettingsViewModel>? logger = null)
     {

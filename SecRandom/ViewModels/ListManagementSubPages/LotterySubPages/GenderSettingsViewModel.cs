@@ -17,7 +17,7 @@ public partial class GenderSettingsViewModel : ObservableObject
     [ObservableProperty]
     private int _selectedGenderIndex;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
     public GenderSettingsViewModel(MainConfigHandler configHandler, ILogger<GenderSettingsViewModel>? logger = null)
     {

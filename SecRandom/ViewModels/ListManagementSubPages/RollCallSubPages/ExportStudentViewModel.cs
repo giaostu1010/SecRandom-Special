@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ public partial class ExportStudentViewModel : ObservableObject
     [ObservableProperty]
     private string _selectedClass = string.Empty;
 
-    public ObservableCollection<string> Classes { get; } = new();
+    public ObservableCollection<string> Classes { get; } = [];
 
     public ExportStudentViewModel(MainConfigHandler configHandler, ILogger<ExportStudentViewModel>? logger = null)
     {

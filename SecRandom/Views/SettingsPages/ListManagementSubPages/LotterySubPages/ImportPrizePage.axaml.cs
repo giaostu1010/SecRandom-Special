@@ -74,14 +74,14 @@ public partial class ImportPrizePage : UserControl
             {
                 Title = "选择奖品名单文件",
                 AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("所有支持格式") { Patterns = new[] { "*.xlsx", "*.xls", "*.csv", "*.txt", "*.json" } },
-                    new FilePickerFileType("Excel 文件") { Patterns = new[] { "*.xlsx", "*.xls" } },
-                    new FilePickerFileType("CSV 文件") { Patterns = new[] { "*.csv" } },
-                    new FilePickerFileType("文本文件") { Patterns = new[] { "*.txt" } },
-                    new FilePickerFileType("JSON 文件") { Patterns = new[] { "*.json" } }
-                }
+                FileTypeFilter =
+                [
+                    new FilePickerFileType("所有支持格式") { Patterns = ["*.xlsx", "*.xls", "*.csv", "*.txt", "*.json"] },
+                    new FilePickerFileType("Excel 文件") { Patterns = ["*.xlsx", "*.xls"] },
+                    new FilePickerFileType("CSV 文件") { Patterns = ["*.csv"] },
+                    new FilePickerFileType("文本文件") { Patterns = ["*.txt"] },
+                    new FilePickerFileType("JSON 文件") { Patterns = ["*.json"] }
+                ]
             });
 
             if (files.Count == 0) return;
@@ -190,7 +190,7 @@ public partial class ImportPrizePage : UserControl
         _columns = lines[0].Split(',').Select(c => c.Trim()).ToList();
 
         // 读取数据
-        _rawData = new List<Dictionary<string, string>>();
+        _rawData = [];
         for (var i = 1; i < lines.Length; i++)
         {
             var values = lines[i].Split(',');
@@ -229,8 +229,8 @@ public partial class ImportPrizePage : UserControl
         if (lines == null || lines.Length == 0) return;
 
         // TXT文件只有名称列
-        _columns = new List<string> { "名称" };
-        _rawData = new List<Dictionary<string, string>>();
+        _columns = ["名称"];
+        _rawData = [];
 
         for (var i = 0; i < lines.Length; i++)
         {
@@ -247,7 +247,7 @@ public partial class ImportPrizePage : UserControl
         try
         {
             // 使用 MiniExcel 读取 Excel 文件
-            var rows = filePath.Query().ToList();
+            var rows = MiniExcel.Query(filePath).ToList();
             if (rows.Count == 0) return;
 
             // 第一行作为列名
@@ -255,7 +255,7 @@ public partial class ImportPrizePage : UserControl
             _columns = firstRow.Keys.ToList();
 
             // 读取数据
-            _rawData = new List<Dictionary<string, string>>();
+            _rawData = [];
             for (var i = 1; i < rows.Count; i++)
             {
                 var row = (IDictionary<string, object>)rows[i];
@@ -288,8 +288,8 @@ public partial class ImportPrizePage : UserControl
         if (data == null) return;
 
         // JSON格式：名称 -> 奖品信息
-        _columns = new List<string> { "名称", "编号", "数量", "权重", "标签" };
-        _rawData = new List<Dictionary<string, string>>();
+        _columns = ["名称", "编号", "数量", "权重", "标签"];
+        _rawData = [];
 
         foreach (var (name, value) in data)
         {
@@ -512,7 +512,7 @@ public partial class ImportPrizePage : UserControl
 
     private static List<string> ParseTags(string tagsText)
     {
-        if (string.IsNullOrWhiteSpace(tagsText)) return new List<string>();
+        if (string.IsNullOrWhiteSpace(tagsText)) return [];
         
         var separators = new[] { "，", ",", "；", ";", "|", "/", "\\", "\n", "\t" };
         foreach (var sep in separators)

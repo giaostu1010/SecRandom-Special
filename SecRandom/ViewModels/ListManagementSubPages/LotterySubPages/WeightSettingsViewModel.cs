@@ -14,7 +14,7 @@ public partial class WeightSettingsViewModel : ObservableObject
     [ObservableProperty]
     private PrizeItem? _selectedPrize;
 
-    public ObservableCollection<PrizeItem> Prizes { get; } = new();
+    public ObservableCollection<PrizeItem> Prizes { get; } = [];
 
     public WeightSettingsViewModel(MainConfigHandler configHandler, ILogger<WeightSettingsViewModel>? logger = null)
     {

@@ -24,7 +24,7 @@ public partial class ExportPrizePage : UserControl
     private readonly LotteryListService _service;
     private readonly ILogger<ExportPrizePage>? _logger;
     private string? _currentPoolName;
-    private List<PrizeItem> _prizes = new();
+    private List<PrizeItem> _prizes = [];
 
     public ExportPrizePage()
     {
@@ -70,7 +70,7 @@ public partial class ExportPrizePage : UserControl
 
         try
         {
-            _prizes = _service.GetPrizeList(_currentPoolName);
+            _prizes = _service.GetPoolList(_currentPoolName);
             
             // 更新奖品数量
             UpdatePrizeCount(_prizes.Count);
@@ -149,10 +149,10 @@ public partial class ExportPrizePage : UserControl
             {
                 Title = "导出奖品名单",
                 SuggestedFileName = $"{_currentPoolName}_奖品名单-SecRandom{extension}",
-                FileTypeChoices = new[]
-                {
-                    new FilePickerFileType(filterName) { Patterns = new[] { $"*{extension}" } }
-                }
+                FileTypeChoices =
+                [
+                    new FilePickerFileType(filterName) { Patterns = [$"*{extension}"] }
+                ]
             });
 
             if (file == null) return;
