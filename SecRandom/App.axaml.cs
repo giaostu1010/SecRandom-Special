@@ -215,6 +215,36 @@ public partial class App : Application
                 // 就像 services.AddTransient<SomeViewModel>(); 一样，谢谢你！
                 // ViewModel 一定要继承 SecRandom.ViewModels.ViewModelBase，里面有 Config 可以直接拿来用。
                 services.AddTransient<ViewModelBase>();
+
+                // ListManagementSubPages ViewModels
+                // RollCallSubPages
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.SetClassNameViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.ImportStudentViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.NameSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.GenderSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.GroupSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.TagSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.RollCallSubPages.ExportStudentViewModel>();
+
+                // LotterySubPages
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.SetPoolNameViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.ImportPrizeViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.PrizeSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.WeightSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.CountSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.TagSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.GenderSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.GroupSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.NameSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.LotterySubPages.ExportPrizeViewModel>();
+
+                // TablePreview
+                services.AddTransient<ViewModels.ListManagementSubPages.TablePreview.RollCallTablePreviewViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.TablePreview.LotteryTablePreviewViewModel>();
+
+                // ListSettingsSubPage
+                services.AddTransient<ViewModels.ListManagementSubPages.ListSettingsSubPage.RollCallListSettingsViewModel>();
+                services.AddTransient<ViewModels.ListManagementSubPages.ListSettingsSubPage.LotteryListSettingsViewModel>();
             })
             .Build();
 
