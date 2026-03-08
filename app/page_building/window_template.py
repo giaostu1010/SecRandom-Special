@@ -51,31 +51,22 @@ class BackgroundLayer(QWidget):
 
     def applyFromSettings(self):
         prefix = f"{self._target}_background_"
-        mode = readme_settings_async("background_management", f"{prefix}mode")
-        color = readme_settings_async("background_management", f"{prefix}color")
-        gradient_start = readme_settings_async(
-            "background_management", f"{prefix}gradient_start"
-        )
-        gradient_end = readme_settings_async(
-            "background_management", f"{prefix}gradient_end"
-        )
-        gradient_direction = readme_settings_async(
-            "background_management", f"{prefix}gradient_direction"
-        )
-        gradient_direction_v2 = readme_settings_async(
-            "background_management", f"{prefix}gradient_direction_v2"
-        )
-        image_path = readme_settings_async("background_management", f"{prefix}image")
-        brightness = readme_settings_async(
-            "background_management", f"{prefix}brightness"
-        )
-        opacity = readme_settings_async("background_management", f"{prefix}opacity")
-        blur_enable = readme_settings_async(
-            "background_management", f"{prefix}blur_enable"
-        )
-        blur_radius = readme_settings_async(
-            "background_management", f"{prefix}blur_radius"
-        )
+        settings_snapshot = get_settings_snapshot()
+        background_settings = settings_snapshot.get("background_management", {})
+        if not isinstance(background_settings, dict):
+            background_settings = {}
+
+        mode = background_settings.get(f"{prefix}mode")
+        color = background_settings.get(f"{prefix}color")
+        gradient_start = background_settings.get(f"{prefix}gradient_start")
+        gradient_end = background_settings.get(f"{prefix}gradient_end")
+        gradient_direction = background_settings.get(f"{prefix}gradient_direction")
+        gradient_direction_v2 = background_settings.get(f"{prefix}gradient_direction_v2")
+        image_path = background_settings.get(f"{prefix}image")
+        brightness = background_settings.get(f"{prefix}brightness")
+        opacity = background_settings.get(f"{prefix}opacity")
+        blur_enable = background_settings.get(f"{prefix}blur_enable")
+        blur_radius = background_settings.get(f"{prefix}blur_radius")
 
         try:
             self._mode = int(mode) if mode is not None else 0

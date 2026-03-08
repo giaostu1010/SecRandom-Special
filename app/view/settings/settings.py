@@ -27,6 +27,7 @@ from app.tools.variable import (
 from app.tools.path_utils import get_data_path
 from app.tools.personalised import get_theme_icon
 from app.tools.settings_access import (
+    get_settings_snapshot,
     readme_settings_async,
     update_settings,
 )
@@ -53,12 +54,13 @@ class SettingsWindow(FluentWindow):
         self.setObjectName("settingWindow")
         self.parent = parent
         self._is_preview = is_preview
+        self._startup_settings_snapshot = get_settings_snapshot()
 
         self._initialize_variables()
         self._setup_timers()
         self._setup_window_properties()
         self._setup_url_handler()
-        self._position_window()
+        self._position_window(snapshot=self._startup_settings_snapshot)
         self._setup_splash_screen()
 
         QTimer.singleShot(APP_INIT_DELAY, lambda: (self.createSubInterface()))
@@ -338,23 +340,37 @@ class SettingsWindow(FluentWindow):
     # 窗口定位与大小管理
     # ==================================================
 
-    def _position_window(self):
+    def _position_window(self, snapshot=None):
         """窗口定位
         根据屏幕尺寸和用户设置自动计算最佳位置"""
-        is_maximized = readme_settings_async("settings", "is_maximized")
+        settings_section = snapshot.get("settings", {}) if isinstance(snapshot, dict) else {}
+        if not isinstance(settings_section, dict):
+            settings_section = {}
+
+        is_maximized = settings_section.get("is_maximized")
+        if is_maximized is None:
+            is_maximized = readme_settings_async("settings", "is_maximized")
         if is_maximized:
-            pre_maximized_width = readme_settings_async(
-                "settings", "pre_maximized_width"
-            )
-            pre_maximized_height = readme_settings_async(
-                "settings", "pre_maximized_height"
-            )
+            pre_maximized_width = settings_section.get("pre_maximized_width")
+            if pre_maximized_width is None:
+                pre_maximized_width = readme_settings_async(
+                    "settings", "pre_maximized_width"
+                )
+            pre_maximized_height = settings_section.get("pre_maximized_height")
+            if pre_maximized_height is None:
+                pre_maximized_height = readme_settings_async(
+                    "settings", "pre_maximized_height"
+                )
             self.resize(pre_maximized_width, pre_maximized_height)
             self._center_window()
             QTimer.singleShot(APP_INIT_DELAY, self.showMaximized)
         else:
-            setting_window_width = readme_settings_async("settings", "width")
-            setting_window_height = readme_settings_async("settings", "height")
+            setting_window_width = settings_section.get("width")
+            if setting_window_width is None:
+                setting_window_width = readme_settings_async("settings", "width")
+            setting_window_height = settings_section.get("height")
+            if setting_window_height is None:
+                setting_window_height = readme_settings_async("settings", "height")
             self.resize(setting_window_width, setting_window_height)
             self._center_window()
 

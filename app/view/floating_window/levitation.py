@@ -16,6 +16,7 @@ from loguru import logger
 # 本地模块导入
 from app.tools.personalised import load_custom_font, get_theme_icon, is_dark_theme
 from app.tools.settings_access import (
+    get_settings_snapshot,
     readme_settings_async,
     update_settings,
     get_settings_signals,
@@ -623,17 +624,26 @@ class LevitationWindow(QWidget):
 
     def _init_settings(self):
         """初始化设置配置"""
+        self._settings_snapshot = get_settings_snapshot()
+
         # 基础显示设置
         self._visible_on_start = self._get_bool_setting(
-            "floating_window_management", "startup_display_floating_window", False
+            "floating_window_management",
+            "startup_display_floating_window",
+            False,
+            snapshot=self._settings_snapshot,
         )
         self._opacity = self._get_float_setting(
             "floating_window_management",
             "floating_window_opacity",
             self.DEFAULT_OPACITY,
+            snapshot=self._settings_snapshot,
         )
         self._floating_window_theme = self._get_int_setting(
-            "floating_window_management", "floating_window_theme", 0
+            "floating_window_management",
+            "floating_window_theme",
+            0,
+            snapshot=self._settings_snapshot,
         )
 
         # 布局设置
@@ -641,59 +651,84 @@ class LevitationWindow(QWidget):
             "floating_window_management",
             "floating_window_placement",
             self.DEFAULT_PLACEMENT,
+            snapshot=self._settings_snapshot,
         )
         self._display_style = self._get_int_setting(
             "floating_window_management",
             "floating_window_display_style",
             self.DEFAULT_DISPLAY_STYLE,
+            snapshot=self._settings_snapshot,
         )
         self._extend_quick_draw_component = self._get_bool_setting(
-            "floating_window_management", "extend_quick_draw_component", False
+            "floating_window_management",
+            "extend_quick_draw_component",
+            False,
+            snapshot=self._settings_snapshot,
         )
 
         # 拖拽设置
         self._draggable = self._get_bool_setting(
-            "floating_window_management", "floating_window_draggable", True
+            "floating_window_management",
+            "floating_window_draggable",
+            True,
+            snapshot=self._settings_snapshot,
         )
         self._long_press_ms = self._get_int_setting(
             "floating_window_management",
             "floating_window_long_press_duration",
             self.DEFAULT_LONG_PRESS_MS,
+            snapshot=self._settings_snapshot,
         )
 
         # 贴边设置
         self._stick_to_edge = self._get_bool_setting(
-            "floating_window_management", "floating_window_stick_to_edge", True
+            "floating_window_management",
+            "floating_window_stick_to_edge",
+            True,
+            snapshot=self._settings_snapshot,
         )
         self._retract_seconds = self._get_int_setting(
             "floating_window_management",
             "floating_window_stick_to_edge_recover_seconds",
             self.DEFAULT_RETRACT_SECONDS,
+            snapshot=self._settings_snapshot,
         )
         self._stick_indicator_style = self._get_int_setting(
             "floating_window_management",
             "floating_window_stick_to_edge_display_style",
             0,
+            snapshot=self._settings_snapshot,
         )
 
         # 按钮配置
-        button_control_value = readme_settings_async(
-            "floating_window_management", "floating_window_button_control"
+        button_control_value = self._get_setting_value(
+            "floating_window_management",
+            "floating_window_button_control",
+            snapshot=self._settings_snapshot,
         )
         self._buttons_spec = self._normalize_button_control_value(button_control_value)
 
         # 浮窗大小设置
         size_idx = self._get_int_setting(
-            "floating_window_management", "floating_window_size", 1
+            "floating_window_management",
+            "floating_window_size",
+            1,
+            snapshot=self._settings_snapshot,
         )
         self._apply_size_setting(size_idx)
 
         # 无焦点模式设置
         self._do_not_steal_focus = self._get_bool_setting(
-            "floating_window_management", "do_not_steal_focus", False
+            "floating_window_management",
+            "do_not_steal_focus",
+            False,
+            snapshot=self._settings_snapshot,
         )
         self._topmost_mode = self._get_int_setting(
-            "floating_window_management", "floating_window_topmost_mode", 1
+            "floating_window_management",
+            "floating_window_topmost_mode",
+            1,
+            snapshot=self._settings_snapshot,
         )
         self._refresh_window_flags()
 
@@ -705,6 +740,7 @@ class LevitationWindow(QWidget):
         self._init_class_linkage_settings()
 
         self._user_requested_visible = bool(self._visible_on_start)
+        self._settings_snapshot = None
 
     def _init_class_linkage_settings(self):
         """初始化联动设置：下课隐藏浮窗"""
@@ -812,19 +848,31 @@ class LevitationWindow(QWidget):
         finally:
             self._suppress_visibility_tracking = False
 
-    def _get_bool_setting(self, section: str, key: str, default: bool = False) -> bool:
+    def _get_setting_value(self, section: str, key: str, snapshot=None):
+        settings_section = snapshot.get(section, {}) if isinstance(snapshot, dict) else {}
+        if isinstance(settings_section, dict) and key in settings_section:
+            return settings_section.get(key)
+        return readme_settings_async(section, key)
+
+    def _get_bool_setting(
+        self, section: str, key: str, default: bool = False, snapshot=None
+    ) -> bool:
         """获取布尔类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return bool(result) if result is not None else default
 
-    def _get_int_setting(self, section: str, key: str, default: int = 0) -> int:
+    def _get_int_setting(
+        self, section: str, key: str, default: int = 0, snapshot=None
+    ) -> int:
         """获取整数类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return int(result) if result is not None else default
 
-    def _get_float_setting(self, section: str, key: str, default: float = 0.0) -> float:
+    def _get_float_setting(
+        self, section: str, key: str, default: float = 0.0, snapshot=None
+    ) -> float:
         """获取浮点数类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return float(result) if result is not None else default
 
     def _init_edge_hide_settings(self):
