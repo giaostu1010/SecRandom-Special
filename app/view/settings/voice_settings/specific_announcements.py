@@ -14,6 +14,7 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
 from app.Language.obtain_language import *
 from app.common.data.list import (
     get_class_name_list,
@@ -366,19 +367,26 @@ class voice_announcement_main(GroupHeaderCardWidget):
 
     def refresh_data(self):
         """刷新表格数据"""
+        trace = start_interaction("specific_announcements.refresh")
+        self._refresh_trace = trace
         # 确保表格已经创建
         if not hasattr(self, "table"):
+            trace.log("data_ready")
             return
         if not hasattr(self, "class_comboBox"):
+            trace.log("data_ready")
             return
 
         class_name = self.class_comboBox.currentText()
         if not class_name:
             self.table.setRowCount(0)
+            trace.log("first_feedback")
+            trace.log("data_ready")
             return
 
         # 临时阻止信号，避免初始化时触发保存操作
         self.table.blockSignals(True)
+        trace.log("first_feedback")
 
         try:
             # 根据模式获取数据
@@ -466,6 +474,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
         finally:
             # 恢复信号
             self.table.blockSignals(False)
+            trace.log("data_ready")
 
 
 # ==================================================

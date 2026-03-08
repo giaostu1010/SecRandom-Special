@@ -13,6 +13,7 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
 from app.Language.obtain_language import *
 from app.common.data.list import *
 from app.common.safety.secure_store import (
@@ -422,25 +423,33 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
 
     def refresh_data(self):
         """刷新表格数据"""
+        trace = start_interaction("behind_scenes.refresh")
+        self._refresh_trace = trace
         if not hasattr(self, "table") or self.table is None:
+            trace.log("data_ready")
             return
 
         if not hasattr(self, "list_comboBox") or self.list_comboBox is None:
+            trace.log("data_ready")
             return
 
         if self.current_mode == 1 and (
             not hasattr(self, "pool_comboBox") or self.pool_comboBox is None
         ):
+            trace.log("data_ready")
             return
 
         try:
             list_name = self.list_comboBox.currentText()
         except RuntimeError:
             logger.exception("名单下拉框已被销毁")
+            trace.log("data_ready")
             return
 
         if not list_name:
             self.table.setRowCount(0)
+            trace.log("first_feedback")
+            trace.log("data_ready")
             return
 
         self.current_list_name = list_name
@@ -457,10 +466,12 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         pool_name = self.pool_comboBox.currentText() if self.current_mode == 1 else None
         self.load_worker = LoadDataWorker(list_name, self.current_mode, pool_name)
         self.load_worker.finished.connect(self.on_data_loaded)
+        trace.log("first_feedback")
         self.load_worker.start()
 
     def on_data_loaded(self, students, prob_data, prize_list):
         """数据加载完成后的回调"""
+        trace = getattr(self, "_refresh_trace", None)
         try:
             self.probability_data = prob_data
 
@@ -597,6 +608,8 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
             logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             self.table.blockSignals(False)
+            if trace is not None:
+                trace.log("data_ready")
 
     def save_probability_data(self):
         """保存概率设置数据"""

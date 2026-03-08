@@ -15,6 +15,7 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
 from app.Language.obtain_language import *
 from app.common.history import *
 from app.common.history.history_reader import (
@@ -714,13 +715,19 @@ class lottery_history_table(GroupHeaderCardWidget):
 
     def refresh_data(self):
         """刷新表格数据"""
+        trace = start_interaction("lottery_history.refresh")
+        self._refresh_trace = trace
         if not hasattr(self, "table"):
+            trace.log("data_ready")
             return
         if not hasattr(self, "pool_comboBox"):
+            trace.log("data_ready")
             return
         pool_name = self.pool_comboBox.currentText()
         if not pool_name:
             self.table.setRowCount(0)
+            trace.log("first_feedback")
+            trace.log("data_ready")
             return
         self.current_pool_name = pool_name
 
@@ -738,6 +745,7 @@ class lottery_history_table(GroupHeaderCardWidget):
         self.table.setRowCount(0)
         self.table.setSortingEnabled(False)
         self.table.blockSignals(True)
+        trace.log("first_feedback")
 
         try:
             if not hasattr(self, "mode_comboBox"):
@@ -866,6 +874,7 @@ class lottery_history_table(GroupHeaderCardWidget):
         finally:
             self.table.blockSignals(False)
             self.force_load_all = False
+            trace.log("data_ready")
 
     def update_table_headers(self):
         """更新表格标题"""

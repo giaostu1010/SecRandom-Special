@@ -56,6 +56,7 @@ from app.tools.config import (
     show_notification,
 )
 from app.tools.personalised import get_theme_icon
+from app.tools.interaction_perf import start_interaction
 from app.tools.settings_access import update_settings
 
 
@@ -389,6 +390,8 @@ class BackupManagerWindow(QWidget):
             self._refresh_last_backup()
 
     def _refresh_restore_files(self):
+        trace = start_interaction("backup_manager.refresh_restore_files")
+        self._restore_refresh_trace = trace
         try:
             files = list_backup_files()
         except Exception:
@@ -396,6 +399,7 @@ class BackupManagerWindow(QWidget):
 
         self._restore_selected_file = ""
         self.restore_table.setRowCount(len(files))
+        trace.log("first_feedback")
         for row, p in enumerate(files):
             name = p.name
             try:
@@ -434,6 +438,7 @@ class BackupManagerWindow(QWidget):
 
         if files:
             self.restore_table.selectRow(0)
+        trace.log("data_ready")
 
     def _on_restore_delete_clicked(self, file_path: str):
         if not file_path:

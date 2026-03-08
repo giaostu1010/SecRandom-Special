@@ -17,6 +17,7 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
 from app.Language.obtain_language import *
 from app.tools.config import *
 from app.common.data.list import get_duplicate_names, make_unique_names
@@ -623,7 +624,9 @@ class ImportStudentNameWindow(QWidget):
 
     def __update_preview(self):
         """更新预览"""
+        trace = start_interaction("import_student.preview")
         if self.data is None:
+            trace.log("data_ready")
             return
 
         id_column = self.id_column_combo.currentText()
@@ -634,6 +637,7 @@ class ImportStudentNameWindow(QWidget):
 
         # 检查是否选择了"无"选项（空字符串）
         if not id_column and not name_column:
+            trace.log("data_ready")
             return
         # 如果选择了"无"选项，将其设为None
         if id_column == get_content_name_async(
@@ -703,6 +707,7 @@ class ImportStudentNameWindow(QWidget):
         self.preview_table.setRowCount(max_rows)
         self.preview_table.setColumnCount(len(preview_columns))
         self.preview_table.setHorizontalHeaderLabels(preview_headers)
+        trace.log("first_feedback")
 
         # 填充数据
         for i in range(max_rows):
@@ -712,6 +717,7 @@ class ImportStudentNameWindow(QWidget):
 
         # 调整列宽
         self.preview_table.resizeColumnsToContents()
+        trace.log("data_ready")
 
     def __import_data(self):
         """导入数据"""

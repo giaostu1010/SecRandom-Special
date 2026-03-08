@@ -21,6 +21,7 @@ from app.tools.settings_access import (
     update_settings,
     get_settings_signals,
 )
+from app.tools.interaction_perf import start_interaction
 from app.tools.path_utils import *
 from app.tools.variable import EXIT_CODE_RESTART, DEFAULT_ICON_CODEPOINT
 from app.Language.obtain_language import (
@@ -1605,9 +1606,12 @@ class LevitationWindow(QWidget):
         return btn
 
     def _toggle_quick_draw_extend_panel(self, anchor: QWidget) -> None:
+        trace = start_interaction("floating.quick_draw_extend.open")
+        self._quick_draw_extend_trace = trace
         panel = getattr(self, "_quick_draw_extend_panel", None)
         if panel is not None and panel.isVisible():
             self._close_quick_draw_extend_panel()
+            trace.log("data_ready")
             return
 
         panel = self._ensure_quick_draw_extend_panel()
@@ -1617,6 +1621,8 @@ class LevitationWindow(QWidget):
         panel.show()
         panel.raise_()
         self._arm_quick_draw_extend_panel_auto_close()
+        trace.log("first_feedback")
+        trace.log("data_ready")
 
     def _arm_quick_draw_extend_panel_auto_close(self) -> None:
         timer = getattr(self, "_quick_draw_extend_close_timer", None)
