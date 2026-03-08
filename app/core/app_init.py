@@ -78,9 +78,28 @@ class AppInitializer:
         self._load_theme()
         self._load_theme_color()
         self._clear_restart_record()
-        self._check_updates()
-        self._warmup_face_detector_devices()
+        self._register_post_show_tasks()
         self._create_main_window()
+
+    def _register_post_show_tasks(self) -> None:
+        self.window_manager.register_after_first_window_shown(
+            lambda: QTimer.singleShot(
+                APP_INIT_DELAY,
+                lambda: safe_execute(
+                    lambda: check_for_updates_on_startup(None),
+                    error_message="检查更新失败",
+                ),
+            )
+        )
+        self.window_manager.register_after_first_window_shown(
+            lambda: QTimer.singleShot(
+                APP_INIT_DELAY + 1500,
+                lambda: safe_execute(
+                    self._do_warmup_face_detector_devices,
+                    error_message="预热摄像头设备失败",
+                ),
+            )
+        )
 
     def _load_theme(self) -> None:
         """加载主题设置"""
@@ -126,15 +145,6 @@ class AppInitializer:
             ),
         )
 
-    def _check_updates(self) -> None:
-        """检查是否需要安装更新"""
-        QTimer.singleShot(
-            APP_INIT_DELAY,
-            lambda: safe_execute(
-                lambda: check_for_updates_on_startup(None), error_message="检查更新失败"
-            ),
-        )
-
     def _create_main_window(self) -> None:
         """创建主窗口实例（但不自动显示）"""
         guide_completed = readme_settings_async("basic_settings", "guide_completed")
@@ -153,17 +163,6 @@ class AppInitializer:
         QTimer.singleShot(
             init_delay,
             lambda: safe_execute(apply_font_settings, error_message="应用字体设置失败"),
-        )
-
-    def _warmup_face_detector_devices(self) -> None:
-        guide_completed = readme_settings_async("basic_settings", "guide_completed")
-        init_delay = 1500 if not guide_completed else APP_INIT_DELAY + 1500
-        QTimer.singleShot(
-            init_delay,
-            lambda: safe_execute(
-                self._do_warmup_face_detector_devices,
-                error_message="预热摄像头设备失败",
-            ),
         )
 
     def _do_warmup_face_detector_devices(self) -> None:
