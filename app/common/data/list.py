@@ -1,11 +1,45 @@
 # ==================================================
 # 导入模块
 # ==================================================
+import copy
 import json
+import threading
 from typing import List, Dict, Any, Tuple
 from loguru import logger
 
 from app.tools.path_utils import *
+
+
+_list_cache_lock = threading.RLock()
+_student_list_cache: dict[str, tuple[tuple[int, int] | None, list[dict[str, Any]]]] = {}
+_pool_list_cache: dict[str, tuple[tuple[int, int] | None, list[dict[str, Any]]]] = {}
+
+
+def _get_file_signature(file_path) -> tuple[int, int] | None:
+    try:
+        stat_result = file_path.stat()
+        return stat_result.st_mtime_ns, stat_result.st_size
+    except OSError:
+        return None
+
+
+def _get_cached_transformed_list(
+    cache: dict[str, tuple[tuple[int, int] | None, list[dict[str, Any]]]],
+    file_path,
+    loader,
+):
+    cache_key = str(file_path)
+    signature = _get_file_signature(file_path)
+
+    with _list_cache_lock:
+        cached = cache.get(cache_key)
+        if cached and cached[0] == signature:
+            return copy.deepcopy(cached[1])
+
+    loaded_data = loader(file_path)
+    with _list_cache_lock:
+        cache[cache_key] = (signature, copy.deepcopy(loaded_data))
+    return copy.deepcopy(loaded_data)
 
 
 def _normalize_tags(value) -> List[str]:
@@ -143,28 +177,28 @@ def get_student_list(class_name: str) -> List[Dict[str, Any]]:
             logger.warning(f"班级名单文件不存在: {class_file_path}")
             return []
 
-        # 读取JSON文件
-        with open(class_file_path, "r", encoding="utf-8") as f:
-            student_data = json.load(f)
+        def loader(file_path):
+            with open(file_path, "r", encoding="utf-8") as f:
+                student_data = json.load(f)
 
-        # 将字典数据转换为列表形式
-        student_list = []
-        for name, info in student_data.items():
-            student = {
-                "name": name,
-                "id": info.get("id", 0),
-                "gender": info.get("gender", "未知"),
-                "group": info.get("group", "未分组"),
-                "exist": info.get("exist", True),
-                "tags": _normalize_tags(info.get("tags", [])),
-            }
-            student_list.append(student)
+            student_list = []
+            for name, info in student_data.items():
+                student = {
+                    "name": name,
+                    "id": info.get("id", 0),
+                    "gender": info.get("gender", "未知"),
+                    "group": info.get("group", "未分组"),
+                    "exist": info.get("exist", True),
+                    "tags": _normalize_tags(info.get("tags", [])),
+                }
+                student_list.append(student)
 
-        # 按ID排序
-        student_list.sort(key=lambda x: x["id"])
+            student_list.sort(key=lambda x: x["id"])
+            return student_list
 
-        # logger.debug(f"班级 {class_name} 共有 {len(student_list)} 名学生")
-        return student_list
+        return _get_cached_transformed_list(
+            _student_list_cache, class_file_path, loader
+        )
 
     except Exception as e:
         logger.error(f"获取学生列表失败: {e}")
@@ -304,35 +338,33 @@ def get_pool_list(pool_name: str) -> List[Dict[str, Any]]:
             logger.warning(f"奖池名单文件不存在: {pool_file_path}")
             return []
 
-        # 读取JSON文件
-        with open(pool_file_path, "r", encoding="utf-8") as f:
-            pool_data = json.load(f)
+        def loader(file_path):
+            with open(file_path, "r", encoding="utf-8") as f:
+                pool_data = json.load(f)
 
-        # 将字典数据转换为列表形式
-        pool_list = []
-        for name, info in pool_data.items():
-            raw_count = info.get("count", 1)
-            try:
-                count = int(raw_count)
-            except Exception:
-                count = 1
-            if count < 0:
-                count = 0
-            pool = {
-                "name": name,
-                "id": info.get("id", 0),
-                "weight": info.get("weight", 1),
-                "exist": info.get("exist", True),
-                "count": count,
-                "tags": _normalize_tags(info.get("tags", [])),
-            }
-            pool_list.append(pool)
+            pool_list = []
+            for name, info in pool_data.items():
+                raw_count = info.get("count", 1)
+                try:
+                    count = int(raw_count)
+                except Exception:
+                    count = 1
+                if count < 0:
+                    count = 0
+                pool = {
+                    "name": name,
+                    "id": info.get("id", 0),
+                    "weight": info.get("weight", 1),
+                    "exist": info.get("exist", True),
+                    "count": count,
+                    "tags": _normalize_tags(info.get("tags", [])),
+                }
+                pool_list.append(pool)
 
-        # 按ID排序
-        pool_list.sort(key=lambda x: x["id"])
+            pool_list.sort(key=lambda x: x["id"])
+            return pool_list
 
-        # logger.debug(f"奖池 {pool_name} 共有 {len(pool_list)} 个奖品")
-        return pool_list
+        return _get_cached_transformed_list(_pool_list_cache, pool_file_path, loader)
 
     except Exception as e:
         logger.error(f"获取奖池列表失败: {e}")
