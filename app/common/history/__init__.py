@@ -1,94 +1,54 @@
-# ==================================================
-# 历史记录模块
-# ==================================================
-# 该模块提供历史记录的保存、加载、统计和权重计算功能
+"""History package exports.
 
-# 文件工具
-from app.common.history.file_utils import (
-    get_history_file_path,
-    load_history_data,
-    save_history_data,
-    get_all_history_names,
-)
+Keep package imports lazy so submodules can be imported independently without
+triggering circular imports during startup.
+"""
 
-# 统计函数
-from app.common.history.statistics import (
-    get_name_history,
-    get_draw_sessions_history,
-    get_individual_statistics,
-)
+from importlib import import_module
 
-# 抽奖历史
-from app.common.history.lottery_history import save_lottery_history
 
-# 点名历史
-from app.common.history.roll_call_history import save_roll_call_history
+_EXPORTS = {
+    "get_history_file_path": "app.common.history.file_utils",
+    "load_history_data": "app.common.history.file_utils",
+    "save_history_data": "app.common.history.file_utils",
+    "get_all_history_names": "app.common.history.file_utils",
+    "get_name_history": "app.common.history.statistics",
+    "get_draw_sessions_history": "app.common.history.statistics",
+    "get_individual_statistics": "app.common.history.statistics",
+    "save_lottery_history": "app.common.history.lottery_history",
+    "save_roll_call_history": "app.common.history.roll_call_history",
+    "format_weight_for_display": "app.common.history.weight_utils",
+    "calculate_weight": "app.common.history.weight_utils",
+    "get_all_names": "app.common.history.utils",
+    "format_table_item": "app.common.history.utils",
+    "create_table_item": "app.common.history.utils",
+    "get_roll_call_student_list": "app.common.history.history_reader",
+    "get_roll_call_history_data": "app.common.history.history_reader",
+    "filter_roll_call_history_by_subject": "app.common.history.history_reader",
+    "get_roll_call_student_total_count": "app.common.history.history_reader",
+    "get_roll_call_students_data": "app.common.history.history_reader",
+    "get_roll_call_session_data": "app.common.history.history_reader",
+    "get_roll_call_student_stats_data": "app.common.history.history_reader",
+    "check_class_has_gender_or_group": "app.common.history.history_reader",
+    "get_lottery_pool_list": "app.common.history.history_reader",
+    "get_lottery_history_data": "app.common.history.history_reader",
+    "get_lottery_prizes_data": "app.common.history.history_reader",
+    "get_lottery_session_data": "app.common.history.history_reader",
+    "get_lottery_prize_stats_data": "app.common.history.history_reader",
+}
 
-# 权重工具
-from app.common.history.weight_utils import (
-    format_weight_for_display,
-    calculate_weight,
-)
+__all__ = list(_EXPORTS)
 
-# 辅助函数
-from app.common.history.utils import (
-    get_all_names,
-    format_table_item,
-    create_table_item,
-)
 
-# 历史记录读取工具
-from app.common.history.history_reader import (
-    # 点名历史读取
-    get_roll_call_student_list,
-    get_roll_call_history_data,
-    filter_roll_call_history_by_subject,
-    get_roll_call_student_total_count,
-    get_roll_call_students_data,
-    get_roll_call_session_data,
-    get_roll_call_student_stats_data,
-    check_class_has_gender_or_group,
-    # 抽奖历史读取
-    get_lottery_pool_list,
-    get_lottery_history_data,
-    get_lottery_prizes_data,
-    get_lottery_session_data,
-    get_lottery_prize_stats_data,
-)
+def __getattr__(name: str):
+    module_name = _EXPORTS.get(name)
+    if module_name is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    module = import_module(module_name)
+    value = getattr(module, name)
+    globals()[name] = value
+    return value
 
-__all__ = [
-    # 文件工具
-    "get_history_file_path",
-    "load_history_data",
-    "save_history_data",
-    "get_all_history_names",
-    # 统计函数
-    "get_name_history",
-    "get_draw_sessions_history",
-    "get_individual_statistics",
-    # 抽奖历史
-    "save_lottery_history",
-    # 点名历史
-    "save_roll_call_history",
-    # 权重工具
-    "format_weight_for_display",
-    "calculate_weight",
-    # 辅助函数
-    "get_all_names",
-    "format_table_item",
-    "create_table_item",
-    # 历史记录读取工具
-    "get_roll_call_student_list",
-    "get_roll_call_history_data",
-    "filter_roll_call_history_by_subject",
-    "get_roll_call_student_total_count",
-    "get_roll_call_students_data",
-    "get_roll_call_session_data",
-    "get_roll_call_student_stats_data",
-    "check_class_has_gender_or_group",
-    "get_lottery_pool_list",
-    "get_lottery_history_data",
-    "get_lottery_prizes_data",
-    "get_lottery_session_data",
-    "get_lottery_prize_stats_data",
-]
+
+def __dir__():
+    return sorted(list(globals().keys()) + __all__)
