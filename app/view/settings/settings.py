@@ -3,7 +3,7 @@
 # ==================================================
 
 from loguru import logger
-from PySide6.QtWidgets import QApplication, QWidget, QScroller, QSizePolicy
+from PySide6.QtWidgets import QApplication, QLabel, QWidget, QScroller, QSizePolicy
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QTimer, QEvent, Signal, QSize, Qt
 from PySide6.QtWidgets import QVBoxLayout
@@ -31,6 +31,7 @@ from app.tools.settings_access import (
     readme_settings_async,
     update_settings,
 )
+from app.tools.interaction_perf import start_interaction
 from app.page_building.window_template import BackgroundLayer
 from app.Language.obtain_language import get_content_name_async
 from app.common.IPC_URL.url_command_handler import URLCommandHandler
@@ -94,6 +95,7 @@ class SettingsWindow(FluentWindow):
         self._deferred_factories_meta = {}
         self._created_pages = {}
         self._page_access_order = []
+        self._pending_page_loads = set()
 
     def _setup_timers(self):
         """设置定时器"""
@@ -531,6 +533,7 @@ class SettingsWindow(FluentWindow):
         Args:
             page_name: 设置页面名称
         """
+        trace = start_interaction(f"settings.{page_name}")
         logger.debug(f"处理设置页面请求: {page_name}")
 
         self._ensure_sub_interface_created()
@@ -545,6 +548,7 @@ class SettingsWindow(FluentWindow):
             if interface and nav_item:
                 logger.debug(f"切换到设置页面: {page_name}")
                 self.switchTo(interface)
+                trace.log("shell_visible")
                 self.show()
                 self.activateWindow()
                 self.raise_()
@@ -780,7 +784,25 @@ class SettingsWindow(FluentWindow):
         w.setObjectName(name)
         layout = QVBoxLayout(w)
         layout.setContentsMargins(0, 0, 0, 0)
+        self._set_placeholder_loading(w)
         return w
+
+    def _set_placeholder_loading(
+        self, container: QWidget, text: str = "正在加载页面..."
+    ) -> None:
+        layout = container.layout()
+        if layout is None:
+            return
+        while layout.count() > 0:
+            item = layout.takeAt(0)
+            if not item:
+                break
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(label)
 
     def _create_special_pages(self, settings_window_page):
         """创建特殊页面（更新和关于页面）
@@ -1050,25 +1072,51 @@ class SettingsWindow(FluentWindow):
             if (
                 name in getattr(self, "_deferred_factories", {})
                 and widget.layout()
-                and widget.layout().count() == 0
+                and name not in getattr(self, "_created_pages", {})
             ):
+                if name in self._pending_page_loads:
+                    return
+                self._pending_page_loads.add(name)
+                self._set_placeholder_loading(widget, "正在加载页面...")
                 factory = self._deferred_factories.pop(name)
-                try:
-                    logger.debug(f"正在创建页面 {name}，预览模式: {self.is_preview}")
-                    real_page = factory(is_preview=self.is_preview)
-                    widget.layout().addWidget(real_page)
 
-                    if not hasattr(self, "_created_pages"):
-                        self._created_pages = {}
-                    self._created_pages[name] = real_page
+                def create_page():
+                    try:
+                        logger.debug(f"正在创建页面 {name}，预览模式: {self.is_preview}")
+                        real_page = factory(is_preview=self.is_preview)
+                        self._clear_placeholder_layout(widget)
+                        widget.layout().addWidget(real_page)
 
-                    logger.debug(
-                        f"设置页面已按需创建: {name}, 预览模式: {self.is_preview}"
-                    )
-                except Exception as e:
-                    logger.exception(f"延迟创建设置页面 {name} 失败: {e}")
+                        if not hasattr(self, "_created_pages"):
+                            self._created_pages = {}
+                        self._created_pages[name] = real_page
+
+                        logger.debug(
+                            f"设置页面已按需创建: {name}, 预览模式: {self.is_preview}"
+                        )
+                    except Exception as e:
+                        self._set_placeholder_loading(
+                            widget, f"页面加载失败: {name}"
+                        )
+                        logger.exception(f"延迟创建设置页面 {name} 失败: {e}")
+                    finally:
+                        self._pending_page_loads.discard(name)
+
+                QTimer.singleShot(0, create_page)
         except Exception as e:
             logger.exception(f"处理堆叠窗口改变失败: {e}")
+
+    def _clear_placeholder_layout(self, container: QWidget) -> None:
+        layout = container.layout()
+        if layout is None:
+            return
+        while layout.count() > 0:
+            item = layout.takeAt(0)
+            if not item:
+                break
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
 
     def _unload_inactive_pages(self, current_page: str):
         """卸载不活动的页面以释放内存
