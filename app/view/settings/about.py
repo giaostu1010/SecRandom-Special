@@ -371,6 +371,9 @@ class user_info_card(HeaderCardWidget):
         self.runtime_timer.setInterval(1000)
         self.runtime_timer.timeout.connect(self._update_runtime_label)
         self.runtime_timer.start()
+        app = QApplication.instance()
+        if app is not None:
+            app.aboutToQuit.connect(self._persist_runtime_value)
 
         if stored_usage_stats is None:
             self._refresh_usage_stats_async()
@@ -432,12 +435,25 @@ class user_info_card(HeaderCardWidget):
                 get_content_name_async("about", "runtime"), runtime_text
             )
         )
-        # 每秒持久化一次运行时长
-        update_settings("user_info", "total_runtime_seconds", int(total_seconds))
+        current_minute = int(max(0, total_seconds) // 60)
+        if current_minute > self._runtime_last_persist_minute:
+            self._persist_runtime_value(total_seconds)
 
     def _get_total_runtime_seconds(self):
         session_seconds = self._get_runtime_seconds()
         return self._runtime_base_seconds + session_seconds
+
+    def _persist_runtime_value(self, total_seconds=None):
+        if total_seconds is None:
+            total_seconds = self._get_total_runtime_seconds()
+
+        normalized_seconds = int(max(0, total_seconds))
+        current_minute = int(normalized_seconds // 60)
+        if current_minute < self._runtime_last_persist_minute:
+            current_minute = self._runtime_last_persist_minute
+
+        update_settings("user_info", "total_runtime_seconds", normalized_seconds)
+        self._runtime_last_persist_minute = current_minute
 
     def _copy_user_info(self):
         text = "\n".join(
