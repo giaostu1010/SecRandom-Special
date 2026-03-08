@@ -1,6 +1,8 @@
 # ==================================================
 # 导入库
 # ==================================================
+import json
+import threading
 
 from loguru import logger
 from PySide6.QtWidgets import *
@@ -14,6 +16,8 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
+from app.tools.table_batching import next_request_id, run_batched
 from app.Language.obtain_language import *
 from app.common.data.list import (
     get_class_name_list,
@@ -21,6 +25,41 @@ from app.common.data.list import (
     get_student_list,
     get_pool_list,
 )
+
+
+_audio_settings_cache_lock = threading.RLock()
+_audio_settings_cache: dict[str, tuple[tuple[int, int] | None, dict]] = {}
+
+
+def _get_file_signature(file_path):
+    try:
+        stat_result = file_path.stat()
+        return stat_result.st_mtime_ns, stat_result.st_size
+    except OSError:
+        return None
+
+
+def _load_cached_audio_settings(file_path):
+    cache_key = str(file_path)
+    signature = _get_file_signature(file_path)
+
+    with _audio_settings_cache_lock:
+        cached = _audio_settings_cache.get(cache_key)
+        if cached and cached[0] == signature:
+            return dict(cached[1])
+
+    if not file_path.exists():
+        return {}
+
+    with open_file(file_path, "r", encoding="utf-8") as f:
+        audio_data = json.load(f)
+
+    if not isinstance(audio_data, dict):
+        audio_data = {}
+
+    with _audio_settings_cache_lock:
+        _audio_settings_cache[cache_key] = (signature, dict(audio_data))
+    return dict(audio_data)
 
 
 # ==================================================
@@ -56,6 +95,17 @@ class voice_announcement_main(GroupHeaderCardWidget):
         self.current_mode = 0  # 0: 点名模式, 1: 抽奖模式
         class_history = get_class_name_list()
         self.current_class_name = class_history[0] if class_history else ""
+        self._populate_request_id = 0
+        self._original_row_models = []
+        self._load_worker = None
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._directory_refresh_timer = QTimer(self)
+        self._directory_refresh_timer.setSingleShot(True)
+        self._directory_refresh_timer.timeout.connect(self.refresh_class_history)
+        settings_snapshot = get_settings_snapshot()
+        announcement_settings = settings_snapshot.get("specific_announcements", {})
 
         # 启用/禁用语音播报开关
         self.enabled_switch = SwitchButton()
@@ -69,9 +119,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
                 "specific_announcements", "enabled", "enable"
             )
         )
-        self.enabled_switch.setChecked(
-            readme_settings_async("specific_announcements", "enabled")
-        )
+        self.enabled_switch.setChecked(bool(announcement_settings.get("enabled", True)))
         self.enabled_switch.checkedChanged.connect(
             lambda state: update_settings("specific_announcements", "enabled", state)
         )
@@ -82,7 +130,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
             get_content_combo_name_async("specific_announcements", "mode")
         )
         self.mode_comboBox.setCurrentIndex(
-            readme_settings_async("specific_announcements", "default_mode")
+            int(announcement_settings.get("default_mode", 0))
         )
         self.mode_comboBox.currentIndexChanged.connect(
             lambda index: [
@@ -118,10 +166,10 @@ class voice_announcement_main(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
         # 连接信号
-        self.refresh_signal.connect(self.refresh_data)
+        self.refresh_signal.connect(self.schedule_refresh_data)
 
     def on_mode_changed(self, mode):
         """模式切换时的处理函数
@@ -131,7 +179,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
         """
         self.current_mode = mode
         self.refresh_class_history()
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def create_class_selection(self):
         """创建班级选择区域"""
@@ -239,11 +287,12 @@ class voice_announcement_main(GroupHeaderCardWidget):
         if item.column() == 1 or item.column() == 2:
             # 撤销编辑
             self.table.blockSignals(True)
-            self.table.setItem(
-                item.row(),
-                item.column(),
-                self.original_items[item.row()][item.column()],
-            )
+            original_row = self._original_row_models[item.row()]
+            if item.column() == 1:
+                replacement = self._create_readonly_item(original_row["id"])
+            else:
+                replacement = self._create_readonly_item(original_row["name"])
+            self.table.setItem(item.row(), item.column(), replacement)
             self.table.blockSignals(False)
             return
 
@@ -313,7 +362,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法"""
-        QTimer.singleShot(1000, self.refresh_class_history)
+        self._directory_refresh_timer.start(250)
 
     def refresh_class_history(self):
         """刷新下拉框列表"""
@@ -330,6 +379,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
             class_history = get_pool_name_list()
 
         # 清空并重新填充下拉框
+        self.class_comboBox.blockSignals(True)
         self.class_comboBox.clear()
         self.class_comboBox.addItems(class_history)
 
@@ -352,6 +402,8 @@ class voice_announcement_main(GroupHeaderCardWidget):
             )
             # 更新current_class_name
             self.current_class_name = ""
+        self.class_comboBox.blockSignals(False)
+        self.schedule_refresh_data()
 
     def on_class_changed(self, index):
         """班级选择变化时刷新表格数据"""
@@ -362,110 +414,168 @@ class voice_announcement_main(GroupHeaderCardWidget):
         self.current_class_name = self.class_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
+
+    def _create_readonly_item(self, value):
+        item = QTableWidgetItem(str(value))
+        item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+        item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        return item
+
+    def _load_data_in_background(self, class_name):
+        if self.current_mode == 0:
+            items_list = get_student_list(class_name)
+        else:
+            items_list = get_pool_list(class_name)
+
+        cleaned_items = [item for item in items_list if item.get("exist", True)]
+        audio_file = get_audio_path(f"{class_name}.json")
+        audio_data = _load_cached_audio_settings(audio_file)
+        return cleaned_items, audio_data
+
+    def _run_background_refresh(self, request_id, class_name):
+        try:
+            cleaned_items, audio_data = self._load_data_in_background(class_name)
+            QTimer.singleShot(
+                0,
+                lambda rid=request_id,
+                items=cleaned_items,
+                data=audio_data: self._on_data_loaded(rid, items, data),
+            )
+        except Exception as e:
+            logger.exception(f"语音播报后台加载失败: {e}")
+            QTimer.singleShot(
+                0,
+                lambda rid=request_id, message=str(e): self._on_data_load_failed(
+                    rid, message
+                ),
+            )
+
+    def _on_data_loaded(self, request_id, cleaned_items, audio_data):
+        if request_id != self._populate_request_id:
+            return
+
+        self._load_worker = None
+        row_models = []
+        for row, item in enumerate(cleaned_items):
+            name = item.get("name", "")
+            audio_settings = audio_data.get(
+                name,
+                {
+                    "tts_alias": "",
+                    "prefix": "",
+                    "suffix": "",
+                    "announcement_enabled": True,
+                },
+            )
+            row_models.append(
+                {
+                    "id": str(item.get("id", row + 1)),
+                    "name": name,
+                    "enabled": bool(audio_settings.get("announcement_enabled", True)),
+                    "tts_alias": str(audio_settings.get("tts_alias", "")),
+                    "prefix": str(audio_settings.get("prefix", "")),
+                    "suffix": str(audio_settings.get("suffix", "")),
+                }
+            )
+
+        self._original_row_models = row_models
+        self.table.setRowCount(len(row_models))
+        run_batched(
+            self,
+            request_id,
+            row_models,
+            self._render_rows_batch,
+            batch_size=30,
+            on_finish=self._finish_rows_render,
+        )
+
+    def _on_data_load_failed(self, request_id, error_message):
+        if request_id != self._populate_request_id:
+            return
+
+        self._load_worker = None
+        logger.error(f"刷新语音播报表格失败: {error_message}")
+        trace = getattr(self, "_refresh_trace", None)
+        if trace is not None:
+            trace.log("data_ready")
+
+    def _render_rows_batch(self, request_id, rows, start_row, end_row):
+        if request_id != self._populate_request_id:
+            return
+
+        self.table.blockSignals(True)
+        try:
+            for row in range(start_row, end_row):
+                row_model = rows[row]
+                enabled_item = QTableWidgetItem()
+                enabled_item.setCheckState(
+                    Qt.CheckState.Checked
+                    if row_model["enabled"]
+                    else Qt.CheckState.Unchecked
+                )
+                enabled_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 0, enabled_item)
+                self.table.setItem(row, 1, self._create_readonly_item(row_model["id"]))
+                self.table.setItem(
+                    row, 2, self._create_readonly_item(row_model["name"])
+                )
+
+                alias_item = QTableWidgetItem(row_model["tts_alias"])
+                alias_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 3, alias_item)
+
+                prefix_item = QTableWidgetItem(row_model["prefix"])
+                prefix_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 4, prefix_item)
+
+                suffix_item = QTableWidgetItem(row_model["suffix"])
+                suffix_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 5, suffix_item)
+        finally:
+            self.table.blockSignals(False)
+
+    def _finish_rows_render(self, request_id):
+        if request_id != self._populate_request_id:
+            return
+
+        trace = getattr(self, "_refresh_trace", None)
+        if trace is not None:
+            trace.log("data_ready")
 
     def refresh_data(self):
         """刷新表格数据"""
+        trace = start_interaction("specific_announcements.refresh")
+        self._refresh_trace = trace
         # 确保表格已经创建
         if not hasattr(self, "table"):
+            trace.log("data_ready")
             return
         if not hasattr(self, "class_comboBox"):
+            trace.log("data_ready")
             return
 
         class_name = self.class_comboBox.currentText()
         if not class_name:
             self.table.setRowCount(0)
+            trace.log("first_feedback")
+            trace.log("data_ready")
             return
 
-        # 临时阻止信号，避免初始化时触发保存操作
-        self.table.blockSignals(True)
+        self.table.setRowCount(0)
+        trace.log("first_feedback")
+        request_id = next_request_id(self)
+        self._load_worker = QRunnable.create(
+            lambda rid=request_id, name=class_name: self._run_background_refresh(
+                rid, name
+            )
+        )
+        QThreadPool.globalInstance().start(self._load_worker)
 
-        try:
-            # 根据模式获取数据
-            if self.current_mode == 0:  # 点名模式
-                items_list = get_student_list(class_name)
-            else:  # 抽奖模式
-                items_list = get_pool_list(class_name)
-
-            # 过滤掉不存在的项目
-            cleaned_items = [item for item in items_list if item.get("exist", True)]
-
-            # 读取音频设置数据
-            audio_data = {}
-            audio_file = get_audio_path(f"{class_name}.json")
-            if audio_file.exists():
-                with open_file(audio_file, "r", encoding="utf-8") as f:
-                    audio_data = json.load(f)
-
-            # 设置表格行数
-            self.table.setRowCount(len(cleaned_items))
-
-            # 填充表格数据
-            for row, item in enumerate(cleaned_items):
-                name = item.get("name", "")
-
-                # 获取对应的音频设置，如果不存在则使用默认值
-                audio_settings = audio_data.get(
-                    name,
-                    {
-                        "tts_alias": "",
-                        "prefix": "",
-                        "suffix": "",
-                        "announcement_enabled": True,
-                    },
-                )
-
-                # 启用状态（可编辑）
-                enabled_item = QTableWidgetItem()
-                enabled_item.setCheckState(
-                    Qt.CheckState.Checked
-                    if audio_settings["announcement_enabled"]
-                    else Qt.CheckState.Unchecked
-                )
-                enabled_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 0, enabled_item)
-
-                # 学号/序号（不可编辑）
-                id_item = QTableWidgetItem(str(item.get("id", row + 1)))
-                id_item.setFlags(id_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                id_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 1, id_item)
-
-                # 姓名/名称（不可编辑）
-                name_item = QTableWidgetItem(name)
-                name_item.setFlags(name_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                name_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 2, name_item)
-
-                # 替换名称（可编辑）
-                alias_item = QTableWidgetItem(audio_settings["tts_alias"])
-                alias_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 3, alias_item)
-
-                # 前缀（可编辑）
-                prefix_item = QTableWidgetItem(audio_settings["prefix"])
-                prefix_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 4, prefix_item)
-
-                # 后缀（可编辑）
-                suffix_item = QTableWidgetItem(audio_settings["suffix"])
-                suffix_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 5, suffix_item)
-
-            # 保存原始数据，用于撤销编辑
-            self.original_items = []
-            for i in range(self.table.rowCount()):
-                row_items = []
-                for j in range(self.table.columnCount()):
-                    item = self.table.item(i, j)
-                    row_items.append(item.clone() if item else QTableWidgetItem(""))
-                self.original_items.append(row_items)
-
-        except Exception as e:
-            logger.exception(f"刷新表格数据失败: {str(e)}")
-        finally:
-            # 恢复信号
-            self.table.blockSignals(False)
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
 
 
 # ==================================================

@@ -12,6 +12,7 @@ from app.Language.obtain_language import get_content_combo_name_async
 from app.common.extraction.extract import _get_current_class_info
 from app.common.history.file_utils import load_history_data, save_history_data
 from app.common.history.weight_utils import calculate_weight
+from app.core.usage_counters import increment_usage_counters
 
 
 def _initialize_history_data(history_data: Dict[str, Any]):
@@ -246,7 +247,10 @@ def save_roll_call_history(
         # 更新全局统计
         _update_global_stats(history_data, selected_students, current_class_info)
 
-        return save_history_data("roll_call", class_name, history_data)
+        saved = save_history_data("roll_call", class_name, history_data)
+        if saved:
+            increment_usage_counters(roll_call_increment=1)
+        return saved
 
     except Exception as e:
         logger.exception(f"保存点名历史记录失败: {e}")

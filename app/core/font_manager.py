@@ -6,7 +6,7 @@ from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QApplication, QWidget
 from loguru import logger
 
-from app.tools.settings_access import readme_settings_async
+from app.tools.settings_access import get_settings_snapshot, readme_settings_async
 from app.tools.variable import FONT_APPLY_DELAY
 from app.core.utils import safe_execute
 from app.tools.path_utils import get_data_path
@@ -163,7 +163,11 @@ def ensure_application_font_point_size(default_point_size: int = 9) -> None:
 def configure_dpi_scale() -> None:
     """在创建QApplication之前配置DPI缩放模式"""
     try:
-        dpi_scale = readme_settings_async("basic_settings", "dpiScale")
+        settings_snapshot = get_settings_snapshot()
+        basic_settings = settings_snapshot.get("basic_settings", {})
+        if not isinstance(basic_settings, dict):
+            basic_settings = {}
+        dpi_scale = basic_settings.get("dpiScale")
         if dpi_scale == "Auto":
             _set_auto_dpi()
         else:
@@ -195,8 +199,18 @@ def _set_manual_dpi(scale: str) -> None:
 
 def apply_font_settings() -> None:
     """应用字体设置 - 优化版本，使用字体管理器异步加载"""
-    font_family = readme_settings_async("basic_settings", "font")
-    font_weight_value = readme_settings_async("basic_settings", "font_weight")
+    settings_snapshot = get_settings_snapshot()
+    basic_settings = settings_snapshot.get("basic_settings", {})
+    if not isinstance(basic_settings, dict):
+        basic_settings = {}
+
+    font_family = basic_settings.get("font")
+    if font_family is None:
+        font_family = readme_settings_async("basic_settings", "font")
+
+    font_weight_value = basic_settings.get("font_weight")
+    if font_weight_value is None:
+        font_weight_value = readme_settings_async("basic_settings", "font_weight")
 
     from qfluentwidgets import setFontFamilies
 

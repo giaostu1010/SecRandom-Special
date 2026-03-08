@@ -13,6 +13,8 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.interaction_perf import start_interaction
+from app.tools.table_batching import next_request_id, run_batched
 from app.Language.obtain_language import *
 from app.common.data.list import *
 from app.common.safety.secure_store import (
@@ -99,6 +101,14 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         self.current_class_name = ""
         self.current_mode = 0  # 0: 点名, 1: 抽奖
         self.probability_data = {}
+        self._populate_request_id = 0
+        self._row_models = []
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._list_refresh_timer = QTimer(self)
+        self._list_refresh_timer.setSingleShot(True)
+        self._list_refresh_timer.timeout.connect(self.refresh_list)
 
         # 创建模式选择区域
         QTimer.singleShot(APPLY_DELAY, self.create_class_selection)
@@ -113,7 +123,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
     def create_class_selection(self):
         """创建班级选择区域"""
@@ -159,7 +169,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         # 奖池选择（抽奖模式专用）
         self.pool_comboBox = ComboBox()
         self.pool_comboBox.setVisible(False)
-        self.pool_comboBox.currentIndexChanged.connect(self.refresh_data)
+        self.pool_comboBox.currentIndexChanged.connect(self.on_pool_changed)
 
         self.addGroup(
             get_theme_icon("ic_fluent_power_20_filled"),
@@ -212,6 +222,8 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         self.current_mode = mode
 
         # 清空名单下拉框
+        self.list_comboBox.blockSignals(True)
+        self.pool_comboBox.blockSignals(True)
         self.list_comboBox.clear()
         self.pool_comboBox.clear()
 
@@ -266,9 +278,11 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 )
                 self.pool_comboBox.setCurrentIndex(-1)
                 self.current_list_name = ""
+        self.list_comboBox.blockSignals(False)
+        self.pool_comboBox.blockSignals(False)
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def on_list_changed(self):
         """当班级选择改变时"""
@@ -280,7 +294,12 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
             self.current_class_name = self.list_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
+
+    def on_pool_changed(self):
+        if self.current_mode == 1:
+            self.current_list_name = self.pool_comboBox.currentText()
+        self.schedule_refresh_data()
 
     def init_list_data(self):
         """初始化名单数据"""
@@ -358,7 +377,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法"""
-        QTimer.singleShot(1000, self.refresh_list)
+        self._list_refresh_timer.start(250)
 
     def refresh_list(self):
         """刷新名单下拉框列表"""
@@ -379,6 +398,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 list_data = get_pool_name_list()
 
             # 清空并重新填充下拉框
+            self.list_comboBox.blockSignals(True)
             self.list_comboBox.clear()
             self.list_comboBox.addItems(list_data)
 
@@ -411,36 +431,50 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                         )
                     )
                 self.current_list_name = ""
+            self.list_comboBox.blockSignals(False)
 
             # 刷新表格数据
             if hasattr(self, "table") and self.table is not None:
-                self.refresh_data()
+                self.schedule_refresh_data()
         except RuntimeError as e:
             logger.exception(f"刷新名单列表时发生错误: {e}")
         except Exception as e:
             logger.exception(f"刷新名单列表时发生未知错误: {e}")
 
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
+
     def refresh_data(self):
         """刷新表格数据"""
+        trace = start_interaction("behind_scenes.refresh")
+        self._refresh_trace = trace
         if not hasattr(self, "table") or self.table is None:
+            trace.log("data_ready")
             return
 
         if not hasattr(self, "list_comboBox") or self.list_comboBox is None:
+            trace.log("data_ready")
             return
 
         if self.current_mode == 1 and (
             not hasattr(self, "pool_comboBox") or self.pool_comboBox is None
         ):
+            trace.log("data_ready")
             return
 
         try:
             list_name = self.list_comboBox.currentText()
         except RuntimeError:
             logger.exception("名单下拉框已被销毁")
+            trace.log("data_ready")
             return
 
         if not list_name:
             self.table.setRowCount(0)
+            trace.log("first_feedback")
+            trace.log("data_ready")
             return
 
         self.current_list_name = list_name
@@ -457,10 +491,13 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         pool_name = self.pool_comboBox.currentText() if self.current_mode == 1 else None
         self.load_worker = LoadDataWorker(list_name, self.current_mode, pool_name)
         self.load_worker.finished.connect(self.on_data_loaded)
+        trace.log("first_feedback")
         self.load_worker.start()
 
     def on_data_loaded(self, students, prob_data, prize_list):
         """数据加载完成后的回调"""
+        trace = getattr(self, "_refresh_trace", None)
+        render_deferred = False
         try:
             self.probability_data = prob_data
 
@@ -473,130 +510,133 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 self.table.blockSignals(False)
                 return
 
-            self.table.setRowCount(len(students))
-
+            pool_name = (
+                self.pool_comboBox.currentText() if self.current_mode == 1 else ""
+            )
+            row_models = []
             for row, student in enumerate(students):
                 student_name = student.get("name", "")
                 student_id = student.get("id", row + 1)
-
-                # 启用勾选框
-                checkbox_item = QTableWidgetItem()
                 prob_data_item = self.probability_data.get(student_name, {})
 
                 if self.current_mode == 0:
-                    # 点名模式
                     is_enabled = prob_data_item.get("roll_call", {}).get(
                         "enabled", False
                     )
-                else:
-                    # 抽奖模式
-                    pool_name = self.pool_comboBox.currentText()
-                    lottery_settings = prob_data_item.get("lottery", {})
-                    if pool_name in lottery_settings:
-                        is_enabled = lottery_settings[pool_name].get("enabled", False)
-                    else:
-                        is_enabled = False
-
-                checkbox_item.setCheckState(
-                    Qt.CheckState.Checked if is_enabled else Qt.CheckState.Unchecked
-                )
-                checkbox_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 0, checkbox_item)
-
-                # 学号
-                id_item = QTableWidgetItem(str(student_id))
-                id_item.setFlags(id_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                id_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 1, id_item)
-
-                # 姓名
-                name_item = QTableWidgetItem(student_name)
-                name_item.setFlags(name_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                name_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table.setItem(row, 2, name_item)
-
-                # 奖品（仅抽奖模式）
-                if self.current_mode == 1:
-                    # 抽奖模式：显示奖品下拉框
-                    pool_name = self.pool_comboBox.currentText()
-                    prize_combobox = ComboBox()
-                    prize_combobox.setPlaceholderText(
-                        get_content_name_async(
-                            "behind_scenes_settings", "select_pool_name"
-                        )
-                    )
-
-                    # 获取奖池中的奖品列表
-                    if prize_list:
-                        prize_combobox.addItems(prize_list)
-
-                    # 设置当前选中的奖品
-                    lottery_settings = prob_data_item.get("lottery", {})
-                    if pool_name in lottery_settings:
-                        selected_prize = lottery_settings[pool_name].get("prize", "")
-                        if selected_prize:
-                            index = prize_combobox.findText(selected_prize)
-                            if index >= 0:
-                                prize_combobox.setCurrentIndex(index)
-
-                    # 连接信号
-                    prize_combobox.currentTextChanged.connect(
-                        lambda text, name=student_name: self.save_prize(name, text)
-                    )
-
-                    self.table.setCellWidget(row, 3, prize_combobox)
-                else:
-                    # 点名模式：显示空单元格
-                    empty_item = QTableWidgetItem("")
-                    empty_item.setFlags(
-                        empty_item.flags() & ~Qt.ItemFlag.ItemIsEditable
-                    )
-                    empty_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                    self.table.setItem(row, 3, empty_item)
-
-                # 概率
-                if self.current_mode == 0:
-                    # 点名模式
+                    selected_prize = ""
                     probability_value = prob_data_item.get("roll_call", {}).get(
                         "probability", 1.0
                     )
                 else:
-                    # 抽奖模式
-                    pool_name = self.pool_comboBox.currentText()
                     lottery_settings = prob_data_item.get("lottery", {})
-                    if pool_name in lottery_settings:
-                        probability_value = lottery_settings[pool_name].get(
-                            "probability", 1.0
-                        )
-                    else:
-                        probability_value = 1.0
+                    current_lottery = lottery_settings.get(pool_name, {})
+                    is_enabled = current_lottery.get("enabled", False)
+                    selected_prize = str(current_lottery.get("prize", ""))
+                    probability_value = current_lottery.get("probability", 1.0)
 
-                probability_spin = DoubleSpinBox()
-                probability_spin.setRange(0, 1000)
-                probability_spin.setSingleStep(0.1)
-                probability_spin.setDecimals(1)
-                probability_spin.setValue(probability_value)
-                probability_spin.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                # 连接信号
-                probability_spin.valueChanged.connect(
-                    lambda value, name=student_name: self.save_probability(name, value)
+                row_models.append(
+                    {
+                        "id": str(student_id),
+                        "name": student_name,
+                        "enabled": bool(is_enabled),
+                        "selected_prize": selected_prize,
+                        "probability": float(probability_value),
+                        "prize_list": list(prize_list),
+                    }
                 )
-                self.table.setCellWidget(row, 4, probability_spin)
 
-            # 调整列宽
-            self.table.horizontalHeader().resizeSection(0, 80)
-            self.table.horizontalHeader().setSectionResizeMode(
-                0, QHeaderView.ResizeMode.ResizeToContents
+            self._row_models = row_models
+            request_id = next_request_id(self)
+            self.table.setRowCount(len(row_models))
+            self.table.blockSignals(False)
+            run_batched(
+                self,
+                request_id,
+                row_models,
+                self._render_rows_batch,
+                batch_size=20,
+                on_finish=self._finish_rows_render,
             )
-            for i in range(1, 5):
-                self.table.horizontalHeader().setSectionResizeMode(
-                    i, QHeaderView.ResizeMode.Stretch
-                )
+            render_deferred = True
+            return
 
         except Exception as e:
             logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
-            self.table.blockSignals(False)
+            if trace is not None and not render_deferred:
+                trace.log("data_ready")
+
+    def _render_rows_batch(self, request_id, rows, start_row, end_row):
+        if request_id != self._populate_request_id:
+            return
+        for row in range(start_row, end_row):
+            row_model = rows[row]
+
+            checkbox_item = QTableWidgetItem()
+            checkbox_item.setCheckState(
+                Qt.CheckState.Checked
+                if row_model["enabled"]
+                else Qt.CheckState.Unchecked
+            )
+            checkbox_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.setItem(row, 0, checkbox_item)
+
+            id_item = QTableWidgetItem(str(row_model["id"]))
+            id_item.setFlags(id_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            id_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.setItem(row, 1, id_item)
+
+            name_item = QTableWidgetItem(str(row_model["name"]))
+            name_item.setFlags(name_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            name_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.setItem(row, 2, name_item)
+
+            if self.current_mode == 1:
+                prize_combobox = ComboBox()
+                prize_combobox.setPlaceholderText(
+                    get_content_name_async("behind_scenes_settings", "select_pool_name")
+                )
+                prize_combobox.addItems(row_model["prize_list"])
+                if row_model["selected_prize"]:
+                    index = prize_combobox.findText(row_model["selected_prize"])
+                    if index >= 0:
+                        prize_combobox.setCurrentIndex(index)
+                prize_combobox.currentTextChanged.connect(
+                    lambda text, name=row_model["name"]: self.save_prize(name, text)
+                )
+                self.table.setCellWidget(row, 3, prize_combobox)
+            else:
+                empty_item = QTableWidgetItem("")
+                empty_item.setFlags(empty_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+                empty_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 3, empty_item)
+
+            probability_spin = DoubleSpinBox()
+            probability_spin.setRange(0, 1000)
+            probability_spin.setSingleStep(0.1)
+            probability_spin.setDecimals(1)
+            probability_spin.setValue(float(row_model["probability"]))
+            probability_spin.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            probability_spin.valueChanged.connect(
+                lambda value, name=row_model["name"]: self.save_probability(name, value)
+            )
+            self.table.setCellWidget(row, 4, probability_spin)
+
+    def _finish_rows_render(self, request_id):
+        if request_id != self._populate_request_id:
+            return
+        self.table.horizontalHeader().resizeSection(0, 80)
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.ResizeToContents
+        )
+        for i in range(1, 5):
+            self.table.horizontalHeader().setSectionResizeMode(
+                i, QHeaderView.ResizeMode.Stretch
+            )
+
+        trace = getattr(self, "_refresh_trace", None)
+        if trace is not None:
+            trace.log("data_ready")
 
     def save_probability_data(self):
         """保存概率设置数据"""

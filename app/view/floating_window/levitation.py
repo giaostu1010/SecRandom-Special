@@ -16,10 +16,12 @@ from loguru import logger
 # 本地模块导入
 from app.tools.personalised import load_custom_font, get_theme_icon, is_dark_theme
 from app.tools.settings_access import (
+    get_settings_snapshot,
     readme_settings_async,
     update_settings,
     get_settings_signals,
 )
+from app.tools.interaction_perf import start_interaction
 from app.tools.path_utils import *
 from app.tools.variable import EXIT_CODE_RESTART, DEFAULT_ICON_CODEPOINT
 from app.Language.obtain_language import (
@@ -29,6 +31,39 @@ from app.Language.obtain_language import (
 from app.common.extraction.extract import _is_non_class_time
 from app.common.safety.verify_ops import require_and_run
 from app.common.data.list import get_class_name_list, get_group_list, get_gender_list
+
+
+class _QuickDrawPanelSignals(QObject):
+    loaded = Signal(int, object)
+    failed = Signal(int, str)
+
+
+class _QuickDrawPanelWorker(QRunnable):
+    def __init__(self, request_id: int, class_name: str):
+        super().__init__()
+        self.request_id = request_id
+        self.class_name = class_name
+        self.signals = _QuickDrawPanelSignals()
+
+    def run(self):
+        try:
+            class_list = get_class_name_list()
+            selected_class = self.class_name
+            if selected_class not in class_list:
+                selected_class = class_list[0] if class_list else ""
+
+            payload = {
+                "class_list": class_list,
+                "class_name": selected_class,
+                "group_list": get_group_list(selected_class) if selected_class else [],
+                "gender_list": get_gender_list(selected_class)
+                if selected_class
+                else [],
+            }
+            self.signals.loaded.emit(self.request_id, payload)
+        except Exception as e:
+            logger.exception(f"悬浮窗扩展面板后台加载失败: {e}")
+            self.signals.failed.emit(self.request_id, str(e))
 
 
 class LevitationWindow(QWidget):
@@ -167,6 +202,11 @@ class LevitationWindow(QWidget):
         self._quick_draw_extend_close_timer.timeout.connect(
             self._close_quick_draw_extend_panel
         )
+        self._quick_draw_extend_request_id = 0
+        self._quick_draw_extend_cache = {"class_list": [], "filters": {}}
+        self._quick_draw_saved_class = ""
+        self._quick_draw_saved_group = ""
+        self._quick_draw_saved_gender = ""
 
     def _init_periodic_topmost_properties(self):
         """初始化周期性置顶相关属性"""
@@ -623,17 +663,26 @@ class LevitationWindow(QWidget):
 
     def _init_settings(self):
         """初始化设置配置"""
+        self._settings_snapshot = get_settings_snapshot()
+
         # 基础显示设置
         self._visible_on_start = self._get_bool_setting(
-            "floating_window_management", "startup_display_floating_window", False
+            "floating_window_management",
+            "startup_display_floating_window",
+            False,
+            snapshot=self._settings_snapshot,
         )
         self._opacity = self._get_float_setting(
             "floating_window_management",
             "floating_window_opacity",
             self.DEFAULT_OPACITY,
+            snapshot=self._settings_snapshot,
         )
         self._floating_window_theme = self._get_int_setting(
-            "floating_window_management", "floating_window_theme", 0
+            "floating_window_management",
+            "floating_window_theme",
+            0,
+            snapshot=self._settings_snapshot,
         )
 
         # 布局设置
@@ -641,59 +690,84 @@ class LevitationWindow(QWidget):
             "floating_window_management",
             "floating_window_placement",
             self.DEFAULT_PLACEMENT,
+            snapshot=self._settings_snapshot,
         )
         self._display_style = self._get_int_setting(
             "floating_window_management",
             "floating_window_display_style",
             self.DEFAULT_DISPLAY_STYLE,
+            snapshot=self._settings_snapshot,
         )
         self._extend_quick_draw_component = self._get_bool_setting(
-            "floating_window_management", "extend_quick_draw_component", False
+            "floating_window_management",
+            "extend_quick_draw_component",
+            False,
+            snapshot=self._settings_snapshot,
         )
 
         # 拖拽设置
         self._draggable = self._get_bool_setting(
-            "floating_window_management", "floating_window_draggable", True
+            "floating_window_management",
+            "floating_window_draggable",
+            True,
+            snapshot=self._settings_snapshot,
         )
         self._long_press_ms = self._get_int_setting(
             "floating_window_management",
             "floating_window_long_press_duration",
             self.DEFAULT_LONG_PRESS_MS,
+            snapshot=self._settings_snapshot,
         )
 
         # 贴边设置
         self._stick_to_edge = self._get_bool_setting(
-            "floating_window_management", "floating_window_stick_to_edge", True
+            "floating_window_management",
+            "floating_window_stick_to_edge",
+            True,
+            snapshot=self._settings_snapshot,
         )
         self._retract_seconds = self._get_int_setting(
             "floating_window_management",
             "floating_window_stick_to_edge_recover_seconds",
             self.DEFAULT_RETRACT_SECONDS,
+            snapshot=self._settings_snapshot,
         )
         self._stick_indicator_style = self._get_int_setting(
             "floating_window_management",
             "floating_window_stick_to_edge_display_style",
             0,
+            snapshot=self._settings_snapshot,
         )
 
         # 按钮配置
-        button_control_value = readme_settings_async(
-            "floating_window_management", "floating_window_button_control"
+        button_control_value = self._get_setting_value(
+            "floating_window_management",
+            "floating_window_button_control",
+            snapshot=self._settings_snapshot,
         )
         self._buttons_spec = self._normalize_button_control_value(button_control_value)
 
         # 浮窗大小设置
         size_idx = self._get_int_setting(
-            "floating_window_management", "floating_window_size", 1
+            "floating_window_management",
+            "floating_window_size",
+            1,
+            snapshot=self._settings_snapshot,
         )
         self._apply_size_setting(size_idx)
 
         # 无焦点模式设置
         self._do_not_steal_focus = self._get_bool_setting(
-            "floating_window_management", "do_not_steal_focus", False
+            "floating_window_management",
+            "do_not_steal_focus",
+            False,
+            snapshot=self._settings_snapshot,
         )
         self._topmost_mode = self._get_int_setting(
-            "floating_window_management", "floating_window_topmost_mode", 1
+            "floating_window_management",
+            "floating_window_topmost_mode",
+            1,
+            snapshot=self._settings_snapshot,
         )
         self._refresh_window_flags()
 
@@ -705,6 +779,7 @@ class LevitationWindow(QWidget):
         self._init_class_linkage_settings()
 
         self._user_requested_visible = bool(self._visible_on_start)
+        self._settings_snapshot = None
 
     def _init_class_linkage_settings(self):
         """初始化联动设置：下课隐藏浮窗"""
@@ -812,19 +887,33 @@ class LevitationWindow(QWidget):
         finally:
             self._suppress_visibility_tracking = False
 
-    def _get_bool_setting(self, section: str, key: str, default: bool = False) -> bool:
+    def _get_setting_value(self, section: str, key: str, snapshot=None):
+        settings_section = (
+            snapshot.get(section, {}) if isinstance(snapshot, dict) else {}
+        )
+        if isinstance(settings_section, dict) and key in settings_section:
+            return settings_section.get(key)
+        return readme_settings_async(section, key)
+
+    def _get_bool_setting(
+        self, section: str, key: str, default: bool = False, snapshot=None
+    ) -> bool:
         """获取布尔类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return bool(result) if result is not None else default
 
-    def _get_int_setting(self, section: str, key: str, default: int = 0) -> int:
+    def _get_int_setting(
+        self, section: str, key: str, default: int = 0, snapshot=None
+    ) -> int:
         """获取整数类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return int(result) if result is not None else default
 
-    def _get_float_setting(self, section: str, key: str, default: float = 0.0) -> float:
+    def _get_float_setting(
+        self, section: str, key: str, default: float = 0.0, snapshot=None
+    ) -> float:
         """获取浮点数类型设置"""
-        result = readme_settings_async(section, key)
+        result = self._get_setting_value(section, key, snapshot=snapshot)
         return float(result) if result is not None else default
 
     def _init_edge_hide_settings(self):
@@ -1555,9 +1644,12 @@ class LevitationWindow(QWidget):
         return btn
 
     def _toggle_quick_draw_extend_panel(self, anchor: QWidget) -> None:
+        trace = start_interaction("floating.quick_draw_extend.open")
+        self._quick_draw_extend_trace = trace
         panel = getattr(self, "_quick_draw_extend_panel", None)
         if panel is not None and panel.isVisible():
             self._close_quick_draw_extend_panel()
+            trace.log("data_ready")
             return
 
         panel = self._ensure_quick_draw_extend_panel()
@@ -1567,6 +1659,7 @@ class LevitationWindow(QWidget):
         panel.show()
         panel.raise_()
         self._arm_quick_draw_extend_panel_auto_close()
+        trace.log("first_feedback")
 
     def _arm_quick_draw_extend_panel_auto_close(self) -> None:
         timer = getattr(self, "_quick_draw_extend_close_timer", None)
@@ -1669,13 +1762,13 @@ class LevitationWindow(QWidget):
             )
         )
         range_combo.currentTextChanged.connect(
-            lambda text: update_settings(
-                "floating_window_management", "quick_draw_group_filter", text
+            lambda text: self._on_quick_draw_extend_filter_changed(
+                "quick_draw_group_filter", text
             )
         )
         gender_combo.currentTextChanged.connect(
-            lambda text: update_settings(
-                "floating_window_management", "quick_draw_gender_filter", text
+            lambda text: self._on_quick_draw_extend_filter_changed(
+                "quick_draw_gender_filter", text
             )
         )
 
@@ -1772,69 +1865,181 @@ class LevitationWindow(QWidget):
         if class_combo is None or range_combo is None or gender_combo is None:
             return
 
-        class_list = get_class_name_list()
-        saved_class = str(
-            readme_settings_async("floating_window_management", "quick_draw_class_name")
-            or ""
+        snapshot = get_settings_snapshot().get("floating_window_management", {})
+        saved_class = str(snapshot.get("quick_draw_class_name", "") or "")
+        saved_group_filter = str(snapshot.get("quick_draw_group_filter", "") or "")
+        saved_gender_filter = str(snapshot.get("quick_draw_gender_filter", "") or "")
+        self._quick_draw_saved_class = saved_class
+        self._quick_draw_saved_group = saved_group_filter
+        self._quick_draw_saved_gender = saved_gender_filter
+
+        cached_class_list = list(self._quick_draw_extend_cache.get("class_list", []))
+        cached_filters = self._quick_draw_extend_cache.get("filters", {}).get(
+            saved_class, {}
         )
-
-        class_combo.blockSignals(True)
-        class_combo.clear()
-        class_combo.addItems(class_list)
-        if saved_class and saved_class in class_list:
-            class_combo.setCurrentIndex(class_list.index(saved_class))
-        elif class_list:
-            class_combo.setCurrentIndex(0)
-        class_combo.blockSignals(False)
-
-        current_class = class_combo.currentText() if class_combo.count() > 0 else ""
-        if current_class:
-            update_settings(
-                "floating_window_management", "quick_draw_class_name", current_class
+        if cached_class_list and (cached_filters or not saved_class):
+            self._apply_quick_draw_class_items(
+                class_combo, cached_class_list, saved_class
             )
+            current_class = class_combo.currentText() if class_combo.count() > 0 else ""
+            self._apply_quick_draw_filter_items(
+                range_combo,
+                gender_combo,
+                list(cached_filters.get("group_list", [])),
+                list(cached_filters.get("gender_list", [])),
+            )
+            self._update_quick_draw_setting("quick_draw_class_name", current_class)
+            trace = getattr(self, "_quick_draw_extend_trace", None)
+            if trace is not None:
+                trace.log("data_ready")
+            return
 
-        self._refresh_quick_draw_extend_filters(
-            current_class, range_combo, gender_combo
-        )
+        self._set_quick_draw_combo_loading(class_combo)
+        self._set_quick_draw_combo_loading(range_combo)
+        self._set_quick_draw_combo_loading(gender_combo)
+        self._start_quick_draw_extend_load(saved_class)
 
     def _on_quick_draw_extend_class_changed(
         self, class_name: str, range_combo: ComboBox, gender_combo: ComboBox
     ) -> None:
-        update_settings(
-            "floating_window_management", "quick_draw_class_name", class_name
+        self._update_quick_draw_setting("quick_draw_class_name", class_name)
+        self._quick_draw_saved_class = class_name
+        cached_filters = self._quick_draw_extend_cache.get("filters", {}).get(
+            class_name
         )
-        self._refresh_quick_draw_extend_filters(class_name, range_combo, gender_combo)
+        if cached_filters is not None:
+            self._apply_quick_draw_filter_items(
+                range_combo,
+                gender_combo,
+                cached_filters.get("group_list", []),
+                cached_filters.get("gender_list", []),
+            )
+            return
+
+        self._set_quick_draw_combo_loading(range_combo)
+        self._set_quick_draw_combo_loading(gender_combo)
+        self._start_quick_draw_extend_load(class_name)
 
     def _refresh_quick_draw_extend_filters(
         self, class_name: str, range_combo: ComboBox, gender_combo: ComboBox
     ) -> None:
-        saved_group_filter = str(
-            readme_settings_async(
-                "floating_window_management", "quick_draw_group_filter"
-            )
-            or ""
+        cached_filters = self._quick_draw_extend_cache.get("filters", {}).get(
+            class_name
         )
-        saved_gender_filter = str(
-            readme_settings_async(
-                "floating_window_management", "quick_draw_gender_filter"
+        if cached_filters is not None:
+            self._apply_quick_draw_filter_items(
+                range_combo,
+                gender_combo,
+                cached_filters.get("group_list", []),
+                cached_filters.get("gender_list", []),
             )
-            or ""
+            return
+
+        self._set_quick_draw_combo_loading(range_combo)
+        self._set_quick_draw_combo_loading(gender_combo)
+        self._start_quick_draw_extend_load(class_name)
+
+    def _on_quick_draw_extend_filter_changed(self, key: str, value: str) -> None:
+        self._update_quick_draw_setting(key, value)
+
+    def _set_quick_draw_combo_loading(self, combo: ComboBox) -> None:
+        combo.blockSignals(True)
+        combo.clear()
+        combo.setEnabled(False)
+        combo.setPlaceholderText(
+            get_content_name_async("roll_call", "default_empty_item")
+        )
+        combo.blockSignals(False)
+
+    def _apply_quick_draw_class_items(
+        self, class_combo: ComboBox, class_list: list[str], selected_class: str
+    ) -> None:
+        class_combo.blockSignals(True)
+        class_combo.clear()
+        class_combo.addItems(class_list)
+        if selected_class and selected_class in class_list:
+            class_combo.setCurrentIndex(class_list.index(selected_class))
+        elif class_list:
+            class_combo.setCurrentIndex(0)
+        class_combo.setEnabled(bool(class_list))
+        class_combo.blockSignals(False)
+
+    def _start_quick_draw_extend_load(self, class_name: str) -> None:
+        self._quick_draw_extend_request_id += 1
+        request_id = self._quick_draw_extend_request_id
+        worker = _QuickDrawPanelWorker(request_id, class_name)
+        worker.signals.loaded.connect(self._apply_quick_draw_extend_payload)
+        worker.signals.failed.connect(self._handle_quick_draw_extend_load_failed)
+        self._quick_draw_extend_worker = worker
+        QThreadPool.globalInstance().start(worker)
+
+    def _apply_quick_draw_extend_payload(self, request_id: int, payload: dict) -> None:
+        if request_id != getattr(self, "_quick_draw_extend_request_id", 0):
+            return
+
+        self._quick_draw_extend_worker = None
+        class_combo = getattr(self, "_quick_draw_extend_class_combo", None)
+        range_combo = getattr(self, "_quick_draw_extend_range_combo", None)
+        gender_combo = getattr(self, "_quick_draw_extend_gender_combo", None)
+        if class_combo is None or range_combo is None or gender_combo is None:
+            return
+
+        class_list = list(payload.get("class_list", []))
+        selected_class = str(payload.get("class_name", "") or "")
+        group_list = list(payload.get("group_list", []))
+        gender_list = list(payload.get("gender_list", []))
+        self._quick_draw_extend_cache["class_list"] = class_list
+        self._quick_draw_extend_cache.setdefault("filters", {})[selected_class] = {
+            "group_list": group_list,
+            "gender_list": gender_list,
+        }
+
+        self._apply_quick_draw_class_items(class_combo, class_list, selected_class)
+
+        current_class = class_combo.currentText() if class_combo.count() > 0 else ""
+        self._update_quick_draw_setting("quick_draw_class_name", current_class)
+        self._quick_draw_saved_class = current_class
+        self._apply_quick_draw_filter_items(
+            range_combo,
+            gender_combo,
+            group_list,
+            gender_list,
         )
 
+        trace = getattr(self, "_quick_draw_extend_trace", None)
+        if trace is not None:
+            trace.log("data_ready")
+
+    def _handle_quick_draw_extend_load_failed(
+        self, request_id: int, error_message: str
+    ) -> None:
+        if request_id != getattr(self, "_quick_draw_extend_request_id", 0):
+            return
+
+        self._quick_draw_extend_worker = None
+        logger.error(f"悬浮窗扩展面板加载失败: {error_message}")
+        trace = getattr(self, "_quick_draw_extend_trace", None)
+        if trace is not None:
+            trace.log("data_ready")
+
+    def _apply_quick_draw_filter_items(
+        self,
+        range_combo: ComboBox,
+        gender_combo: ComboBox,
+        group_list: list[str],
+        gender_list: list[str],
+    ) -> None:
         base_range_options = get_content_combo_name_async("roll_call", "range_combobox")
-        group_list = get_group_list(class_name) if class_name else []
         range_items = (
-            (base_range_options + group_list)
+            base_range_options + group_list
             if group_list and group_list != [""]
             else base_range_options[:1]
         )
-
         base_gender_options = get_content_combo_name_async(
             "roll_call", "gender_combobox"
         )
-        gender_list = get_gender_list(class_name) if class_name else []
         gender_items = (
-            (base_gender_options + gender_list)
+            base_gender_options + gender_list
             if gender_list and gender_list != [""]
             else base_gender_options[:1]
         )
@@ -1842,8 +2047,9 @@ class LevitationWindow(QWidget):
         range_combo.blockSignals(True)
         range_combo.clear()
         range_combo.addItems(range_items)
-        if saved_group_filter:
-            idx = range_combo.findText(saved_group_filter)
+        range_combo.setEnabled(True)
+        if self._quick_draw_saved_group:
+            idx = range_combo.findText(self._quick_draw_saved_group)
             range_combo.setCurrentIndex(idx if idx >= 0 else 0)
         else:
             range_combo.setCurrentIndex(0)
@@ -1852,23 +2058,39 @@ class LevitationWindow(QWidget):
         gender_combo.blockSignals(True)
         gender_combo.clear()
         gender_combo.addItems(gender_items)
-        if saved_gender_filter:
-            idx = gender_combo.findText(saved_gender_filter)
+        gender_combo.setEnabled(True)
+        if self._quick_draw_saved_gender:
+            idx = gender_combo.findText(self._quick_draw_saved_gender)
             gender_combo.setCurrentIndex(idx if idx >= 0 else 0)
         else:
             gender_combo.setCurrentIndex(0)
         gender_combo.blockSignals(False)
 
-        update_settings(
-            "floating_window_management",
+        self._update_quick_draw_setting(
             "quick_draw_group_filter",
             range_combo.currentText() if range_combo.count() > 0 else "",
         )
-        update_settings(
-            "floating_window_management",
+        self._update_quick_draw_setting(
             "quick_draw_gender_filter",
             gender_combo.currentText() if gender_combo.count() > 0 else "",
         )
+
+    def _update_quick_draw_setting(self, key: str, value: str) -> None:
+        attr_name_map = {
+            "quick_draw_class_name": "_quick_draw_saved_class",
+            "quick_draw_group_filter": "_quick_draw_saved_group",
+            "quick_draw_gender_filter": "_quick_draw_saved_gender",
+        }
+        attr_name = attr_name_map.get(key)
+        if not attr_name:
+            update_settings("floating_window_management", key, str(value or ""))
+            return
+        current_value = str(getattr(self, attr_name, ""))
+        value_str = str(value or "")
+        if current_value == value_str:
+            return
+        setattr(self, attr_name, value_str)
+        update_settings("floating_window_management", key, value_str)
 
     def mousePressEvent(self, e):
         if e.button() == Qt.LeftButton:
