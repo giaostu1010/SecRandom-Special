@@ -26,7 +26,8 @@ from app.tools.config import (
     record_drawn_prize,
     reset_drawn_prize_record,
 )
-from app.tools.settings_access import readme_settings_async
+from app.tools.interaction_perf import start_interaction
+from app.tools.settings_access import get_settings_signals, readme_settings_async
 from app.tools.list_specific_settings_access import (
     read_lottery_setting,
     get_safe_font_size_list_specific,
@@ -82,6 +83,81 @@ class LotteryManager(QObject):
         self._render_settings_cache = None
         self._notification_settings_cache_pool = None
         self._notification_settings_cache = None
+        self._settings_version = 0
+        self._draw_data_cache = {}
+        self._count_summary_cache = {}
+        self._class_option_cache = {}
+        try:
+            get_settings_signals().settingChanged.connect(self._on_setting_changed)
+        except Exception:
+            pass
+
+    def _on_setting_changed(self, *_):
+        self._settings_version += 1
+        self.invalidate_derived_cache()
+
+    def invalidate_derived_cache(self):
+        self._draw_data_cache.clear()
+        self._count_summary_cache.clear()
+        self._class_option_cache.clear()
+        self.invalidate_total_count_cache()
+        self.invalidate_settings_cache()
+
+    def _build_draw_data_cache_key(
+        self,
+        pool_name,
+        class_name,
+        group_filter,
+        gender_filter,
+        group_index,
+        gender_index,
+    ):
+        return (
+            pool_name,
+            class_name,
+            group_filter,
+            gender_filter,
+            int(group_index or 0),
+            int(gender_index or 0),
+            self._settings_version,
+        )
+
+    def get_group_options(self, class_name: str) -> list[str]:
+        cache_key = ("groups", class_name, self._settings_version)
+        cached = self._class_option_cache.get(cache_key)
+        if cached is not None:
+            return list(cached)
+        groups = tuple(get_group_list(class_name))
+        self._class_option_cache[cache_key] = groups
+        return list(groups)
+
+    def get_gender_options(self, class_name: str) -> list[str]:
+        cache_key = ("genders", class_name, self._settings_version)
+        cached = self._class_option_cache.get(cache_key)
+        if cached is not None:
+            return list(cached)
+        genders = tuple(get_gender_list(class_name))
+        self._class_option_cache[cache_key] = genders
+        return list(genders)
+
+    def get_many_count_summary(self, pool_name: str) -> tuple[int, int, str]:
+        display_mode = readme_settings_async(
+            "page_management", "lottery_quantity_label"
+        )
+        cache_key = (
+            "many",
+            pool_name,
+            int(display_mode or 0),
+            self._settings_version,
+        )
+        cached = self._count_summary_cache.get(cache_key)
+        if isinstance(cached, tuple) and len(cached) == 3:
+            return cached
+        summary = LotteryUtils.update_prize_many_count_label_text(
+            pool_name, display_mode=display_mode
+        )
+        self._count_summary_cache[cache_key] = summary
+        return summary
 
     def _format_prize_student_text(self, prize_name, group_name, student_name, mode):
         prize_name = str(prize_name or "")
@@ -161,8 +237,32 @@ class LotteryManager(QObject):
                 class_text and class_text not in invalid_options
             )
 
+            cache_key = self._build_draw_data_cache_key(
+                pool_name,
+                self.current_class_name,
+                self.current_group_filter,
+                self.current_gender_filter,
+                self.current_group_index,
+                self.current_gender_index,
+            )
+            cached = self._draw_data_cache.get(cache_key)
+            if isinstance(cached, dict):
+                self.prizes = list(cached.get("prizes") or [])
+                self.enable_student_assignment = bool(
+                    cached.get("enable_student_assignment")
+                )
+                logger.debug(
+                    f"抽奖数据命中缓存: pool={pool_name}, class={self.current_class_name}"
+                )
+                self.data_loaded.emit(True)
+                return True
+
             self.prizes = get_pool_list(pool_name)
             self.prizes = [p for p in self.prizes if p.get("exist", True)]
+            self._draw_data_cache[cache_key] = {
+                "prizes": list(self.prizes),
+                "enable_student_assignment": bool(self.enable_student_assignment),
+            }
             logger.info(f"加载 {len(self.prizes)} 个奖品在这个奖池中 {pool_name}")
 
             self.data_loaded.emit(True)
@@ -365,6 +465,7 @@ class LotteryManager(QObject):
                     self.current_gender_filter,
                     self.current_group_filter,
                 )
+            self.invalidate_derived_cache()
             return {"reset_required": True, "pool_name": self.current_pool_name}
 
         selected_items_dict = (
@@ -385,6 +486,7 @@ class LotteryManager(QObject):
             gender_filter=gender_filter,
             save_temp=save_temp,
         )
+        self.invalidate_derived_cache()
 
         result = dict(result or {})
         result["save_temp"] = save_temp
@@ -399,6 +501,7 @@ class LotteryManager(QObject):
                 self.current_gender_filter,
                 self.current_group_filter,
             )
+        self.invalidate_derived_cache()
 
     def get_random_items(self, count):
         """
@@ -695,6 +798,7 @@ class LotteryManager(QObject):
 
 
 def start_lottery_draw(widget):
+    trace = start_interaction("lottery.draw")
     track_event("lottery_draw")
 
     manager = widget.manager
@@ -715,12 +819,14 @@ def start_lottery_draw(widget):
         gender_index,
         invalid_class_options=list_base_options,
     )
+    trace.log("context_ready")
     widget._draw_plan = manager.prepare_draw(
         context,
         invalid_class_options=list_base_options,
         refresh_settings=True,
         refresh_total_count=False,
     )
+    trace.log("prepare_ready")
 
     widget.start_button.setText(
         get_content_pushbutton_name_async("lottery", "start_button")
@@ -732,6 +838,7 @@ def start_lottery_draw(widget):
         logger.exception("Error disconnecting start_button clicked (ignored): {}", e)
 
     widget.draw_random()
+    trace.log("first_feedback_ready")
     plan = widget._draw_plan
     animation = plan.animation if plan else 0
     autoplay_count = plan.autoplay_count if plan else 0
@@ -827,6 +934,7 @@ def stop_long_press(widget):
 
 
 def on_filter_changed(widget, *_):
+    trace = start_interaction("lottery.filter_changed")
     try:
         widget.update_many_count_label()
         total_count = widget.manager.get_pool_total_count(
@@ -839,6 +947,7 @@ def on_filter_changed(widget, *_):
             and widget.remaining_list_page is not None
         ):
             QTimer.singleShot(APP_INIT_DELAY, widget._update_remaining_list_delayed)
+        trace.log("ui_updated")
     except Exception as e:
         logger.exception(f"切换筛选条件时发生错误: {e}")
 
@@ -1379,10 +1488,8 @@ def get_total_count(widget):
 
 
 def update_many_count_label(widget):
-    total_count, remaining_count, formatted_text = (
-        LotteryUtils.update_prize_many_count_label_text(
-            widget.pool_list_combobox.currentText()
-        )
+    total_count, remaining_count, formatted_text = widget.manager.get_many_count_summary(
+        widget.pool_list_combobox.currentText()
     )
 
     widget.remaining_count = remaining_count
@@ -1504,8 +1611,7 @@ def on_file_changed(widget, path):
 
 def populate_lists(widget):
     try:
-        widget.manager.invalidate_total_count_cache()
-        widget.manager.invalidate_settings_cache()
+        widget.manager.invalidate_derived_cache()
         pool_list = get_pool_name_list()
         widget.pool_list_combobox.blockSignals(True)
         widget.pool_list_combobox.clear()
@@ -1559,7 +1665,7 @@ def populate_lists(widget):
                 )
                 widget.gender_combobox.blockSignals(False)
             else:
-                group_list = get_group_list(selected_text)
+                group_list = widget.manager.get_group_options(selected_text)
                 if group_list:
                     widget.range_combobox.addItems(base_options + group_list)
                 else:
@@ -1569,16 +1675,14 @@ def populate_lists(widget):
                 widget.gender_combobox.clear()
                 widget.gender_combobox.addItems(
                     get_content_combo_name_async("lottery", "gender_combobox")
-                    + get_gender_list(selected_text)
+                    + widget.manager.get_gender_options(selected_text)
                 )
                 widget.gender_combobox.blockSignals(False)
         finally:
             widget.range_combobox.blockSignals(False)
 
-        total_count, remaining_count, formatted_text = (
-            LotteryUtils.update_prize_many_count_label_text(
-                widget.pool_list_combobox.currentText()
-            )
+        total_count, remaining_count, formatted_text = widget.manager.get_many_count_summary(
+            widget.pool_list_combobox.currentText()
         )
 
         widget.remaining_count = remaining_count
@@ -1600,6 +1704,7 @@ def setup_settings_listener(widget):
 
 
 def on_settings_changed(widget, first_level_key, second_level_key, value):
+    widget.manager.invalidate_derived_cache()
     if first_level_key in ("lottery_settings", "lottery_notification_settings"):
         widget.manager.invalidate_settings_cache()
 
@@ -1649,6 +1754,7 @@ def set_widget_font(widget, font_size):
 
 
 def on_class_changed(widget, *_):
+    trace = start_interaction("lottery.class_changed")
     widget.range_combobox.blockSignals(True)
     widget.gender_combobox.blockSignals(True)
 
@@ -1668,7 +1774,7 @@ def on_class_changed(widget, *_):
             widget.gender_combobox.setEnabled(False)
         else:
             base_options = get_content_combo_name_async("roll_call", "range_combobox")
-            group_list = get_group_list(selected_text)
+            group_list = widget.manager.get_group_options(selected_text)
             if group_list and group_list != [""]:
                 widget.range_combobox.addItems(base_options + group_list)
             else:
@@ -1678,13 +1784,14 @@ def on_class_changed(widget, *_):
             gender_options = get_content_combo_name_async(
                 "roll_call", "gender_combobox"
             )
-            gender_list = get_gender_list(selected_text)
+            gender_list = widget.manager.get_gender_options(selected_text)
             if gender_list and gender_list != [""]:
                 widget.gender_combobox.addItems(gender_options + gender_list)
             else:
                 widget.gender_combobox.addItems(gender_options[:1])
             widget.range_combobox.setEnabled(True)
             widget.gender_combobox.setEnabled(True)
+        trace.log("ui_updated")
     except Exception as e:
         logger.exception(f"切换班级时发生错误: {e}")
     finally:

@@ -29,7 +29,8 @@ from app.common.extraction.extract import _is_non_class_time
 from app.common.safety.verify_ops import require_and_run
 from app.page_building.another_window import create_remaining_list_window
 from app.tools.config import remove_record
-from app.tools.settings_access import readme_settings_async
+from app.tools.interaction_perf import start_interaction
+from app.tools.settings_access import get_settings_signals, readme_settings_async
 from app.tools.list_specific_settings_access import read_roll_call_setting
 from app.tools.personalised import load_custom_font
 from app.Language.obtain_language import (
@@ -87,6 +88,132 @@ class RollCallManager(QObject):
         self._precomputed_result = None
         self._precompute_key = None
         self._precompute_running = False
+        self._settings_version = 0
+        self._draw_data_cache = {}
+        self._count_summary_cache = {}
+        self._option_cache = {}
+        self._display_settings_cache = None
+        self._display_settings_cache_version = -1
+        try:
+            get_settings_signals().settingChanged.connect(self._on_setting_changed)
+        except Exception:
+            pass
+
+    def _on_setting_changed(self, *_):
+        self._settings_version += 1
+        self.invalidate_derived_cache()
+
+    def invalidate_derived_cache(self) -> None:
+        self._draw_data_cache.clear()
+        self._count_summary_cache.clear()
+        self._option_cache.clear()
+        self._display_settings_cache = None
+        self._display_settings_cache_version = -1
+        self._precomputed_result = None
+        self._precompute_key = None
+        self._precompute_running = False
+
+    def _build_draw_data_cache_key(
+        self,
+        class_name,
+        group_filter,
+        gender_filter,
+        group_index,
+        gender_index,
+        half_repeat,
+    ):
+        return (
+            class_name,
+            group_filter,
+            gender_filter,
+            int(group_index or 0),
+            int(gender_index or 0),
+            int(half_repeat or 0),
+            self._settings_version,
+        )
+
+    def get_group_options(self, class_name: str) -> list[str]:
+        cache_key = ("groups", class_name, self._settings_version)
+        cached = self._option_cache.get(cache_key)
+        if cached is not None:
+            return list(cached)
+        groups = tuple(get_group_list(class_name))
+        self._option_cache[cache_key] = groups
+        return list(groups)
+
+    def get_gender_options(self, class_name: str) -> list[str]:
+        cache_key = ("genders", class_name, self._settings_version)
+        cached = self._option_cache.get(cache_key)
+        if cached is not None:
+            return list(cached)
+        genders = tuple(get_gender_list(class_name))
+        self._option_cache[cache_key] = genders
+        return list(genders)
+
+    def get_display_settings(self, refresh: bool = False):
+        if (
+            refresh
+            or self._display_settings_cache is None
+            or self._display_settings_cache_version != self._settings_version
+        ):
+            self._display_settings_cache = RollCallUtils.create_display_settings(
+                self.settings_group
+            )
+            self._display_settings_cache_version = self._settings_version
+        return dict(self._display_settings_cache or {})
+
+    def get_total_count(self, class_name: str, group_index: int, group_filter: str) -> int:
+        cache_key = (
+            "total",
+            class_name,
+            int(group_index or 0),
+            group_filter,
+            self._settings_version,
+        )
+        cached = self._count_summary_cache.get(cache_key)
+        if isinstance(cached, int):
+            return cached
+        total_count = RollCallUtils.get_total_count(
+            class_name, group_index, group_filter
+        )
+        total_count = int(total_count or 0)
+        self._count_summary_cache[cache_key] = total_count
+        return total_count
+
+    def get_many_count_summary(
+        self,
+        class_name: str,
+        group_index: int,
+        group_filter: str,
+        gender_filter: str,
+        half_repeat: int,
+    ) -> tuple[int, int, str]:
+        display_mode = readme_settings_async(
+            "page_management", "roll_call_quantity_label"
+        )
+        cache_key = (
+            "many",
+            class_name,
+            int(group_index or 0),
+            group_filter,
+            gender_filter,
+            int(half_repeat or 0),
+            int(display_mode or 0),
+            self._settings_version,
+        )
+        cached = self._count_summary_cache.get(cache_key)
+        if isinstance(cached, tuple) and len(cached) == 3:
+            return cached
+        summary = RollCallUtils.update_many_count_label_text(
+            class_name,
+            group_index,
+            group_filter,
+            gender_filter,
+            half_repeat,
+            display_mode=display_mode,
+        )
+        self._count_summary_cache[cache_key] = summary
+        return summary
 
     def build_draw_context(
         self,
@@ -161,11 +288,13 @@ class RollCallManager(QObject):
                 self.current_gender_filter,
                 self.current_group_filter,
             )
+            self.invalidate_derived_cache()
             return {"reset_required": True, "class_name": self.current_class_name}
 
         selected_students = (result or {}).get("selected_students") or []
         selected_students_dict = (result or {}).get("selected_students_dict") or []
         self.save_result(selected_students, selected_students_dict)
+        self.invalidate_derived_cache()
 
         result = dict(result or {})
         result["should_update_remaining"] = bool(
@@ -180,6 +309,7 @@ class RollCallManager(QObject):
             self.current_gender_filter,
             self.current_group_filter,
         )
+        self.invalidate_derived_cache()
 
     def load_data(
         self,
@@ -194,15 +324,31 @@ class RollCallManager(QObject):
         加载学生数据
         """
         try:
-            self._precomputed_result = None
-            self._precompute_key = None
-            self._precompute_running = False
             self.current_class_name = class_name
             self.current_group_filter = group_filter
             self.current_gender_filter = gender_filter
             self.current_group_index = group_index
             self.current_gender_index = gender_index
             self.half_repeat = half_repeat
+
+            cache_key = self._build_draw_data_cache_key(
+                class_name,
+                group_filter,
+                gender_filter,
+                group_index,
+                gender_index,
+                half_repeat,
+            )
+            cached = self._draw_data_cache.get(cache_key)
+            if isinstance(cached, dict):
+                self.students = list(cached.get("students") or [])
+                self.tags_by_id = dict(cached.get("tags_by_id") or {})
+                self.weights = list(cached.get("weights") or [])
+                logger.debug(
+                    f"点名抽取数据命中缓存: class={class_name}, group={group_filter}, gender={gender_filter}"
+                )
+                self.data_loaded.emit(True)
+                return True
 
             # 获取原始学生列表
             raw_students = get_student_list(class_name)
@@ -227,6 +373,11 @@ class RollCallManager(QObject):
 
             # 计算权重
             self.weights = self._calculate_weights()
+            self._draw_data_cache[cache_key] = {
+                "students": list(self.students),
+                "tags_by_id": dict(self.tags_by_id),
+                "weights": list(self.weights),
+            }
 
             logger.info(f"加载 {len(self.students)} 个学生在这个班级 {class_name}")
             self.data_loaded.emit(True)
@@ -408,6 +559,7 @@ class RollCallManager(QObject):
 
 
 def start_roll_call_draw(widget):
+    trace = start_interaction("roll_call.draw")
     track_event("roll_call_draw")
 
     manager = widget.manager
@@ -426,11 +578,11 @@ def start_roll_call_draw(widget):
         gender_index,
         half_repeat,
     )
+    trace.log("context_ready")
     widget._draw_plan = manager.prepare_draw(context)
+    trace.log("prepare_ready")
 
-    widget._cached_display_dict = RollCallUtils.create_display_settings(
-        "roll_call_settings"
-    )
+    widget._cached_display_dict = manager.get_display_settings(refresh=False)
     widget._cached_animation_widgets = None
     widget._cached_show_random = widget._cached_display_dict.get("show_random", 0)
 
@@ -444,6 +596,7 @@ def start_roll_call_draw(widget):
         logger.exception("Error disconnecting start_button clicked (ignored): {}", e)
 
     widget.draw_random()
+    trace.log("first_feedback_ready")
 
     plan = widget._draw_plan
     animation = plan.animation if plan else 0
@@ -944,7 +1097,7 @@ def do_reset_count(widget):
 
 def update_count(widget, change):
     try:
-        widget.total_count = RollCallUtils.get_total_count(
+        widget.total_count = widget.manager.get_total_count(
             widget.list_combobox.currentText(),
             widget.range_combobox.currentIndex(),
             widget.range_combobox.currentText(),
@@ -960,7 +1113,7 @@ def update_count(widget, change):
 
 
 def get_total_count(widget):
-    return RollCallUtils.get_total_count(
+    return widget.manager.get_total_count(
         widget.list_combobox.currentText(),
         widget.range_combobox.currentIndex(),
         widget.range_combobox.currentText(),
@@ -968,14 +1121,12 @@ def get_total_count(widget):
 
 
 def update_many_count_label(widget):
-    total_count, remaining_count, formatted_text = (
-        RollCallUtils.update_many_count_label_text(
-            widget.list_combobox.currentText(),
-            widget.range_combobox.currentIndex(),
-            widget.range_combobox.currentText(),
-            widget.gender_combobox.currentText(),
-            read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
-        )
+    total_count, remaining_count, formatted_text = widget.manager.get_many_count_summary(
+        widget.list_combobox.currentText(),
+        widget.range_combobox.currentIndex(),
+        widget.range_combobox.currentText(),
+        widget.gender_combobox.currentText(),
+        read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
     )
 
     widget.remaining_count = remaining_count
@@ -1068,6 +1219,7 @@ def setup_file_watcher(widget):
 
 def on_directory_changed(widget, path):
     try:
+        widget.manager.invalidate_derived_cache()
         QTimer.singleShot(500, lambda: refresh_class_list(widget))
     except Exception as e:
         logger.exception(f"处理文件夹变化事件失败: {e}")
@@ -1075,6 +1227,7 @@ def on_directory_changed(widget, path):
 
 def on_file_changed(widget, path):
     try:
+        widget.manager.invalidate_derived_cache()
         QTimer.singleShot(500, lambda: refresh_class_list(widget))
     except Exception as e:
         logger.exception(f"处理文件变化事件失败: {e}")
@@ -1082,6 +1235,7 @@ def on_file_changed(widget, path):
 
 def refresh_class_list(widget):
     try:
+        widget.manager.invalidate_derived_cache()
         current_class = widget.list_combobox.currentText()
         new_class_list = get_class_name_list()
         widget.list_combobox.blockSignals(True)
@@ -1133,7 +1287,7 @@ def _populate_range_combobox(widget):
     widget.range_combobox.clear()
 
     base_options = get_content_combo_name_async("roll_call", "range_combobox")
-    group_list = get_group_list(widget.list_combobox.currentText())
+    group_list = widget.manager.get_group_options(widget.list_combobox.currentText())
 
     if group_list:
         widget.range_combobox.addItems(base_options + group_list)
@@ -1148,20 +1302,18 @@ def _populate_gender_combobox(widget):
     widget.gender_combobox.clear()
     widget.gender_combobox.addItems(
         get_content_combo_name_async("roll_call", "gender_combobox")
-        + get_gender_list(widget.list_combobox.currentText())
+        + widget.manager.get_gender_options(widget.list_combobox.currentText())
     )
     widget.gender_combobox.blockSignals(False)
 
 
 def _update_count_label(widget):
-    total_count, remaining_count, formatted_text = (
-        RollCallUtils.update_many_count_label_text(
-            widget.list_combobox.currentText(),
-            widget.range_combobox.currentIndex(),
-            widget.range_combobox.currentText(),
-            widget.gender_combobox.currentText(),
-            read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
-        )
+    total_count, remaining_count, formatted_text = widget.manager.get_many_count_summary(
+        widget.list_combobox.currentText(),
+        widget.range_combobox.currentIndex(),
+        widget.range_combobox.currentText(),
+        widget.gender_combobox.currentText(),
+        read_roll_call_setting(widget.list_combobox.currentText(), "half_repeat"),
     )
 
     widget.remaining_count = remaining_count
@@ -1177,6 +1329,7 @@ def setup_settings_listener(widget):
 
 
 def on_settings_changed(widget, first_level_key, second_level_key, value):
+    widget.manager.invalidate_derived_cache()
     if first_level_key == "roll_call_settings" and second_level_key in (
         "result_flow_animation_duration",
         "result_flow_animation_style",
@@ -1222,6 +1375,7 @@ def set_widget_font(widget, font_size):
 
 
 def on_class_changed(widget):
+    trace = start_interaction("roll_call.class_changed")
     widget.range_combobox.blockSignals(True)
     widget.gender_combobox.blockSignals(True)
     try:
@@ -1230,6 +1384,7 @@ def on_class_changed(widget):
         update_many_count_label(widget)
         _update_start_button_state(widget)
         _update_remaining_list_window(widget)
+        trace.log("ui_updated")
     except Exception as e:
         logger.exception(f"切换班级时发生错误: {e}")
     finally:
@@ -1238,10 +1393,12 @@ def on_class_changed(widget):
 
 
 def on_filter_changed(widget):
+    trace = start_interaction("roll_call.filter_changed")
     try:
         update_many_count_label(widget)
         _update_start_button_state(widget)
         _update_remaining_list_window(widget)
+        trace.log("ui_updated")
     except Exception as e:
         logger.exception(f"切换筛选条件时发生错误: {e}")
 
@@ -1249,7 +1406,7 @@ def on_filter_changed(widget):
 def _update_range_options(widget):
     widget.range_combobox.clear()
     base_options = get_content_combo_name_async("roll_call", "range_combobox")
-    group_list = get_group_list(widget.list_combobox.currentText())
+    group_list = widget.manager.get_group_options(widget.list_combobox.currentText())
     if group_list and group_list != [""]:
         widget.range_combobox.addItems(base_options + group_list)
     else:
@@ -1259,7 +1416,7 @@ def _update_range_options(widget):
 def _update_gender_options(widget):
     widget.gender_combobox.clear()
     gender_options = get_content_combo_name_async("roll_call", "gender_combobox")
-    gender_list = get_gender_list(widget.list_combobox.currentText())
+    gender_list = widget.manager.get_gender_options(widget.list_combobox.currentText())
     if gender_list and gender_list != [""]:
         widget.gender_combobox.addItems(gender_options + gender_list)
     else:
@@ -1267,7 +1424,7 @@ def _update_gender_options(widget):
 
 
 def _update_start_button_state(widget):
-    total_count = RollCallUtils.get_total_count(
+    total_count = widget.manager.get_total_count(
         widget.list_combobox.currentText(),
         widget.range_combobox.currentIndex(),
         widget.range_combobox.currentText(),
