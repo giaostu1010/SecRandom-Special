@@ -14,6 +14,7 @@ from app.tools.path_utils import get_path
 
 _history_cache_lock = threading.RLock()
 _history_data_cache: dict[str, tuple[tuple[int, int] | None, Dict[str, Any]]] = {}
+_history_name_cache: dict[str, tuple[tuple[int, int] | None, List[str]]] = {}
 
 
 def _get_file_signature(file_path: Path) -> tuple[int, int] | None:
@@ -22,6 +23,21 @@ def _get_file_signature(file_path: Path) -> tuple[int, int] | None:
         return stat_result.st_mtime_ns, stat_result.st_size
     except OSError:
         return None
+
+
+def _get_cached_history_names(history_dir: Path) -> List[str]:
+    cache_key = str(history_dir)
+    signature = _get_file_signature(history_dir)
+
+    with _history_cache_lock:
+        cached = _history_name_cache.get(cache_key)
+        if cached and cached[0] == signature:
+            return list(cached[1])
+
+    names = sorted(file.stem for file in history_dir.glob("*.json"))
+    with _history_cache_lock:
+        _history_name_cache[cache_key] = (signature, list(names))
+    return list(names)
 
 
 # ==================================================
@@ -126,10 +142,7 @@ def get_all_history_names(history_type: str) -> List[str]:
         history_dir = get_path(f"data/history/{history_type}_history")
         if not history_dir.exists():
             return []
-        history_files = list(history_dir.glob("*.json"))
-        names = [file.stem for file in history_files]
-        names.sort()
-        return names
+        return _get_cached_history_names(history_dir)
     except Exception as e:
         logger.error(f"获取历史记录名称列表失败: {e}")
         return []

@@ -103,6 +103,12 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         self.probability_data = {}
         self._populate_request_id = 0
         self._row_models = []
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._list_refresh_timer = QTimer(self)
+        self._list_refresh_timer.setSingleShot(True)
+        self._list_refresh_timer.timeout.connect(self.refresh_list)
 
         # 创建模式选择区域
         QTimer.singleShot(APPLY_DELAY, self.create_class_selection)
@@ -117,7 +123,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
     def create_class_selection(self):
         """创建班级选择区域"""
@@ -163,7 +169,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         # 奖池选择（抽奖模式专用）
         self.pool_comboBox = ComboBox()
         self.pool_comboBox.setVisible(False)
-        self.pool_comboBox.currentIndexChanged.connect(self.refresh_data)
+        self.pool_comboBox.currentIndexChanged.connect(self.on_pool_changed)
 
         self.addGroup(
             get_theme_icon("ic_fluent_power_20_filled"),
@@ -216,6 +222,8 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         self.current_mode = mode
 
         # 清空名单下拉框
+        self.list_comboBox.blockSignals(True)
+        self.pool_comboBox.blockSignals(True)
         self.list_comboBox.clear()
         self.pool_comboBox.clear()
 
@@ -270,9 +278,11 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 )
                 self.pool_comboBox.setCurrentIndex(-1)
                 self.current_list_name = ""
+        self.list_comboBox.blockSignals(False)
+        self.pool_comboBox.blockSignals(False)
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def on_list_changed(self):
         """当班级选择改变时"""
@@ -284,7 +294,12 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
             self.current_class_name = self.list_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
+
+    def on_pool_changed(self):
+        if self.current_mode == 1:
+            self.current_list_name = self.pool_comboBox.currentText()
+        self.schedule_refresh_data()
 
     def init_list_data(self):
         """初始化名单数据"""
@@ -362,7 +377,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法"""
-        QTimer.singleShot(1000, self.refresh_list)
+        self._list_refresh_timer.start(250)
 
     def refresh_list(self):
         """刷新名单下拉框列表"""
@@ -383,6 +398,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 list_data = get_pool_name_list()
 
             # 清空并重新填充下拉框
+            self.list_comboBox.blockSignals(True)
             self.list_comboBox.clear()
             self.list_comboBox.addItems(list_data)
 
@@ -415,14 +431,20 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                         )
                     )
                 self.current_list_name = ""
+            self.list_comboBox.blockSignals(False)
 
             # 刷新表格数据
             if hasattr(self, "table") and self.table is not None:
-                self.refresh_data()
+                self.schedule_refresh_data()
         except RuntimeError as e:
             logger.exception(f"刷新名单列表时发生错误: {e}")
         except Exception as e:
             logger.exception(f"刷新名单列表时发生未知错误: {e}")
+
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
 
     def refresh_data(self):
         """刷新表格数据"""

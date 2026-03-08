@@ -86,6 +86,12 @@ class roll_call_history_table(GroupHeaderCardWidget):
         self._active_refresh_worker = None
         self._history_has_gender = False
         self._history_has_group = False
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._directory_refresh_timer = QTimer(self)
+        self._directory_refresh_timer.setSingleShot(True)
+        self._directory_refresh_timer.timeout.connect(self.refresh_class_history)
 
         # 创建班级选择区域
         QTimer.singleShot(APPLY_DELAY, self.create_class_selection)
@@ -100,10 +106,10 @@ class roll_call_history_table(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
         # 连接信号
-        self.refresh_signal.connect(self.refresh_data)
+        self.refresh_signal.connect(self.schedule_refresh_data)
 
     def create_class_selection(self):
         """创建班级选择区域"""
@@ -115,11 +121,17 @@ class roll_call_history_table(GroupHeaderCardWidget):
 
         # 设置默认选择
         if class_history:
-            saved_index = readme_settings_async(
-                "roll_call_history_table", "select_class_name"
+            saved_name = str(
+                get_settings_snapshot()
+                .get("roll_call_history_table", {})
+                .get("select_class_name", "")
+                or ""
             )
-            self.class_comboBox.setCurrentIndex(0)
-            self.current_class_name = class_history[0]
+            selected_index = (
+                class_history.index(saved_name) if saved_name in class_history else 0
+            )
+            self.class_comboBox.setCurrentIndex(selected_index)
+            self.current_class_name = class_history[selected_index]
         else:
             # 如果没有班级历史，设置占位符
             self.class_comboBox.setCurrentIndex(-1)
@@ -141,7 +153,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
             + self.all_names
         )
         self.mode_comboBox.setCurrentIndex(0)
-        self.mode_comboBox.currentIndexChanged.connect(self.refresh_data)
+        self.mode_comboBox.currentIndexChanged.connect(self.schedule_refresh_data)
 
         # 选择课程
         self.subject_comboBox = ComboBox()
@@ -786,7 +798,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
             path: 发生变化的目录路径
         """
         # logger.debug(f"检测到目录变化: {path}")
-        QTimer.singleShot(1000, self.refresh_class_history)
+        self._directory_refresh_timer.start(250)
 
     def refresh_class_history(self):
         """刷新班级下拉框列表"""
@@ -801,6 +813,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
         class_history = get_all_history_names("roll_call")
 
         # 清空并重新填充下拉框
+        self.class_comboBox.blockSignals(True)
         self.class_comboBox.clear()
         self.class_comboBox.addItems(class_history)
 
@@ -830,9 +843,12 @@ class roll_call_history_table(GroupHeaderCardWidget):
             )
             # 更新current_class_name
             self.current_class_name = ""
+        self.class_comboBox.blockSignals(False)
 
         if hasattr(self, "clear_button"):
             self.clear_button.setEnabled(bool(self.current_class_name))
+        self._update_mode_options()
+        self.schedule_refresh_data()
 
     def on_class_changed(self, index):
         """班级选择变化时刷新表格数据"""
@@ -848,7 +864,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
         self._update_mode_options()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def on_subject_changed(self, index):
         """课程选择变化时刷新表格数据"""
@@ -862,7 +878,12 @@ class roll_call_history_table(GroupHeaderCardWidget):
             self.current_subject = self.subject_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
+
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
 
     def _update_subject_list(self):
         """更新课程列表"""
@@ -1044,10 +1065,13 @@ class roll_call_history_table(GroupHeaderCardWidget):
         self._history_request_id += 1
         request_id = self._history_request_id
         self.current_mode = self.mode_comboBox.currentIndex() if hasattr(self, "mode_comboBox") else 0
+        settings_snapshot = get_settings_snapshot()
         selected_name = (
             self.mode_comboBox.currentText()
             if self.current_mode >= 2 and hasattr(self, "mode_comboBox")
-            else readme_settings_async("roll_call_history_table", "select_student_name")
+            else settings_snapshot.get("roll_call_history_table", {}).get(
+                "select_student_name"
+            )
         )
 
         worker = _HistoryLoadWorker(

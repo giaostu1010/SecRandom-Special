@@ -13,6 +13,7 @@ from app.tools.path_utils import *
 _list_cache_lock = threading.RLock()
 _student_list_cache: dict[str, tuple[tuple[int, int] | None, list[dict[str, Any]]]] = {}
 _pool_list_cache: dict[str, tuple[tuple[int, int] | None, list[dict[str, Any]]]] = {}
+_directory_name_cache: dict[str, tuple[tuple[int, int] | None, list[str]]] = {}
 
 
 def _get_file_signature(file_path) -> tuple[int, int] | None:
@@ -40,6 +41,21 @@ def _get_cached_transformed_list(
     with _list_cache_lock:
         cache[cache_key] = (signature, copy.deepcopy(loaded_data))
     return copy.deepcopy(loaded_data)
+
+
+def _get_cached_directory_names(directory_path) -> List[str]:
+    cache_key = str(directory_path)
+    signature = _get_file_signature(directory_path)
+
+    with _list_cache_lock:
+        cached = _directory_name_cache.get(cache_key)
+        if cached and cached[0] == signature:
+            return list(cached[1])
+
+    names = sorted(file_path.stem for file_path in directory_path.glob("*.json"))
+    with _list_cache_lock:
+        _directory_name_cache[cache_key] = (signature, list(names))
+    return list(names)
 
 
 def _normalize_tags(value) -> List[str]:
@@ -137,17 +153,7 @@ def get_class_name_list() -> List[str]:
             roll_call_list_dir.mkdir(parents=True, exist_ok=True)
             return []
 
-        # 获取文件夹中的所有文件
-        class_files = []
-        for file_path in roll_call_list_dir.glob("*.json"):
-            # 获取文件名（不带扩展名）作为班级名称
-            class_name = file_path.stem
-            class_files.append(class_name)
-
-        # 按字母顺序排序
-        class_files.sort()
-
-        # logger.debug(f"找到 {len(class_files)} 个班级: {class_files}")
+        class_files = _get_cached_directory_names(roll_call_list_dir)
         return class_files
 
     except Exception as e:
@@ -298,17 +304,7 @@ def get_pool_name_list() -> List[str]:
             lottery_list_dir.mkdir(parents=True, exist_ok=True)
             return []
 
-        # 获取文件夹中的所有文件
-        pool_files = []
-        for file_path in lottery_list_dir.glob("*.json"):
-            # 获取文件名（不带扩展名）作为奖池名称
-            pool_name = file_path.stem
-            pool_files.append(pool_name)
-
-        # 按字母顺序排序
-        pool_files.sort()
-
-        # logger.debug(f"找到 {len(pool_files)} 个奖池: {pool_files}")
+        pool_files = _get_cached_directory_names(lottery_list_dir)
         return pool_files
 
     except Exception as e:

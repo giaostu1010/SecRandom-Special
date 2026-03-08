@@ -2,6 +2,7 @@
 # 导入库
 # ==================================================
 import json
+import threading
 
 from loguru import logger
 from PySide6.QtWidgets import *
@@ -24,6 +25,41 @@ from app.common.data.list import (
     get_student_list,
     get_pool_list,
 )
+
+
+_audio_settings_cache_lock = threading.RLock()
+_audio_settings_cache: dict[str, tuple[tuple[int, int] | None, dict]] = {}
+
+
+def _get_file_signature(file_path):
+    try:
+        stat_result = file_path.stat()
+        return stat_result.st_mtime_ns, stat_result.st_size
+    except OSError:
+        return None
+
+
+def _load_cached_audio_settings(file_path):
+    cache_key = str(file_path)
+    signature = _get_file_signature(file_path)
+
+    with _audio_settings_cache_lock:
+        cached = _audio_settings_cache.get(cache_key)
+        if cached and cached[0] == signature:
+            return dict(cached[1])
+
+    if not file_path.exists():
+        return {}
+
+    with open_file(file_path, "r", encoding="utf-8") as f:
+        audio_data = json.load(f)
+
+    if not isinstance(audio_data, dict):
+        audio_data = {}
+
+    with _audio_settings_cache_lock:
+        _audio_settings_cache[cache_key] = (signature, dict(audio_data))
+    return dict(audio_data)
 
 
 # ==================================================
@@ -62,6 +98,14 @@ class voice_announcement_main(GroupHeaderCardWidget):
         self._populate_request_id = 0
         self._original_row_models = []
         self._load_worker = None
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._directory_refresh_timer = QTimer(self)
+        self._directory_refresh_timer.setSingleShot(True)
+        self._directory_refresh_timer.timeout.connect(self.refresh_class_history)
+        settings_snapshot = get_settings_snapshot()
+        announcement_settings = settings_snapshot.get("specific_announcements", {})
 
         # 启用/禁用语音播报开关
         self.enabled_switch = SwitchButton()
@@ -75,9 +119,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
                 "specific_announcements", "enabled", "enable"
             )
         )
-        self.enabled_switch.setChecked(
-            readme_settings_async("specific_announcements", "enabled")
-        )
+        self.enabled_switch.setChecked(bool(announcement_settings.get("enabled", True)))
         self.enabled_switch.checkedChanged.connect(
             lambda state: update_settings("specific_announcements", "enabled", state)
         )
@@ -88,7 +130,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
             get_content_combo_name_async("specific_announcements", "mode")
         )
         self.mode_comboBox.setCurrentIndex(
-            readme_settings_async("specific_announcements", "default_mode")
+            int(announcement_settings.get("default_mode", 0))
         )
         self.mode_comboBox.currentIndexChanged.connect(
             lambda index: [
@@ -124,10 +166,10 @@ class voice_announcement_main(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
         # 连接信号
-        self.refresh_signal.connect(self.refresh_data)
+        self.refresh_signal.connect(self.schedule_refresh_data)
 
     def on_mode_changed(self, mode):
         """模式切换时的处理函数
@@ -137,7 +179,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
         """
         self.current_mode = mode
         self.refresh_class_history()
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def create_class_selection(self):
         """创建班级选择区域"""
@@ -320,7 +362,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法"""
-        QTimer.singleShot(1000, self.refresh_class_history)
+        self._directory_refresh_timer.start(250)
 
     def refresh_class_history(self):
         """刷新下拉框列表"""
@@ -337,6 +379,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
             class_history = get_pool_name_list()
 
         # 清空并重新填充下拉框
+        self.class_comboBox.blockSignals(True)
         self.class_comboBox.clear()
         self.class_comboBox.addItems(class_history)
 
@@ -359,6 +402,8 @@ class voice_announcement_main(GroupHeaderCardWidget):
             )
             # 更新current_class_name
             self.current_class_name = ""
+        self.class_comboBox.blockSignals(False)
+        self.schedule_refresh_data()
 
     def on_class_changed(self, index):
         """班级选择变化时刷新表格数据"""
@@ -369,7 +414,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
         self.current_class_name = self.class_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def _create_readonly_item(self, value):
         item = QTableWidgetItem(str(value))
@@ -384,11 +429,8 @@ class voice_announcement_main(GroupHeaderCardWidget):
             items_list = get_pool_list(class_name)
 
         cleaned_items = [item for item in items_list if item.get("exist", True)]
-        audio_data = {}
         audio_file = get_audio_path(f"{class_name}.json")
-        if audio_file.exists():
-            with open_file(audio_file, "r", encoding="utf-8") as f:
-                audio_data = json.load(f)
+        audio_data = _load_cached_audio_settings(audio_file)
         return cleaned_items, audio_data
 
     def _run_background_refresh(self, request_id, class_name):
@@ -529,6 +571,11 @@ class voice_announcement_main(GroupHeaderCardWidget):
             )
         )
         QThreadPool.globalInstance().start(self._load_worker)
+
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
 
 
 # ==================================================

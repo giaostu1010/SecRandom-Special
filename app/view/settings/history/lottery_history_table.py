@@ -82,6 +82,12 @@ class lottery_history_table(GroupHeaderCardWidget):
         self._history_request_id = 0
         self._cached_row_models = []
         self._active_refresh_worker = None
+        self._refresh_debounce_timer = QTimer(self)
+        self._refresh_debounce_timer.setSingleShot(True)
+        self._refresh_debounce_timer.timeout.connect(self.refresh_data)
+        self._directory_refresh_timer = QTimer(self)
+        self._directory_refresh_timer.setSingleShot(True)
+        self._directory_refresh_timer.timeout.connect(self.refresh_pool_history)
 
         # 创建奖池选择区域
         QTimer.singleShot(APPLY_DELAY, self.create_pool_selection)
@@ -96,10 +102,10 @@ class lottery_history_table(GroupHeaderCardWidget):
         QTimer.singleShot(APPLY_DELAY, self.setup_file_watcher)
 
         # 初始化数据
-        QTimer.singleShot(APPLY_DELAY, self.refresh_data)
+        QTimer.singleShot(APPLY_DELAY, self.schedule_refresh_data)
 
         # 连接信号
-        self.refresh_signal.connect(self.refresh_data)
+        self.refresh_signal.connect(self.schedule_refresh_data)
 
     def create_pool_selection(self):
         """创建奖池选择区域"""
@@ -111,11 +117,17 @@ class lottery_history_table(GroupHeaderCardWidget):
 
         # 设置默认选择
         if pool_history:
-            saved_index = readme_settings_async(
-                "lottery_history_table", "select_pool_name"
+            saved_name = str(
+                get_settings_snapshot()
+                .get("lottery_history_table", {})
+                .get("select_pool_name", "")
+                or ""
             )
-            self.pool_comboBox.setCurrentIndex(0)
-            self.current_pool_name = pool_history[0]
+            selected_index = (
+                pool_history.index(saved_name) if saved_name in pool_history else 0
+            )
+            self.pool_comboBox.setCurrentIndex(selected_index)
+            self.current_pool_name = pool_history[selected_index]
         else:
             # 如果没有奖池历史，设置占位符
             self.pool_comboBox.setCurrentIndex(-1)
@@ -135,7 +147,7 @@ class lottery_history_table(GroupHeaderCardWidget):
             + self.all_names
         )
         self.mode_comboBox.setCurrentIndex(0)
-        self.mode_comboBox.currentIndexChanged.connect(self.refresh_data)
+        self.mode_comboBox.currentIndexChanged.connect(self.schedule_refresh_data)
 
         # 选择课程
         self.subject_comboBox = ComboBox()
@@ -660,7 +672,7 @@ class lottery_history_table(GroupHeaderCardWidget):
             path: 发生变化的目录路径
         """
         # logger.debug(f"检测到目录变化: {path}")
-        QTimer.singleShot(1000, self.refresh_pool_history)
+        self._directory_refresh_timer.start(250)
 
     def refresh_pool_history(self):
         """刷新奖池下拉框列表"""
@@ -675,6 +687,7 @@ class lottery_history_table(GroupHeaderCardWidget):
         pool_history = get_all_history_names("lottery")
 
         # 清空并重新填充下拉框
+        self.pool_comboBox.blockSignals(True)
         self.pool_comboBox.clear()
         self.pool_comboBox.addItems(pool_history)
 
@@ -702,9 +715,12 @@ class lottery_history_table(GroupHeaderCardWidget):
             )
             # 更新current_pool_name
             self.current_pool_name = ""
+        self.pool_comboBox.blockSignals(False)
 
         if hasattr(self, "clear_button"):
             self.clear_button.setEnabled(bool(self.current_pool_name))
+        self._update_mode_options()
+        self.schedule_refresh_data()
 
     def on_pool_changed(self, index):
         """奖池选择变化时刷新表格数据"""
@@ -720,7 +736,7 @@ class lottery_history_table(GroupHeaderCardWidget):
         self._update_mode_options()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
 
     def refresh_data(self):
         """刷新表格数据"""
@@ -756,10 +772,13 @@ class lottery_history_table(GroupHeaderCardWidget):
         self.current_mode = (
             self.mode_comboBox.currentIndex() if hasattr(self, "mode_comboBox") else 0
         )
+        settings_snapshot = get_settings_snapshot()
         selected_name = (
             self.mode_comboBox.currentText()
             if self.current_mode >= 2 and hasattr(self, "mode_comboBox")
-            else readme_settings_async("lottery_history_table", "select_lottery_name")
+            else settings_snapshot.get("lottery_history_table", {}).get(
+                "select_lottery_name"
+            )
         )
 
         worker = _HistoryLoadWorker(
@@ -820,7 +839,12 @@ class lottery_history_table(GroupHeaderCardWidget):
             self.current_subject = self.subject_comboBox.currentText()
 
         # 刷新表格数据
-        self.refresh_data()
+        self.schedule_refresh_data()
+
+    def schedule_refresh_data(self):
+        if not hasattr(self, "_refresh_debounce_timer"):
+            return
+        self._refresh_debounce_timer.start(0)
 
     def _update_subject_list(self):
         """更新课程列表"""
