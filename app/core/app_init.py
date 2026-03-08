@@ -3,7 +3,7 @@ from loguru import logger
 
 from app.tools.settings_default import manage_settings_file
 from app.tools.config import remove_record
-from app.tools.settings_access import readme_settings_async
+from app.tools.settings_access import readme_settings_async, update_settings
 from app.tools.update_utils import check_for_updates_on_startup
 from app.tools.variable import APP_INIT_DELAY
 from app.core.font_manager import (
@@ -49,6 +49,71 @@ def calculate_total_draw_counts():
 
     total_draw_count = roll_call_total + lottery_total
     return total_draw_count, roll_call_total, lottery_total
+
+
+def _normalize_stored_counter(value):
+    if value is None:
+        return None
+    try:
+        normalized = int(value)
+    except Exception:
+        return None
+    if normalized < 0:
+        return None
+    return normalized
+
+
+def get_stored_draw_counts():
+    """读取已缓存的抽取统计；若旧版本字段缺失或值不合法则返回 None。"""
+    stored_total = _normalize_stored_counter(
+        readme_settings_async("user_info", "total_draw_count", None)
+    )
+    stored_roll_call = _normalize_stored_counter(
+        readme_settings_async("user_info", "roll_call_total_count", None)
+    )
+    stored_lottery = _normalize_stored_counter(
+        readme_settings_async("user_info", "lottery_total_count", None)
+    )
+
+    if None in (stored_total, stored_roll_call, stored_lottery):
+        return None
+    if stored_total != stored_roll_call + stored_lottery:
+        return None
+    return stored_total, stored_roll_call, stored_lottery
+
+
+def persist_draw_counts(
+    total_draw_count: int, roll_call_total: int, lottery_total: int
+) -> tuple[int, int, int]:
+    """持久化抽取统计字段。"""
+    update_settings("user_info", "total_draw_count", int(total_draw_count or 0))
+    update_settings("user_info", "roll_call_total_count", int(roll_call_total or 0))
+    update_settings("user_info", "lottery_total_count", int(lottery_total or 0))
+    return (
+        int(total_draw_count or 0),
+        int(roll_call_total or 0),
+        int(lottery_total or 0),
+    )
+
+
+def recompute_and_persist_draw_counts() -> tuple[int, int, int]:
+    """全量重算并回写抽取统计，兼容旧数据格式。"""
+    return persist_draw_counts(*calculate_total_draw_counts())
+
+
+def increment_usage_counters(
+    *, roll_call_increment: int = 0, lottery_increment: int = 0
+) -> tuple[int, int, int]:
+    """优先增量维护抽取统计；旧版本缺字段时自动回退到全量重算。"""
+    stored_counts = get_stored_draw_counts()
+    if stored_counts is None:
+        return recompute_and_persist_draw_counts()
+
+    total_draw_count, roll_call_total, lottery_total = stored_counts
+    roll_call_total += max(0, int(roll_call_increment or 0))
+    lottery_total += max(0, int(lottery_increment or 0))
+    total_draw_count = roll_call_total + lottery_total
+    return persist_draw_counts(total_draw_count, roll_call_total, lottery_total)
 
 
 class AppInitializer:

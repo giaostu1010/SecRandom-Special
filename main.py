@@ -20,12 +20,11 @@ from app.tools.config import (
     get_geoip_properties_zh_cn,
 )
 from app.tools.settings_default import manage_settings_file
-from app.tools.settings_access import (
-    readme_settings_async,
-    get_or_create_user_id,
-    update_settings,
+from app.tools.settings_access import readme_settings_async, get_or_create_user_id
+from app.core.app_init import (
+    get_stored_draw_counts,
+    recompute_and_persist_draw_counts,
 )
-from app.core.app_init import calculate_total_draw_counts
 from app.tools.variable import (
     APP_QUIT_ON_LAST_WINDOW_CLOSED,
     VERSION,
@@ -82,14 +81,6 @@ def initialize_sentry():
     sentry_sdk.set_user({"id": user_id, "ip_address": "{{auto}}"})
 
 
-def _read_usage_counter_value(key: str) -> int:
-    try:
-        value = readme_settings_async("user_info", key, 0)
-        return int(value or 0)
-    except Exception:
-        return 0
-
-
 def initialize_posthog(
     total_draw_count: int | None = None,
     roll_call_total: int | None = None,
@@ -104,11 +95,11 @@ def initialize_posthog(
     user_id = get_or_create_user_id()
     geoip_properties = get_geoip_properties_zh_cn()
     if total_draw_count is None:
-        total_draw_count = _read_usage_counter_value("total_draw_count")
-    if roll_call_total is None:
-        roll_call_total = _read_usage_counter_value("roll_call_total_count")
-    if lottery_total is None:
-        lottery_total = _read_usage_counter_value("lottery_total_count")
+        stored_counts = get_stored_draw_counts()
+        if stored_counts is not None:
+            total_draw_count, roll_call_total, lottery_total = stored_counts
+        else:
+            total_draw_count, roll_call_total, lottery_total = (0, 0, 0)
 
     posthog.capture(
         distinct_id=user_id,
@@ -122,17 +113,6 @@ def initialize_posthog(
             },
         },
     )
-
-
-def refresh_usage_counters():
-    """后台补算抽取统计并回写缓存字段。"""
-    total_draw_count, roll_call_total, lottery_total = calculate_total_draw_counts()
-    update_settings("user_info", "total_draw_count", total_draw_count)
-    update_settings("user_info", "roll_call_total_count", roll_call_total)
-    update_settings("user_info", "lottery_total_count", lottery_total)
-    return total_draw_count, roll_call_total, lottery_total
-
-
 def schedule_deferred_startup_tasks(window_manager: WindowManager):
     """在首个窗口可见后执行非关键启动任务。"""
 
@@ -141,7 +121,7 @@ def schedule_deferred_startup_tasks(window_manager: WindowManager):
 
     def task():
         try:
-            totals = refresh_usage_counters()
+            totals = recompute_and_persist_draw_counts()
         except Exception as e:
             logger.exception(f"补算抽取统计失败，将使用已存储计数发送事件: {e}")
             totals = None
