@@ -1276,7 +1276,11 @@ class SettingsWindow(FluentWindow):
                 return
 
             try:
+                self._clear_placeholder_layout(container)
                 layout.addWidget(real_page)
+                if not hasattr(self, "_created_pages"):
+                    self._created_pages = {}
+                self._created_pages[name] = real_page
                 logger.debug(f"后台预热创建设置页面: {name}")
             except RuntimeError as e:
                 logger.exception(

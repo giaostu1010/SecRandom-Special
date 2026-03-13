@@ -531,6 +531,12 @@ class MainWindow(FluentWindow):
         self.settingsInterface.setObjectName("settingsInterface")
 
         self.initNavigation()
+        try:
+            self.stackedWidget.currentChanged.connect(
+                self._on_main_stacked_widget_changed
+            )
+        except Exception:
+            pass
         self._sub_interface_created = True
         self._ensure_main_page_loaded("roll_call_page")
 
@@ -607,6 +613,19 @@ class MainWindow(FluentWindow):
         self.activateWindow()
         self.raise_()
         self.switchTo(shell)
+
+    def _on_main_stacked_widget_changed(self, index: int):
+        try:
+            widget = self.stackedWidget.widget(index)
+        except Exception:
+            return
+
+        if widget is None:
+            return
+
+        page_name = widget.objectName()
+        if page_name in self._registered_pages:
+            self._ensure_main_page_loaded(page_name)
 
     def initNavigation(self):
         """初始化导航系统
@@ -715,9 +734,6 @@ class MainWindow(FluentWindow):
             )
             settings_item.clicked.connect(
                 lambda: self.showSettingsRequested.emit("basicSettingsInterface")
-            )
-            settings_item.clicked.connect(
-                lambda: self._show_and_switch_to_page("roll_call_page")
             )
 
     # ==================================================
