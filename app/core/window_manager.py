@@ -294,16 +294,14 @@ class WindowManager:
         if hasattr(self.url_handler, "windowActionRequested"):
             self.url_handler.windowActionRequested.connect(self._handle_window_action)
 
-    def _ensure_main_window_pages_created(self) -> None:
+    def _ensure_main_window_page(self, page_name: str | None = None) -> None:
         if self.main_window is None:
             return
         try:
-            roll_call_page = getattr(self.main_window, "roll_call_page", None)
-            lottery_page = getattr(self.main_window, "lottery_page", None)
-            if roll_call_page is not None or lottery_page is not None:
-                return
             if hasattr(self.main_window, "createSubInterface"):
                 self.main_window.createSubInterface()
+            if page_name and hasattr(self.main_window, "_ensure_main_page_loaded"):
+                self.main_window._ensure_main_page_loaded(page_name)
         except Exception as e:
             logger.exception("确保主窗口页面创建失败（已忽略）: {}", e)
 
@@ -312,13 +310,18 @@ class WindowManager:
             return None
         try:
             if hasattr(self.main_window, "_get_roll_call_widget"):
-                return self.main_window._get_roll_call_widget(
-                    getattr(self.main_window, "roll_call_page", None)
-                )
+                self._ensure_main_window_page("roll_call_page")
+                return self.main_window._get_roll_call_widget()
         except Exception:
             pass
 
-        roll_call_page = getattr(self.main_window, "roll_call_page", None)
+        self._ensure_main_window_page("roll_call_page")
+        if hasattr(self.main_window, "_get_main_page"):
+            roll_call_page = self.main_window._get_main_page(
+                "roll_call_page", load=False
+            )
+        else:
+            roll_call_page = getattr(self.main_window, "roll_call_page", None)
         if roll_call_page is None:
             return None
         if (
@@ -347,7 +350,18 @@ class WindowManager:
     def _get_lottery_widget(self):
         if self.main_window is None:
             return None
-        lottery_page = getattr(self.main_window, "lottery_page", None)
+        try:
+            if hasattr(self.main_window, "_get_lottery_widget"):
+                self._ensure_main_window_page("lottery_page")
+                return self.main_window._get_lottery_widget()
+        except Exception:
+            pass
+
+        self._ensure_main_window_page("lottery_page")
+        if hasattr(self.main_window, "_get_main_page"):
+            lottery_page = self.main_window._get_main_page("lottery_page", load=False)
+        else:
+            lottery_page = getattr(self.main_window, "lottery_page", None)
         if lottery_page is None:
             return None
         if hasattr(lottery_page, "lottery_widget") and lottery_page.lottery_widget:
@@ -369,7 +383,7 @@ class WindowManager:
 
     def _handle_roll_call_action(self, action: str, payload) -> None:
         def impl():
-            self._ensure_main_window_pages_created()
+            self._ensure_main_window_page("roll_call_page")
             data = payload if isinstance(payload, dict) else {}
             if action == "quick_draw":
                 if hasattr(self.main_window, "_handle_quick_draw"):
@@ -455,7 +469,7 @@ class WindowManager:
 
     def _handle_lottery_action(self, action: str, payload) -> None:
         def impl():
-            self._ensure_main_window_pages_created()
+            self._ensure_main_window_page("lottery_page")
             data = payload if isinstance(payload, dict) else {}
             widget = self._get_lottery_widget()
             if widget is None:
