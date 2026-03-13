@@ -755,21 +755,9 @@ class SettingsWindow(FluentWindow):
         """
         interface = self._make_placeholder(interface_attr)
         setattr(self, interface_attr, interface)
-
-        def make_factory(method_name=page_method, iface=interface):
-            def factory(parent=iface, is_preview=False):
-                page_instance = getattr(settings_window_page, method_name)(
-                    parent, is_preview=is_preview
-                )
-                return page_instance
-
-            return factory
-
-        self._deferred_factories[interface_attr] = make_factory()
-        self._deferred_factories_meta[interface_attr] = {
-            "is_pivot": is_pivot,
-            "is_preview": False,
-        }
+        self._register_deferred_factory(
+            interface_attr, page_method, is_pivot, settings_window_page
+        )
 
     def _make_placeholder(self, name: str):
         """创建占位符组件
@@ -811,22 +799,14 @@ class SettingsWindow(FluentWindow):
             settings_window_page: 设置窗口页面模块
         """
         self.updateInterface = self._make_placeholder("updateInterface")
-        self._deferred_factories["updateInterface"] = self._make_page_factory(
-            "update_page", self.updateInterface, settings_window_page
+        self._register_deferred_factory(
+            "updateInterface", "update_page", False, settings_window_page
         )
-        self._deferred_factories_meta["updateInterface"] = {
-            "is_pivot": False,
-            "is_preview": False,
-        }
 
         self.aboutInterface = self._make_placeholder("aboutInterface")
-        self._deferred_factories["aboutInterface"] = self._make_page_factory(
-            "about_page", self.aboutInterface, settings_window_page
+        self._register_deferred_factory(
+            "aboutInterface", "about_page", False, settings_window_page
         )
-        self._deferred_factories_meta["aboutInterface"] = {
-            "is_pivot": False,
-            "is_preview": False,
-        }
 
     def _make_page_factory(self, page_method, interface, settings_window_page):
         """创建页面工厂函数
@@ -847,6 +827,32 @@ class SettingsWindow(FluentWindow):
             return page_instance
 
         return factory
+
+    def _register_deferred_factory(
+        self, interface_attr, page_method, is_pivot, settings_window_page
+    ) -> None:
+        interface = getattr(self, interface_attr, None)
+        if interface is None:
+            return
+
+        self._deferred_factories[interface_attr] = self._make_page_factory(
+            page_method, interface, settings_window_page
+        )
+        self._deferred_factories_meta[interface_attr] = {
+            "is_pivot": is_pivot,
+            "is_preview": False,
+        }
+
+    def _get_page_factory_definition(self, page_name: str):
+        for _, interface_attr, page_method, is_pivot in self._get_page_configs():
+            if interface_attr == page_name:
+                return page_method, is_pivot
+
+        special_pages = {
+            "updateInterface": ("update_page", False),
+            "aboutInterface": ("about_page", False),
+        }
+        return special_pages.get(page_name)
 
     def _setup_background_warmup(self):
         """设置后台预热"""
@@ -1187,63 +1193,17 @@ class SettingsWindow(FluentWindow):
         """
         from app.page_building import settings_window_page
 
-        factory_mapping = {
-            "basicSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.basic_settings_page(
-                p, is_preview=is_preview
-            ),
-            "listManagementInterface": lambda p=container,
-            is_preview=False: settings_window_page.list_management_page(
-                p, is_preview=is_preview
-            ),
-            "extractionSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.extraction_settings_page(
-                p, is_preview=is_preview
-            ),
-            "floatingWindowManagementInterface": lambda p=container,
-            is_preview=False: settings_window_page.floating_window_management_page(
-                p, is_preview=is_preview
-            ),
-            "notificationSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.notification_settings_page(
-                p, is_preview=is_preview
-            ),
-            "safetySettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.safety_settings_page(
-                p, is_preview=is_preview
-            ),
-            "voiceSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.voice_settings_page(
-                p, is_preview=is_preview
-            ),
-            "themeManagementInterface": lambda p=container,
-            is_preview=False: settings_window_page.theme_management_page(
-                p, is_preview=is_preview
-            ),
-            "historyInterface": lambda p=container,
-            is_preview=False: settings_window_page.history_page(
-                p, is_preview=is_preview
-            ),
-            "moreSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.more_settings_page(
-                p, is_preview=is_preview
-            ),
-            "updateInterface": lambda p=container,
-            is_preview=False: settings_window_page.update_page(
-                p, is_preview=is_preview
-            ),
-            "aboutInterface": lambda p=container,
-            is_preview=False: settings_window_page.about_page(p, is_preview=is_preview),
-            "courseSettingsInterface": lambda p=container,
-            is_preview=False: settings_window_page.linkage_settings_page(
-                p, is_preview=is_preview
-            ),
-        }
+        page_definition = self._get_page_factory_definition(page_name)
+        if page_definition is None:
+            return
 
-        if page_name in factory_mapping:
-            if not hasattr(self, "_deferred_factories"):
-                self._deferred_factories = {}
-            self._deferred_factories[page_name] = factory_mapping[page_name]
+        if container is not None:
+            setattr(self, page_name, container)
+
+        page_method, is_pivot = page_definition
+        self._register_deferred_factory(
+            page_name, page_method, is_pivot, settings_window_page
+        )
 
     def _create_deferred_page(self, name: str):
         """根据名字创建对应延迟工厂并把结果加入占位容器
