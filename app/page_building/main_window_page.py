@@ -10,9 +10,6 @@ from app.tools.settings_default import *
 from app.Language.obtain_language import *
 from app.tools.settings_access import get_settings_signals
 
-# 导入自定义页面内容组件
-from app.view.main.roll_call import roll_call
-from app.view.main.lottery import Lottery
 from app.tools.theme_loader import ThemeLoader
 
 
@@ -20,10 +17,18 @@ class roll_call_page(PageTemplate):
     """创建班级点名页面"""
 
     def __init__(self, parent: QFrame = None):
-        widget_class = ThemeLoader.load_theme_widget("roll_call", roll_call)
+        widget_class = ThemeLoader.load_theme_widget(
+            "roll_call", self._get_default_widget_class()
+        )
         super().__init__(content_widget_class=widget_class, parent=parent)
         self.roll_call_widget = None
         get_settings_signals().settingChanged.connect(self._on_global_setting_changed)
+
+    @staticmethod
+    def _get_default_widget_class():
+        from app.view.main.roll_call import roll_call
+
+        return roll_call
 
     def _on_global_setting_changed(self, group, key, value):
         if group == "theme_management" and key in (
@@ -31,7 +36,7 @@ class roll_call_page(PageTemplate):
             "roll_call_theme_type",
         ):
             self.content_widget_class = ThemeLoader.load_theme_widget(
-                "roll_call", roll_call
+                "roll_call", self._get_default_widget_class()
             )
             self.handle_settings_change()
 
@@ -82,10 +87,18 @@ class lottery_page(PageTemplate):
     """创建班级点名页面"""
 
     def __init__(self, parent: QFrame = None):
-        widget_class = ThemeLoader.load_theme_widget("lottery", Lottery)
+        widget_class = ThemeLoader.load_theme_widget(
+            "lottery", self._get_default_widget_class()
+        )
         super().__init__(content_widget_class=widget_class, parent=parent)
         self.lottery_widget = None
         get_settings_signals().settingChanged.connect(self._on_global_setting_changed)
+
+    @staticmethod
+    def _get_default_widget_class():
+        from app.view.main.lottery import Lottery
+
+        return Lottery
 
     def _on_global_setting_changed(self, group, key, value):
         if group == "theme_management" and key in (
@@ -93,7 +106,7 @@ class lottery_page(PageTemplate):
             "lottery_theme_type",
         ):
             self.content_widget_class = ThemeLoader.load_theme_widget(
-                "lottery", Lottery
+                "lottery", self._get_default_widget_class()
             )
             self.handle_settings_change()
 
