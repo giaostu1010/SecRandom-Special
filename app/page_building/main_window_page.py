@@ -1,6 +1,6 @@
 # 导入库
 from PySide6.QtWidgets import QFrame
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import Qt
 
 # 导入页面模板
 from app.page_building.page_template import PageTemplate, PivotPageTemplate
@@ -63,10 +63,6 @@ class _ThemedMainPage(PageTemplate):
     def handle_settings_change(self):
         """处理设置变化信号"""
         self.clear_content()
-        QTimer.singleShot(0, self._recreate_content)
-
-    def _recreate_content(self):
-        """重新创建内容"""
         self.create_content()
 
     def clear_content(self):
