@@ -5,9 +5,6 @@ import gc
 import subprocess
 import platform
 
-import sentry_sdk
-from sentry_sdk.integrations.loguru import LoguruIntegration, LoggingLevels
-from posthog import Posthog
 from PySide6.QtCore import Qt, QThreadPool, QRunnable, QTimer, qInstallMessageHandler
 from PySide6.QtWidgets import QApplication
 from loguru import logger
@@ -21,10 +18,6 @@ from app.tools.config import (
 )
 from app.tools.settings_default import manage_settings_file
 from app.tools.settings_access import readme_settings_async, get_or_create_user_id
-from app.core.usage_counters import (
-    get_stored_draw_counts,
-    recompute_and_persist_draw_counts,
-)
 from app.tools.variable import (
     APP_QUIT_ON_LAST_WINDOW_CLOSED,
     VERSION,
@@ -62,6 +55,9 @@ import app.core.window_manager as wm
 
 def initialize_sentry():
     """初始化 Sentry 错误监控系统"""
+    import sentry_sdk
+    from sentry_sdk.integrations.loguru import LoguruIntegration, LoggingLevels
+
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[
@@ -87,6 +83,8 @@ def initialize_posthog(
     lottery_total: int | None = None,
 ):
     """初始化 PostHog 产品分析系统"""
+    from posthog import Posthog
+
     posthog = Posthog(
         project_api_key=POSTHOG_API_KEY,
         host=POSTHOG_HOST,
@@ -95,6 +93,8 @@ def initialize_posthog(
     user_id = get_or_create_user_id()
     geoip_properties = get_geoip_properties_zh_cn()
     if total_draw_count is None:
+        from app.core.usage_counters import get_stored_draw_counts
+
         stored_counts = get_stored_draw_counts()
         if stored_counts is not None:
             total_draw_count, roll_call_total, lottery_total = stored_counts
@@ -124,6 +124,8 @@ def schedule_deferred_startup_tasks(window_manager: WindowManager):
     def task():
         start = time.perf_counter()
         try:
+            from app.core.usage_counters import recompute_and_persist_draw_counts
+
             totals = recompute_and_persist_draw_counts()
         except Exception as e:
             logger.exception(f"补算抽取统计失败，将使用已存储计数发送事件: {e}")
