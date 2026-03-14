@@ -561,27 +561,12 @@ class SettingsWindow(FluentWindow):
         trace = start_interaction(f"settings.{page_name}")
         logger.debug(f"处理设置页面请求: {page_name}")
 
-        self._ensure_sub_interface_created()
-
-        page_mapping = self._get_page_mapping()
-
-        if page_name in page_mapping:
-            interface_attr, item_attr = page_mapping[page_name]
-            interface = getattr(self, interface_attr, None)
-            nav_item = getattr(self, item_attr, None)
-
-            if interface and nav_item:
-                self._ensure_deferred_page_loaded(interface_attr)
-                logger.debug(f"切换到设置页面: {page_name}")
-                self.switchTo(interface)
-                trace.log("shell_visible")
-                self.show()
-                self.activateWindow()
-                self.raise_()
-            else:
-                logger.warning(f"设置页面不存在或尚未初始化: {page_name}")
+        page = self._ensure_settings_page_ready(page_name)
+        if page is not None:
+            trace.log("shell_visible")
         else:
             logger.warning(f"未知的设置页面: {page_name}")
+        return page
 
     def _ensure_sub_interface_created(self):
         """确保子界面已创建"""
@@ -608,6 +593,46 @@ class SettingsWindow(FluentWindow):
             mapping[page.route_name] = value
             mapping[page.interface_attr] = value
         return mapping
+
+    def _resolve_settings_page_target(self, page_name: str):
+        page_mapping = self._get_page_mapping()
+        if page_name not in page_mapping:
+            return None
+
+        interface_attr, item_attr = page_mapping[page_name]
+        interface = getattr(self, interface_attr, None)
+        nav_item = getattr(self, item_attr, None)
+        if interface is None or nav_item is None:
+            return None
+
+        return interface_attr, interface
+
+    def _ensure_settings_page_ready(self, page_name: str, on_ready=None):
+        self._ensure_sub_interface_created()
+
+        target = self._resolve_settings_page_target(page_name)
+        if target is None:
+            return None
+
+        interface_attr, interface = target
+        self.switchTo(interface)
+        logger.debug(f"切换到设置页面: {page_name}")
+        self.show()
+        self.activateWindow()
+        self.raise_()
+
+        self._ensure_deferred_page_loaded(interface_attr)
+        page = getattr(self, "_created_pages", {}).get(interface_attr)
+        if page is None:
+            logger.warning(f"设置页面不存在或尚未初始化: {page_name}")
+            return None
+
+        if on_ready is not None:
+            self._request_geometry_sync(
+                lambda current_page=page: on_ready(current_page)
+            )
+
+        return page
 
     # ==================================================
     # 界面创建与导航
@@ -830,10 +855,8 @@ class SettingsWindow(FluentWindow):
     def _load_default_page(self):
         """加载默认页面（基础设置页面）"""
         try:
-            self._ensure_deferred_page_loaded("basicSettingsInterface")
-
-            if hasattr(self, "basicSettingsInterface") and self.basicSettingsInterface:
-                self.switchTo(self.basicSettingsInterface)
+            page = self._ensure_settings_page_ready("basicSettingsInterface")
+            if page is not None:
                 logger.debug("已自动导航到基础设置页面")
         except Exception as e:
             logger.exception(f"加载默认页面失败: {e}")
