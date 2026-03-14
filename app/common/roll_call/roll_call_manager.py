@@ -41,14 +41,9 @@ from app.Language.obtain_language import (
 from app.tools.path_utils import get_data_path
 from app.tools.variable import APP_INIT_DELAY
 from app.tools.config import track_event
+from app.common.safety.verify_proxy import require_and_run_lazy
 
 system_random = SystemRandom()
-
-
-def _require_and_run(*args, **kwargs):
-    from app.common.safety.verify_ops import require_and_run
-
-    return require_and_run(*args, **kwargs)
 
 
 @dataclass(frozen=True, slots=True)
@@ -911,7 +906,7 @@ def start_draw(widget):
     if _is_non_class_time():
         if readme_settings_async("linkage_settings", "verification_required"):
             logger.info("当前时间在非上课时间段内，需要密码验证")
-            _require_and_run(
+            require_and_run_lazy(
                 "roll_call_start", widget, lambda: start_roll_call_draw(widget)
             )
         else:
@@ -929,7 +924,7 @@ def reset_count(widget):
     if _is_non_class_time():
         if readme_settings_async("linkage_settings", "verification_required"):
             logger.info("当前时间在非上课时间段内，需要密码验证")
-            _require_and_run("roll_call_reset", widget, widget._do_reset_count)
+            require_and_run_lazy("roll_call_reset", widget, widget._do_reset_count)
         else:
             logger.info("当前时间在非上课时间段内，禁止重置")
             return

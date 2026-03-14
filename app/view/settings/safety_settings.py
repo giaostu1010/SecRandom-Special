@@ -15,6 +15,7 @@ from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
+from app.common.safety.verify_proxy import require_and_run_lazy
 
 
 def _create_set_password_window():
@@ -39,12 +40,6 @@ def _create_unbind_usb_window():
     from app.page_building.security_window import create_unbind_usb_window
 
     return create_unbind_usb_window()
-
-
-def _require_and_run(*args, **kwargs):
-    from app.common.safety.verify_ops import require_and_run
-
-    return require_and_run(*args, **kwargs)
 
 
 def _read_secrets():
@@ -373,7 +368,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                 )
             )
             return
-        _require_and_run("set_totp", self, _create_set_totp_window)
+        require_and_run_lazy("set_totp", self, _create_set_totp_window)
 
     def bind_usb(self):
         if not _is_password_configured():
@@ -383,7 +378,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                 )
             )
             return
-        _require_and_run("bind_usb", self, _create_bind_usb_window)
+        require_and_run_lazy("bind_usb", self, _create_bind_usb_window)
 
     def unbind_usb(self):
         if not _is_password_configured():
@@ -393,7 +388,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                 )
             )
             return
-        _require_and_run("unbind_usb", self, _create_unbind_usb_window)
+        require_and_run_lazy("unbind_usb", self, _create_unbind_usb_window)
 
     def __on_safety_switch_changed(self):
         if self._busy:
@@ -427,7 +422,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                 self._update_components_enabled_state()
                 logger.debug(f"安全总开关状态：{bool(desired)}")
 
-            _require_and_run("toggle_safety", self, apply)
+            require_and_run_lazy("toggle_safety", self, apply)
         finally:
             self._busy = False
 
@@ -472,7 +467,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                     )
                 logger.debug(f"TOTP开关状态：{bool(desired)}")
 
-            _require_and_run("toggle_totp", self, apply)
+            require_and_run_lazy("toggle_totp", self, apply)
         finally:
             self._busy = False
 
@@ -523,7 +518,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                     )
                 logger.debug(f"U盘验证开关状态：{bool(desired)}")
 
-            _require_and_run("toggle_usb", self, apply)
+            require_and_run_lazy("toggle_usb", self, apply)
         finally:
             self._busy = False
 
@@ -659,7 +654,7 @@ class basic_safety_verification_process(GroupHeaderCardWidget):
             self.verification_process_combo.setCurrentIndex(desired)
             self.verification_process_combo.blockSignals(False)
 
-        _require_and_run("change_verification_process", self, apply)
+        require_and_run_lazy("change_verification_process", self, apply)
 
     def _update_enabled_state(self, enabled):
         """根据安全总开关状态更新组件的启用状态"""
@@ -935,7 +930,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            _require_and_run("toggle_show_hide_floating_window_switch", self, apply)
+            require_and_run_lazy("toggle_show_hide_floating_window_switch", self, apply)
         finally:
             self._busy = False
 
@@ -968,7 +963,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            _require_and_run("toggle_restart_switch", self, apply)
+            require_and_run_lazy("toggle_restart_switch", self, apply)
         finally:
             self._busy = False
 
@@ -999,7 +994,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            _require_and_run("toggle_exit_switch", self, apply)
+            require_and_run_lazy("toggle_exit_switch", self, apply)
         finally:
             self._busy = False
 
@@ -1034,7 +1029,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            _require_and_run("toggle_open_settings_switch", self, apply)
+            require_and_run_lazy("toggle_open_settings_switch", self, apply)
         finally:
             self._busy = False
 
@@ -1078,7 +1073,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            _require_and_run("toggle_preview_settings_switch", self, apply)
+            require_and_run_lazy("toggle_preview_settings_switch", self, apply)
         finally:
             self._busy = False
 

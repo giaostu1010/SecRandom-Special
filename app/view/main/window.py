@@ -35,16 +35,11 @@ from app.page_building.main_window_page import (
     history_page,
 )
 from app.page_building.window_template import BackgroundLayer
+from app.common.safety.verify_proxy import require_and_run_lazy
 from app.tools.settings_access import get_settings_snapshot
 
 if TYPE_CHECKING:
     from app.view.floating_window.levitation import LevitationWindow
-
-
-def _require_and_run(*args, **kwargs):
-    from app.common.safety.verify_ops import require_and_run
-
-    return require_and_run(*args, **kwargs)
 
 
 # ==================================================
@@ -841,9 +836,9 @@ class MainWindow(FluentWindow):
         elif action == "float":
             self._toggle_float_window()
         elif action == "restart":
-            _require_and_run("restart", self, self.restart_app)
+            require_and_run_lazy("restart", self, self.restart_app)
         elif action == "exit":
-            _require_and_run("exit", self, self.close_window_secrandom)
+            require_and_run_lazy("exit", self, self.close_window_secrandom)
         else:
             logger.warning(f"未知的托盘操作: {action}")
 
