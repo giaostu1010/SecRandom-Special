@@ -68,13 +68,6 @@ class AppInitializer:
             self._check_for_updates,
             error_message="检查更新失败",
         )
-        QTimer.singleShot(
-            1500,
-            lambda: safe_execute(
-                self._do_warmup_face_detector_devices,
-                error_message="预热摄像头设备失败",
-            ),
-        )
 
     def _run_main_window_post_show_tasks(self) -> None:
         main_window = getattr(self.window_manager, "main_window", None)
@@ -111,8 +104,3 @@ class AppInitializer:
     def _clear_restart_record_now(self) -> None:
         """清除重启记录"""
         remove_record("", "", "", "restart")
-
-    def _do_warmup_face_detector_devices(self) -> None:
-        from app.common.camera_preview_backend import warmup_camera_devices_async
-
-        warmup_camera_devices_async(force_refresh=True)
