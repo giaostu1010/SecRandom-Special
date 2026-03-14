@@ -3,7 +3,6 @@ from loguru import logger
 
 from app.tools.config import remove_record
 from app.tools.settings_access import readme_settings_async
-from app.tools.update_utils import check_for_updates_on_startup
 from app.tools.variable import APP_INIT_DELAY
 from app.core.font_manager import (
     apply_font_settings,
@@ -66,7 +65,7 @@ class AppInitializer:
             error_message="启动主窗口延后任务失败",
         )
         safe_execute(
-            lambda: check_for_updates_on_startup(None),
+            self._check_for_updates,
             error_message="检查更新失败",
         )
         QTimer.singleShot(
@@ -84,6 +83,11 @@ class AppInitializer:
 
         if hasattr(main_window, "schedule_post_startup_tasks"):
             main_window.schedule_post_startup_tasks()
+
+    def _check_for_updates(self) -> None:
+        from app.tools.update_utils import check_for_updates_on_startup
+
+        check_for_updates_on_startup(None)
 
     def _apply_theme(self) -> None:
         """应用主题设置"""

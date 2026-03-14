@@ -44,7 +44,6 @@ from app.core.window_manager import WindowManager
 from app.core.url_handler_setup import create_url_handler
 from app.core.cs_ipc_handler_setup import create_cs_ipc_handler
 from app.core.app_init import AppInitializer
-from app.tools.update_utils import update_check_thread
 import app.core.window_manager as wm
 
 
@@ -334,9 +333,7 @@ def initialize_app_components(window_manager):
 # ==================================================
 
 
-def cleanup_resources(
-    shared_memory, local_server, url_handler, cs_ipc_handler, update_check_thread
-):
+def cleanup_resources(shared_memory, local_server, url_handler, cs_ipc_handler):
     """清理应用程序资源
 
     Args:
@@ -344,7 +341,6 @@ def cleanup_resources(
         local_server: 本地服务器对象
         url_handler: URL 处理器对象
         cs_ipc_handler: CS IPC 处理器对象
-        update_check_thread: 更新检查线程对象
     """
     if cs_ipc_handler:
         cs_ipc_handler.stop_ipc_client()
@@ -359,6 +355,7 @@ def cleanup_resources(
         local_server.close()
         logger.debug("本地服务器已关闭")
 
+    update_check_thread = _get_update_check_thread()
     if update_check_thread and update_check_thread.isRunning():
         logger.debug("正在等待更新检查线程完成...")
         update_check_thread.wait(UPDATE_CHECK_THREAD_TIMEOUT_MS)
@@ -369,6 +366,15 @@ def cleanup_resources(
 
     gc.collect()
     logger.debug("垃圾回收已完成")
+
+
+def _get_update_check_thread():
+    try:
+        from app.tools import update_utils
+
+        return getattr(update_utils, "update_check_thread", None)
+    except Exception:
+        return None
 
 
 def restart_application(program_dir):
@@ -471,7 +477,6 @@ def handle_exit(
     local_server,
     url_handler,
     cs_ipc_handler,
-    update_check_thread,
 ):
     """处理应用程序退出
 
@@ -482,13 +487,10 @@ def handle_exit(
         local_server: 本地服务器对象
         url_handler: URL 处理器对象
         cs_ipc_handler: CS IPC 处理器对象
-        update_check_thread: 更新检查线程对象
     """
     logger.debug("Qt 事件循环已结束")
 
-    cleanup_resources(
-        shared_memory, local_server, url_handler, cs_ipc_handler, update_check_thread
-    )
+    cleanup_resources(shared_memory, local_server, url_handler, cs_ipc_handler)
 
     logger.info("程序退出流程已完成，正在结束进程")
     if sys.stdout:
@@ -562,7 +564,6 @@ def main():
             local_server,
             url_handler,
             cs_ipc_handler,
-            update_check_thread,
         )
     except Exception as e:
         logger.exception(f"程序退出过程中发生异常: {e}")
