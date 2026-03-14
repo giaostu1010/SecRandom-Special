@@ -88,6 +88,7 @@ class MainWindow(FluentWindow):
         self._has_been_shown = False
         self._post_startup_tasks_scheduled = False
         self.pre_class_reset_performed = False
+        self._sub_interface_create_count = 0
 
     def _setup_timers(self):
         """设置定时器"""
@@ -237,7 +238,7 @@ class MainWindow(FluentWindow):
 
         self.url_command_handler = URLCommandHandler(self)
         self.url_command_handler.showMainPageRequested.connect(
-            self._handle_main_page_requested
+            self.showMainPageRequested.emit
         )
         self.url_command_handler.showSettingsRequested.connect(
             self.showSettingsRequested.emit
@@ -273,14 +274,14 @@ class MainWindow(FluentWindow):
         self.showMainPageRequested.connect(self._handle_main_page_requested)
         self.showTrayActionRequested.connect(self._handle_tray_action_requested)
         self.float_window.rollCallRequested.connect(
-            lambda: self._show_and_switch_to_page("roll_call_page")
+            lambda: self.showMainPageRequested.emit("roll_call_page")
         )
         self.float_window.quickDrawRequested.connect(self._handle_quick_draw)
         self.float_window.lotteryRequested.connect(
-            lambda: self._show_and_switch_to_page("lottery_page")
+            lambda: self.showMainPageRequested.emit("lottery_page")
         )
         self.float_window.faceDrawRequested.connect(
-            lambda: self._show_and_switch_to_page("camera_preview_page")
+            lambda: self.showMainPageRequested.emit("camera_preview_page")
         )
         self.float_window.timerRequested.connect(self._open_countdown_timer_window)
 
@@ -549,6 +550,10 @@ class MainWindow(FluentWindow):
         except Exception:
             pass
         self._sub_interface_created = True
+        self._sub_interface_create_count += 1
+        logger.debug(
+            f"主窗口导航壳创建完成，累计有效创建次数: {self._sub_interface_create_count}"
+        )
 
     def _register_main_page_shell(self, page_name: str):
         shell = QWidget(self)
@@ -631,10 +636,13 @@ class MainWindow(FluentWindow):
             return
 
         self._ensure_main_page_loaded(page_name)
+        self._activate_main_window()
+        self.switchTo(shell)
+
+    def _activate_main_window(self):
         self._show_main_window()
         self.activateWindow()
         self.raise_()
-        self.switchTo(shell)
 
     def _on_main_stacked_widget_changed(self, index: int):
         try:
@@ -793,9 +801,7 @@ class MainWindow(FluentWindow):
                 self._show_and_switch_to_page(page_name)
                 return
 
-        self._show_main_window()
-        self.activateWindow()
-        self.raise_()
+        self._activate_main_window()
         self.switchTo(page)
 
     def _handle_main_page_requested(self, page_name: str):
@@ -809,9 +815,7 @@ class MainWindow(FluentWindow):
         )
         if page_name == "main_window":
             logger.debug("MainWindow._handle_main_page_requested: 显示主窗口")
-            self._show_main_window()
-            self.raise_()
-            self.activateWindow()
+            self._activate_main_window()
         elif page_name in self._page_shells:
             logger.debug(
                 f"MainWindow._handle_main_page_requested: 切换到页面: {page_name}"
@@ -851,7 +855,7 @@ class MainWindow(FluentWindow):
         logger.debug("开始连接快捷键信号...")
 
         self.shortcut_manager.openRollCallPageRequested.connect(
-            lambda: self._show_and_switch_to_page("roll_call_page")
+            lambda: self.showMainPageRequested.emit("roll_call_page")
         )
         logger.debug("快捷键信号已连接: openRollCallPageRequested")
 
@@ -859,7 +863,7 @@ class MainWindow(FluentWindow):
         logger.debug("快捷键信号已连接: useQuickDrawRequested")
 
         self.shortcut_manager.openLotteryPageRequested.connect(
-            lambda: self._show_and_switch_to_page("lottery_page")
+            lambda: self.showMainPageRequested.emit("lottery_page")
         )
         logger.debug("快捷键信号已连接: openLotteryPageRequested")
 
