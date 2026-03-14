@@ -11,6 +11,11 @@ from app.common.page_registry import (
     iter_settings_pages,
     resolve_main_page_alias,
 )
+from app.common.safety.verify_ops import (
+    resolve_operation_for_command,
+    resolve_operation_switch,
+    should_require_password_for_command,
+)
 
 
 # ==================================================
@@ -237,74 +242,12 @@ class URLCommandHandler(QObject):
 
     def _requires_verification(self, command: str) -> bool:
         """检查命令是否需要验证"""
-        from app.tools.settings_access import readme_settings_async
-        from app.common.safety.password import is_configured as password_is_configured
-
-        if command.startswith("data/"):
-            logger.debug(f"命令无需验证（数据只读）：{command}")
-            return False
-
-        # 未配置密码则不需要验证
-        if not password_is_configured():
-            logger.debug(f"命令无需验证（未配置密码）：{command}")
-            return False
-
-        # 检查安全总开关
-        if not readme_settings_async("basic_safety_settings", "safety_switch"):
-            logger.debug(f"命令无需验证（安全总开关关闭）：{command}")
-            return False
-
         if command in (self.secure_commands or []):
             logger.debug(f"命令需验证（自定义受控命令）：{command}")
             return True
 
-        # 命令到操作类型的映射
-        command_to_op = {
-            "tray/settings": "open_settings",
-            "tray/float": "show_hide_floating_window",
-            "window/main": None,
-            "window/settings": "open_settings",
-            "window/float": "show_hide_floating_window",
-            "window/timer": None,
-            "tray/restart": "restart",
-            "tray/exit": "exit",
-            "roll_call/quick_draw": None,
-            "roll_call/start": None,
-            "roll_call/reset": None,
-            "lottery/start": None,
-            "lottery/reset": None,
-        }
-
-        # 操作类型到开关的映射
-        op_to_switch = {
-            "open_settings": "open_settings_switch",
-            "show_hide_floating_window": "show_hide_floating_window_switch",
-            "restart": "restart_switch",
-            "exit": "exit_switch",
-            "roll_call_start": "safety_switch",
-            "roll_call_reset": "safety_switch",
-            "lottery_start": "safety_switch",
-            "lottery_reset": "safety_switch",
-            "quick_draw": "safety_switch",
-        }
-
-        # 获取操作类型
-        op = command_to_op.get(command, None)
-        if op is None:
-            logger.debug(f"命令无需验证（默认放行）：{command}")
-            return False
-
-        # 获取对应的开关
-        switch = op_to_switch.get(op)
-        if not switch:
-            logger.debug(f"命令需验证（默认受控）：{command}")
-            return True
-
-        # 检查开关状态
-        requires = bool(readme_settings_async("basic_safety_settings", switch))
-        logger.debug(
-            f"检查命令是否需要验证 - 命令: {command}, 操作: {op}, 开关: {switch}, 结果: {requires}"
-        )
+        requires = should_require_password_for_command(command)
+        logger.debug(f"检查命令是否需要验证 - 命令: {command}, 结果: {requires}")
         return requires
 
     def _resolve_settings_page(
@@ -364,36 +307,8 @@ class URLCommandHandler(QObject):
         return payload
 
     def _get_op_and_switch(self, command: str) -> tuple[str, Optional[str]]:
-        command_to_op = {
-            "tray/settings": "open_settings",
-            "tray/float": "show_hide_floating_window",
-            "window/main": None,
-            "window/settings": "open_settings",
-            "window/float": "show_hide_floating_window",
-            "window/timer": None,
-            "tray/restart": "restart",
-            "tray/exit": "exit",
-            "roll_call/quick_draw": "quick_draw",
-            "roll_call/start": "roll_call_start",
-            "roll_call/reset": "roll_call_reset",
-            "lottery/start": "lottery_start",
-            "lottery/reset": "lottery_reset",
-        }
-
-        op_to_switch = {
-            "open_settings": "open_settings_switch",
-            "show_hide_floating_window": "show_hide_floating_window_switch",
-            "restart": "restart_switch",
-            "exit": "exit_switch",
-            "roll_call_start": "safety_switch",
-            "roll_call_reset": "safety_switch",
-            "lottery_start": "safety_switch",
-            "lottery_reset": "safety_switch",
-            "quick_draw": "safety_switch",
-        }
-
-        op = command_to_op.get(command, command)
-        return op, op_to_switch.get(op)
+        op = resolve_operation_for_command(command) or command
+        return op, resolve_operation_switch(op)
 
     def _get_linkage_verification_policy(self, kind: str) -> Dict[str, bool]:
         from app.tools.settings_access import readme_settings_async
