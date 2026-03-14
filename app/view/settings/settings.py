@@ -32,6 +32,12 @@ from app.tools.interaction_perf import start_interaction
 from app.page_building.window_template import BackgroundLayer
 from app.Language.obtain_language import get_content_name_async
 from app.common.IPC_URL.url_command_handler import URLCommandHandler
+from app.common.page_registry import (
+    get_settings_page_by_interface,
+    iter_navigable_settings_pages,
+    iter_settings_page_container_names,
+    iter_settings_pages,
+)
 from app.common.search.settings_search_controller import SettingsSearchController
 
 
@@ -68,20 +74,8 @@ class SettingsWindow(FluentWindow):
 
     def _initialize_variables(self):
         """初始化实例变量"""
-        interface_names = [
-            "basicSettingsInterface",
-            "listManagementInterface",
-            "extractionSettingsInterface",
-            "floatingWindowManagementInterface",
-            "notificationSettingsInterface",
-            "safetySettingsInterface",
-            "customSettingsInterface",
-            "voiceSettingsInterface",
-            "themeManagementInterface",
-            "historyInterface",
-            "moreSettingsInterface",
-            "updateInterface",
-            "aboutInterface",
+        interface_names = list(iter_settings_page_container_names()) + [
+            "customSettingsInterface"
         ]
 
         for name in interface_names:
@@ -577,64 +571,12 @@ class SettingsWindow(FluentWindow):
         Returns:
             dict: 页面名称到界面属性的映射
         """
-        return {
-            "settings_basic": ("basicSettingsInterface", "basic_settings_item"),
-            "settings_list": ("listManagementInterface", "list_management_item"),
-            "settings_extraction": (
-                "extractionSettingsInterface",
-                "extraction_settings_item",
-            ),
-            "settings_floating": (
-                "floatingWindowManagementInterface",
-                "floating_window_management_item",
-            ),
-            "settings_notification": (
-                "notificationSettingsInterface",
-                "notification_settings_item",
-            ),
-            "settings_safety": ("safetySettingsInterface", "safety_settings_item"),
-            "settings_linkage": ("courseSettingsInterface", "course_settings_item"),
-            "settings_voice": ("voiceSettingsInterface", "voice_settings_item"),
-            "settings_theme": ("themeManagementInterface", "theme_management_item"),
-            "settings_history": ("historyInterface", "history_item"),
-            "settings_more": ("moreSettingsInterface", "more_settings_item"),
-            "settings_update": ("updateInterface", "update_item"),
-            "settings_about": ("aboutInterface", "about_item"),
-            "basicSettingsInterface": ("basicSettingsInterface", "basic_settings_item"),
-            "listManagementInterface": (
-                "listManagementInterface",
-                "list_management_item",
-            ),
-            "extractionSettingsInterface": (
-                "extractionSettingsInterface",
-                "extraction_settings_item",
-            ),
-            "floatingWindowManagementInterface": (
-                "floatingWindowManagementInterface",
-                "floating_window_management_item",
-            ),
-            "notificationSettingsInterface": (
-                "notificationSettingsInterface",
-                "notification_settings_item",
-            ),
-            "safetySettingsInterface": (
-                "safetySettingsInterface",
-                "safety_settings_item",
-            ),
-            "courseSettingsInterface": (
-                "courseSettingsInterface",
-                "course_settings_item",
-            ),
-            "voiceSettingsInterface": ("voiceSettingsInterface", "voice_settings_item"),
-            "themeManagementInterface": (
-                "themeManagementInterface",
-                "theme_management_item",
-            ),
-            "historyInterface": ("historyInterface", "history_item"),
-            "moreSettingsInterface": ("moreSettingsInterface", "more_settings_item"),
-            "updateInterface": ("updateInterface", "update_item"),
-            "aboutInterface": ("aboutInterface", "about_item"),
-        }
+        mapping = {}
+        for page in iter_settings_pages():
+            value = (page.interface_attr, page.item_attr)
+            mapping[page.route_name] = value
+            mapping[page.interface_attr] = value
+        return mapping
 
     # ==================================================
     # 界面创建与导航
@@ -650,16 +592,16 @@ class SettingsWindow(FluentWindow):
         from app.page_building import settings_window_page
 
         settings = self._get_sidebar_settings()
-        page_configs = self._get_page_configs()
 
-        for setting_key, interface_attr, page_method, is_pivot in page_configs:
-            setting_value = settings.get(setting_key)
+        for page in iter_settings_pages():
+            setting_value = settings.get(page.sidebar_setting_key)
             if setting_value is None or setting_value != 2:
                 self._create_page_placeholder(
-                    interface_attr, page_method, is_pivot, settings_window_page
+                    page.interface_attr,
+                    page.page_method,
+                    page.is_pivot,
+                    settings_window_page,
                 )
-
-        self._create_special_pages(settings_window_page)
         self.initNavigation()
         self._setup_background_warmup()
         self._sub_interface_created = True
@@ -670,21 +612,7 @@ class SettingsWindow(FluentWindow):
         Returns:
             dict: 侧边栏设置字典
         """
-        return {
-            "base_settings": 0,
-            "name_management": 0,
-            "draw_settings": 0,
-            "floating_window_management": 0,
-            "notification_service": 0,
-            "security_settings": 0,
-            "linkage_settings": 0,
-            "voice_settings": 0,
-            "theme_management": 0,
-            "settings_history": 0,
-            "more_settings": 0,
-            "updateInterface": 0,
-            "aboutInterface": 0,
-        }
+        return {page.sidebar_setting_key: 0 for page in iter_navigable_settings_pages()}
 
     def _get_page_configs(self):
         """获取页面配置列表
@@ -693,54 +621,13 @@ class SettingsWindow(FluentWindow):
             list: 页面配置列表
         """
         return [
-            ("base_settings", "basicSettingsInterface", "basic_settings_page", False),
             (
-                "name_management",
-                "listManagementInterface",
-                "list_management_page",
-                True,
-            ),
-            (
-                "draw_settings",
-                "extractionSettingsInterface",
-                "extraction_settings_page",
-                True,
-            ),
-            (
-                "floating_window_management",
-                "floatingWindowManagementInterface",
-                "floating_window_management_page",
-                True,
-            ),
-            (
-                "notification_service",
-                "notificationSettingsInterface",
-                "notification_settings_page",
-                True,
-            ),
-            (
-                "security_settings",
-                "safetySettingsInterface",
-                "safety_settings_page",
-                True,
-            ),
-            (
-                "linkage_settings",
-                "courseSettingsInterface",
-                "linkage_settings_page",
-                False,
-            ),
-            ("voice_settings", "voiceSettingsInterface", "voice_settings_page", True),
-            (
-                "theme_management",
-                "themeManagementInterface",
-                "theme_management_page",
-                False,
-            ),
-            ("settings_history", "historyInterface", "history_page", True),
-            ("more_settings", "moreSettingsInterface", "more_settings_page", True),
-            ("updateInterface", "updateInterface", "update_page", False),
-            ("aboutInterface", "aboutInterface", "about_page", False),
+                page.sidebar_setting_key,
+                page.interface_attr,
+                page.page_method,
+                page.is_pivot,
+            )
+            for page in iter_settings_pages()
         ]
 
     def _create_page_placeholder(
@@ -793,22 +680,6 @@ class SettingsWindow(FluentWindow):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-    def _create_special_pages(self, settings_window_page):
-        """创建特殊页面（更新和关于页面）
-
-        Args:
-            settings_window_page: 设置窗口页面模块
-        """
-        self.updateInterface = self._make_placeholder("updateInterface")
-        self._register_deferred_factory(
-            "updateInterface", "update_page", False, settings_window_page
-        )
-
-        self.aboutInterface = self._make_placeholder("aboutInterface")
-        self._register_deferred_factory(
-            "aboutInterface", "about_page", False, settings_window_page
-        )
-
     def _make_page_factory(self, page_method, interface, settings_window_page):
         """创建页面工厂函数
 
@@ -845,15 +716,10 @@ class SettingsWindow(FluentWindow):
         }
 
     def _get_page_factory_definition(self, page_name: str):
-        for _, interface_attr, page_method, is_pivot in self._get_page_configs():
-            if interface_attr == page_name:
-                return page_method, is_pivot
-
-        special_pages = {
-            "updateInterface": ("update_page", False),
-            "aboutInterface": ("about_page", False),
-        }
-        return special_pages.get(page_name)
+        page = get_settings_page_by_interface(page_name)
+        if page is None:
+            return None
+        return page.page_method, page.is_pivot
 
     def _setup_background_warmup(self):
         """设置后台预热"""
@@ -866,20 +732,16 @@ class SettingsWindow(FluentWindow):
         """初始化导航系统
         根据用户设置构建个性化菜单导航"""
         settings = self._get_sidebar_settings()
-        nav_configs = self._get_nav_configs()
-
-        for (
-            setting_key,
-            interface_attr,
-            item_attr,
-            icon_name,
-            module,
-            name_key,
-        ) in nav_configs:
-            setting_value = settings.get(setting_key)
+        for page in iter_navigable_settings_pages():
+            setting_value = settings.get(page.sidebar_setting_key)
             if setting_value is None or setting_value != 2:
                 self._add_navigation_item(
-                    setting_key, interface_attr, item_attr, icon_name, module, name_key
+                    page.sidebar_setting_key,
+                    page.interface_attr,
+                    page.item_attr,
+                    page.icon_name,
+                    page.language_module,
+                    page.title_key,
                 )
 
         self.splashScreen.finish()
@@ -893,109 +755,14 @@ class SettingsWindow(FluentWindow):
         """
         return [
             (
-                "base_settings",
-                "basicSettingsInterface",
-                "basic_settings_item",
-                "ic_fluent_wrench_settings_20_filled",
-                "basic_settings",
-                "title",
-            ),
-            (
-                "name_management",
-                "listManagementInterface",
-                "list_management_item",
-                "ic_fluent_list_20_filled",
-                "list_management",
-                "title",
-            ),
-            (
-                "draw_settings",
-                "extractionSettingsInterface",
-                "extraction_settings_item",
-                "ic_fluent_archive_20_filled",
-                "extraction_settings",
-                "title",
-            ),
-            (
-                "floating_window_management",
-                "floatingWindowManagementInterface",
-                "floating_window_management_item",
-                "ic_fluent_window_apps_20_filled",
-                "floating_window_management",
-                "title",
-            ),
-            (
-                "notification_service",
-                "notificationSettingsInterface",
-                "notification_settings_item",
-                "ic_fluent_comment_note_20_filled",
-                "notification_settings",
-                "title",
-            ),
-            (
-                "security_settings",
-                "safetySettingsInterface",
-                "safety_settings_item",
-                "ic_fluent_shield_20_filled",
-                "safety_settings",
-                "title",
-            ),
-            (
-                "linkage_settings",
-                "courseSettingsInterface",
-                "course_settings_item",
-                "ic_fluent_calendar_ltr_20_filled",
-                "linkage_settings",
-                "title",
-            ),
-            (
-                "voice_settings",
-                "voiceSettingsInterface",
-                "voice_settings_item",
-                "ic_fluent_person_voice_20_filled",
-                "voice_settings",
-                "title",
-            ),
-            (
-                "theme_management",
-                "themeManagementInterface",
-                "theme_management_item",
-                "ic_fluent_paint_brush_20_filled",
-                "theme_management",
-                "title",
-            ),
-            (
-                "settings_history",
-                "historyInterface",
-                "history_item",
-                "ic_fluent_history_20_filled",
-                "history",
-                "title",
-            ),
-            (
-                "more_settings",
-                "moreSettingsInterface",
-                "more_settings_item",
-                "ic_fluent_more_horizontal_20_filled",
-                "more_settings",
-                "title",
-            ),
-            (
-                "updateInterface",
-                "updateInterface",
-                "update_item",
-                "ic_fluent_arrow_sync_20_filled",
-                "update",
-                "title",
-            ),
-            (
-                "aboutInterface",
-                "aboutInterface",
-                "about_item",
-                "ic_fluent_info_20_filled",
-                "about",
-                "title",
-            ),
+                page.sidebar_setting_key,
+                page.interface_attr,
+                page.item_attr,
+                page.icon_name,
+                page.language_module,
+                page.title_key,
+            )
+            for page in iter_navigable_settings_pages()
         ]
 
     def _add_navigation_item(
@@ -1339,20 +1106,8 @@ class SettingsWindow(FluentWindow):
         Returns:
             QWidget: 容器对象或None
         """
-        container_attrs = [
-            "basicSettingsInterface",
-            "listManagementInterface",
-            "extractionSettingsInterface",
-            "floatingWindowManagementInterface",
-            "notificationSettingsInterface",
-            "safetySettingsInterface",
-            "customSettingsInterface",
-            "voiceSettingsInterface",
-            "historyInterface",
-            "moreSettingsInterface",
-            "courseSettingsInterface",
-            "updateInterface",
-            "aboutInterface",
+        container_attrs = list(iter_settings_page_container_names()) + [
+            "customSettingsInterface"
         ]
 
         for attr in container_attrs:
