@@ -21,8 +21,6 @@ from app.tools.personalised import *
 class PageTemplate(QFrame):
     # 暂时禁用实例缓存以解决初始化问题
     # _instances = {}
-    _resolved_content_class_cache = {}
-
     def __new__(cls, content_widget_class=None, parent: QFrame = None, **kwargs):
         # 直接创建新实例，不使用缓存
         return super(PageTemplate, cls).__new__(cls)
@@ -89,27 +87,7 @@ class PageTemplate(QFrame):
         if self.content_widget_class:
             self._ensure_scroll_area()
             self._show_loading_placeholder()
-            self.create_content()
-
-    @classmethod
-    def _resolve_content_widget_class(cls, content_widget_class):
-        if isinstance(content_widget_class, str):
-            cached_cls = cls._resolved_content_class_cache.get(content_widget_class)
-            if cached_cls is not None:
-                return cached_cls, content_widget_class
-
-            if ":" in content_widget_class:
-                module_name, attr = content_widget_class.split(":", 1)
-            else:
-                module_name, attr = content_widget_class.rsplit(".", 1)
-            module = importlib.import_module(module_name)
-            resolved_class = getattr(module, attr)
-            cls._resolved_content_class_cache[content_widget_class] = resolved_class
-            return resolved_class, content_widget_class
-
-        resolved_class = content_widget_class
-        resolved_name = getattr(resolved_class, "__name__", str(resolved_class))
-        return resolved_class, resolved_name
+            QTimer.singleShot(0, self.create_content)
 
     def _ensure_scroll_area(self):
         """确保滚动区域已创建 - 延迟创建以减少内存使用"""
@@ -156,9 +134,20 @@ class PageTemplate(QFrame):
         #    -> 动态导入模块并获取类
         start = time.perf_counter()
         try:
-            content_cls, content_name = self._resolve_content_widget_class(
-                self.content_widget_class
-            )
+            content_cls = None
+            content_name = None
+            if isinstance(self.content_widget_class, str):
+                path = self.content_widget_class
+                content_name = path
+                if ":" in path:
+                    module_name, attr = path.split(":", 1)
+                else:
+                    module_name, attr = path.rsplit(".", 1)
+                module = importlib.import_module(module_name)
+                content_cls = getattr(module, attr)
+            else:
+                content_cls = self.content_widget_class
+                content_name = getattr(content_cls, "__name__", str(content_cls))
 
             # 如果内容组件尚未创建，创建并添加到布局
             if not self.content_created:
@@ -311,8 +300,6 @@ class PivotPageTemplate(QFrame):
     - 切换页面时卸载之前的页面
     - 支持按需重新加载
     """
-
-    _resolved_page_class_cache = {}
 
     def __init__(self, page_config: dict, parent: QFrame = None, is_preview_mode=False):
         """
@@ -482,18 +469,6 @@ class PivotPageTemplate(QFrame):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         inner_layout.addWidget(label)
 
-    @classmethod
-    def _resolve_page_widget_class(cls, base_path: str, page_name: str):
-        cache_key = (base_path, page_name)
-        cached_cls = cls._resolved_page_class_cache.get(cache_key)
-        if cached_cls is not None:
-            return cached_cls
-
-        module = importlib.import_module(f"{base_path}.{page_name}")
-        resolved_class = getattr(module, page_name)
-        cls._resolved_page_class_cache[cache_key] = resolved_class
-        return resolved_class
-
     def _load_page_content(
         self,
         page_name: str,
@@ -516,9 +491,8 @@ class PivotPageTemplate(QFrame):
         try:
             # 动态导入页面组件
             start = time.perf_counter()
-            content_widget_class = self._resolve_page_widget_class(
-                self.base_path, page_name
-            )
+            module = importlib.import_module(f"{self.base_path}.{page_name}")
+            content_widget_class = getattr(module, page_name)
 
             # 创建页面组件
             widget = content_widget_class(self)
@@ -629,11 +603,14 @@ class PivotPageTemplate(QFrame):
             ):
                 self._pending_page_loads.add(page_name)
                 self._show_page_loading_placeholder(info["layout"], info["display"])
-                self._load_page_content(
-                    page_name,
-                    info["display"],
-                    info["scroll"],
-                    info["layout"],
+                QTimer.singleShot(
+                    0,
+                    lambda n=page_name, i=info: self._load_page_content(
+                        n,
+                        i["display"],
+                        i["scroll"],
+                        i["layout"],
+                    ),
                 )
 
     def _unload_excess_pages(self, exclude_page: str = None):

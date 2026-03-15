@@ -269,12 +269,7 @@ def _check_shield_status(settings, last_drawn_time):
 # ==================================================
 # 公平抽取权重计算函数
 # ==================================================
-def calculate_weight(
-    students_data: list,
-    class_name: str,
-    subject: str = "",
-    history_data: dict | None = None,
-) -> list:
+def calculate_weight(students_data: list, class_name: str, subject: str = "") -> list:
     """计算学生权重
 
     Args:
@@ -286,10 +281,10 @@ def calculate_weight(
         list: 更新后的学生数据列表
     """
     settings = _load_weight_settings()
-    if history_data is None:
-        history_data = load_history_data("roll_call", class_name)
-        if subject:
-            history_data = filter_roll_call_history_by_subject(history_data, subject)
+    history_data = load_history_data("roll_call", class_name)
+
+    if subject:
+        history_data = filter_roll_call_history_by_subject(history_data, subject)
 
     group_stats = history_data.get("group_stats", {})
     gender_stats = history_data.get("gender_stats", {})
