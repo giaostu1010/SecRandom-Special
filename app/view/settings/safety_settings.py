@@ -15,67 +15,17 @@ from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
-from app.common.safety.verify_proxy import require_and_run_lazy
-
-
-def _create_set_password_window():
-    from app.page_building.security_window import create_set_password_window
-
-    return create_set_password_window()
-
-
-def _create_set_totp_window():
-    from app.page_building.security_window import create_set_totp_window
-
-    return create_set_totp_window()
-
-
-def _create_bind_usb_window():
-    from app.page_building.security_window import create_bind_usb_window
-
-    return create_bind_usb_window()
-
-
-def _create_unbind_usb_window():
-    from app.page_building.security_window import create_unbind_usb_window
-
-    return create_unbind_usb_window()
-
-
-def _read_secrets():
-    from app.common.safety.secure_store import read_secrets
-
-    return read_secrets()
-
-
-def _write_secrets(data):
-    from app.common.safety.secure_store import write_secrets
-
-    return write_secrets(data)
-
-
-def _is_password_configured() -> bool:
-    from app.common.safety.password import is_configured as password_is_configured
-
-    return bool(password_is_configured())
-
-
-def _is_totp_configured() -> bool:
-    from app.common.safety.totp import is_configured as totp_is_configured
-
-    return bool(totp_is_configured())
-
-
-def _has_binding() -> bool:
-    from app.common.safety.usb import has_binding
-
-    return bool(has_binding())
-
-
-def _is_bound_present() -> bool:
-    from app.common.safety.usb import is_bound_present
-
-    return bool(is_bound_present())
+from app.page_building.security_window import (
+    create_set_password_window,
+    create_set_totp_window,
+    create_bind_usb_window,
+    create_unbind_usb_window,
+)
+from app.common.safety.verify_ops import require_and_run
+from app.common.safety.usb import has_binding, is_bound_present
+from app.common.safety.secure_store import read_secrets, write_secrets
+from app.common.safety.password import is_configured as password_is_configured
+from app.common.safety.totp import is_configured as totp_is_configured
 
 
 # ==================================================
@@ -157,15 +107,14 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         self.safety_switch.setChecked(
             readme_settings_async("basic_safety_settings", "safety_switch")
         )
-        if self.safety_switch.isChecked():
-            try:
-                sec = _read_secrets()
-                bs = sec.get("basic_safety_settings") or {}
-                if "safety_switch" in bs:
-                    self.safety_switch.setChecked(bool(bs.get("safety_switch")))
-            except Exception:
-                pass
-        if self.safety_switch.isChecked() and not _is_password_configured():
+        try:
+            sec = read_secrets()
+            bs = sec.get("basic_safety_settings") or {}
+            if "safety_switch" in bs:
+                self.safety_switch.setChecked(bool(bs.get("safety_switch")))
+        except Exception:
+            pass
+        if self.safety_switch.isChecked() and not password_is_configured():
             self.safety_switch.setChecked(False)
             update_settings("basic_safety_settings", "safety_switch", False)
         self.safety_switch.checkedChanged.connect(self.__on_safety_switch_changed)
@@ -191,19 +140,14 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         self.totp_switch.setChecked(
             readme_settings_async("basic_safety_settings", "totp_switch")
         )
-        if self.safety_switch.isChecked():
-            try:
-                sec = _read_secrets()
-                bs = sec.get("basic_safety_settings") or {}
-                if "totp_switch" in bs:
-                    self.totp_switch.setChecked(bool(bs.get("totp_switch")))
-            except Exception:
-                pass
-        if (
-            self.safety_switch.isChecked()
-            and self.totp_switch.isChecked()
-            and not _is_totp_configured()
-        ):
+        try:
+            sec = read_secrets()
+            bs = sec.get("basic_safety_settings") or {}
+            if "totp_switch" in bs:
+                self.totp_switch.setChecked(bool(bs.get("totp_switch")))
+        except Exception:
+            pass
+        if self.totp_switch.isChecked() and not totp_is_configured():
             self.totp_switch.setChecked(False)
             update_settings("basic_safety_settings", "totp_switch", False)
         self.totp_switch.checkedChanged.connect(self.__on_totp_switch_changed)
@@ -229,19 +173,14 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         self.usb_switch.setChecked(
             readme_settings_async("basic_safety_settings", "usb_switch")
         )
-        if self.safety_switch.isChecked():
-            try:
-                sec = _read_secrets()
-                bs = sec.get("basic_safety_settings") or {}
-                if "usb_switch" in bs:
-                    self.usb_switch.setChecked(bool(bs.get("usb_switch")))
-            except Exception:
-                pass
-        if (
-            self.safety_switch.isChecked()
-            and self.usb_switch.isChecked()
-            and not _has_binding()
-        ):
+        try:
+            sec = read_secrets()
+            bs = sec.get("basic_safety_settings") or {}
+            if "usb_switch" in bs:
+                self.usb_switch.setChecked(bool(bs.get("usb_switch")))
+        except Exception:
+            pass
+        if self.usb_switch.isChecked() and not has_binding():
             self.usb_switch.setChecked(False)
             update_settings("basic_safety_settings", "usb_switch", False)
         self.usb_switch.checkedChanged.connect(self.__on_usb_switch_changed)
@@ -302,7 +241,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
             self.unbind_usb_button,
         )
 
-        if self.safety_switch.isChecked() and not _is_password_configured():
+        if not password_is_configured():
             self.totp_switch.setEnabled(False)
             self.set_totp_button.setEnabled(False)
             self.usb_switch.setEnabled(False)
@@ -349,53 +288,53 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
 
     def _persist_basic_safety(self, name: str, value: bool):
         try:
-            sec = _read_secrets()
+            sec = read_secrets()
             bs = sec.get("basic_safety_settings") or {}
             bs[name] = bool(value)
             sec["basic_safety_settings"] = bs
-            _write_secrets(sec)
+            write_secrets(sec)
         except Exception:
             pass
 
     def set_password(self):
-        _create_set_password_window()
+        create_set_password_window()
 
     def set_totp(self):
-        if not _is_password_configured():
+        if not password_is_configured():
             self._notify_error(
                 get_content_name_async(
                     "basic_safety_settings", "error_set_password_first"
                 )
             )
             return
-        require_and_run_lazy("set_totp", self, _create_set_totp_window)
+        require_and_run("set_totp", self, create_set_totp_window)
 
     def bind_usb(self):
-        if not _is_password_configured():
+        if not password_is_configured():
             self._notify_error(
                 get_content_name_async(
                     "basic_safety_settings", "error_set_password_first"
                 )
             )
             return
-        require_and_run_lazy("bind_usb", self, _create_bind_usb_window)
+        require_and_run("bind_usb", self, create_bind_usb_window)
 
     def unbind_usb(self):
-        if not _is_password_configured():
+        if not password_is_configured():
             self._notify_error(
                 get_content_name_async(
                     "basic_safety_settings", "error_set_password_first"
                 )
             )
             return
-        require_and_run_lazy("unbind_usb", self, _create_unbind_usb_window)
+        require_and_run("unbind_usb", self, create_unbind_usb_window)
 
     def __on_safety_switch_changed(self):
         if self._busy:
             return
         self._busy = True
         try:
-            if self.safety_switch.isChecked() and not _is_password_configured():
+            if self.safety_switch.isChecked() and not password_is_configured():
                 self.safety_switch.setChecked(False)
                 update_settings("basic_safety_settings", "safety_switch", False)
                 self._notify_error(
@@ -422,7 +361,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                 self._update_components_enabled_state()
                 logger.debug(f"安全总开关状态：{bool(desired)}")
 
-            require_and_run_lazy("toggle_safety", self, apply)
+            require_and_run("toggle_safety", self, apply)
         finally:
             self._busy = False
 
@@ -432,7 +371,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         self._busy = True
         try:
             desired = bool(self.totp_switch.isChecked())
-            if desired and not _is_totp_configured():
+            if desired and not totp_is_configured():
                 self._set_switch(self.totp_switch, "totp_switch", False)
                 self._notify_error(
                     get_content_name_async(
@@ -467,7 +406,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                     )
                 logger.debug(f"TOTP开关状态：{bool(desired)}")
 
-            require_and_run_lazy("toggle_totp", self, apply)
+            require_and_run("toggle_totp", self, apply)
         finally:
             self._busy = False
 
@@ -478,11 +417,9 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         try:
             desired = bool(self.usb_switch.isChecked())
             try:
-                need_present = desired and (
-                    not _has_binding() or not _is_bound_present()
-                )
+                need_present = desired and (not has_binding() or not is_bound_present())
             except Exception:
-                need_present = desired and (not _has_binding())
+                need_present = desired and (not has_binding())
             if need_present:
                 self._set_switch(self.usb_switch, "usb_switch", False)
                 self._notify_error(
@@ -518,14 +455,14 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
                     )
                 logger.debug(f"U盘验证开关状态：{bool(desired)}")
 
-            require_and_run_lazy("toggle_usb", self, apply)
+            require_and_run("toggle_usb", self, apply)
         finally:
             self._busy = False
 
     def _update_components_enabled_state(self):
         """根据安全总开关状态更新其他组件的启用状态（内部方法）"""
         safety_enabled = self.safety_switch.isChecked()
-        password_configured = _is_password_configured() if safety_enabled else False
+        password_configured = password_is_configured()
 
         # 总开关关闭时，禁用除总开关外的所有安全相关组件
         if not safety_enabled:
@@ -544,9 +481,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
 
     def _update_components_enabled_state_based_on_global(self, global_safety_enabled):
         """根据全局安全总开关状态更新组件的启用状态"""
-        password_configured = (
-            _is_password_configured() if global_safety_enabled else False
-        )
+        password_configured = password_is_configured()
 
         # 如果全局安全总开关关闭，禁用除总开关外的所有安全相关组件
         if not global_safety_enabled:
@@ -595,7 +530,7 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
             self.usb_switch.setChecked(bool(value))
             self.usb_switch.blockSignals(False)
 
-        enabled = _is_password_configured() if self.safety_switch.isChecked() else False
+        enabled = password_is_configured()
         self.totp_switch.setEnabled(enabled and self.safety_switch.isChecked())
         self.set_totp_button.setEnabled(self.safety_switch.isChecked())
         self.usb_switch.setEnabled(enabled and self.safety_switch.isChecked())
@@ -654,7 +589,7 @@ class basic_safety_verification_process(GroupHeaderCardWidget):
             self.verification_process_combo.setCurrentIndex(desired)
             self.verification_process_combo.blockSignals(False)
 
-        require_and_run_lazy("change_verification_process", self, apply)
+        require_and_run("change_verification_process", self, apply)
 
     def _update_enabled_state(self, enabled):
         """根据安全总开关状态更新组件的启用状态"""
@@ -808,24 +743,12 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             self.open_settings_switch,
         )
 
-        safety_enabled = bool(
-            readme_settings_async("basic_safety_settings", "safety_switch")
-        )
-        if safety_enabled:
-            self._ensure_ops_disabled_if_no_password()
-        else:
-            self._update_enabled_state(False)
+        self._ensure_ops_disabled_if_no_password()
 
     def __on_ops_setting_changed(self, first_level_key, second_level_key, value):
         if first_level_key != "basic_safety_settings":
             return
-        if second_level_key == "safety_switch":
-            self._update_enabled_state(bool(value))
-            if not bool(value):
-                return
-
-        if readme_settings_async("basic_safety_settings", "safety_switch"):
-            self._ensure_ops_disabled_if_no_password()
+        self._ensure_ops_disabled_if_no_password()
 
         # 只在状态不同时才更新，避免不必要的信号触发
         if (
@@ -864,11 +787,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             self.preview_settings_switch.blockSignals(False)
 
     def _ensure_ops_disabled_if_no_password(self):
-        if not readme_settings_async("basic_safety_settings", "safety_switch"):
-            self._update_enabled_state(False)
-            return
-
-        enabled = _is_password_configured()
+        enabled = password_is_configured()
         self.show_hide_floating_window_switch.setEnabled(enabled)
         self.restart_switch.setEnabled(enabled)
         self.exit_switch.setEnabled(enabled)
@@ -900,7 +819,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             return
         self._busy = True
         try:
-            if not _is_password_configured():
+            if not password_is_configured():
                 try:
                     self.show_hide_floating_window_switch.blockSignals(True)
                     self.show_hide_floating_window_switch.setChecked(False)
@@ -930,7 +849,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            require_and_run_lazy("toggle_show_hide_floating_window_switch", self, apply)
+            require_and_run("toggle_show_hide_floating_window_switch", self, apply)
         finally:
             self._busy = False
 
@@ -939,7 +858,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             return
         self._busy = True
         try:
-            if not _is_password_configured():
+            if not password_is_configured():
                 try:
                     self.restart_switch.blockSignals(True)
                     self.restart_switch.setChecked(False)
@@ -963,7 +882,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            require_and_run_lazy("toggle_restart_switch", self, apply)
+            require_and_run("toggle_restart_switch", self, apply)
         finally:
             self._busy = False
 
@@ -972,7 +891,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             return
         self._busy = True
         try:
-            if not _is_password_configured():
+            if not password_is_configured():
                 try:
                     self.exit_switch.blockSignals(True)
                     self.exit_switch.setChecked(False)
@@ -994,7 +913,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            require_and_run_lazy("toggle_exit_switch", self, apply)
+            require_and_run("toggle_exit_switch", self, apply)
         finally:
             self._busy = False
 
@@ -1003,7 +922,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             return
         self._busy = True
         try:
-            if not _is_password_configured():
+            if not password_is_configured():
                 try:
                     self.open_settings_switch.blockSignals(True)
                     self.open_settings_switch.setChecked(False)
@@ -1029,7 +948,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            require_and_run_lazy("toggle_open_settings_switch", self, apply)
+            require_and_run("toggle_open_settings_switch", self, apply)
         finally:
             self._busy = False
 
@@ -1038,7 +957,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             return
         self._busy = True
         try:
-            if not _is_password_configured():
+            if not password_is_configured():
                 try:
                     self.preview_settings_switch.blockSignals(True)
                     self.preview_settings_switch.setChecked(False)
@@ -1073,7 +992,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
                     desired,
                 )
 
-            require_and_run_lazy("toggle_preview_settings_switch", self, apply)
+            require_and_run("toggle_preview_settings_switch", self, apply)
         finally:
             self._busy = False
 
@@ -1088,7 +1007,7 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
             self.preview_settings_switch.setEnabled(False)
         else:
             # 全局安全总开关开启时，根据密码配置状态决定其他组件是否启用
-            password_configured = _is_password_configured()
+            password_configured = password_is_configured()
             self.show_hide_floating_window_switch.setEnabled(password_configured)
             self.restart_switch.setEnabled(password_configured)
             self.exit_switch.setEnabled(password_configured)
