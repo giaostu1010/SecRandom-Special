@@ -8,7 +8,7 @@ import platform
 import sentry_sdk
 from sentry_sdk.integrations.loguru import LoguruIntegration, LoggingLevels
 from posthog import Posthog
-from PySide6.QtCore import Qt, QThreadPool, QRunnable, QTimer, qInstallMessageHandler
+from PySide6.QtCore import Qt, QTimer, qInstallMessageHandler
 from PySide6.QtWidgets import QApplication
 from loguru import logger
 
@@ -21,10 +21,7 @@ from app.tools.config import (
 )
 from app.tools.settings_default import manage_settings_file
 from app.tools.settings_access import readme_settings_async, get_or_create_user_id
-from app.core.usage_counters import (
-    get_stored_draw_counts,
-    recompute_and_persist_draw_counts,
-)
+from app.core.app_init import calculate_total_draw_counts
 from app.tools.variable import (
     APP_QUIT_ON_LAST_WINDOW_CLOSED,
     VERSION,
@@ -81,11 +78,7 @@ def initialize_sentry():
     sentry_sdk.set_user({"id": user_id, "ip_address": "{{auto}}"})
 
 
-def initialize_posthog(
-    total_draw_count: int | None = None,
-    roll_call_total: int | None = None,
-    lottery_total: int | None = None,
-):
+def initialize_posthog():
     """初始化 PostHog 产品分析系统"""
     posthog = Posthog(
         project_api_key=POSTHOG_API_KEY,
@@ -94,12 +87,7 @@ def initialize_posthog(
     set_posthog_client(posthog)
     user_id = get_or_create_user_id()
     geoip_properties = get_geoip_properties_zh_cn()
-    if total_draw_count is None:
-        stored_counts = get_stored_draw_counts()
-        if stored_counts is not None:
-            total_draw_count, roll_call_total, lottery_total = stored_counts
-        else:
-            total_draw_count, roll_call_total, lottery_total = (0, 0, 0)
+    total_draw_count, roll_call_total, lottery_total = calculate_total_draw_counts()
 
     posthog.capture(
         distinct_id=user_id,
@@ -112,36 +100,6 @@ def initialize_posthog(
                 "lottery_total_count": lottery_total,
             },
         },
-    )
-
-
-def schedule_deferred_startup_tasks(window_manager: WindowManager):
-    """在首个窗口可见后执行非关键启动任务。"""
-
-    if DEV_VERSION in VERSION:
-        return
-
-    def task():
-        start = time.perf_counter()
-        try:
-            totals = recompute_and_persist_draw_counts()
-        except Exception as e:
-            logger.exception(f"补算抽取统计失败，将使用已存储计数发送事件: {e}")
-            totals = None
-
-        try:
-            if totals is None:
-                initialize_posthog()
-            else:
-                initialize_posthog(*totals)
-        except Exception as e:
-            logger.exception(f"初始化 PostHog 失败: {e}")
-        finally:
-            elapsed = time.perf_counter() - start
-            logger.debug(f"启动后分析任务完成，耗时: {elapsed:.3f}s")
-
-    window_manager.register_after_first_window_shown(
-        lambda: QThreadPool.globalInstance().start(QRunnable.create(task))
     )
 
 
@@ -246,10 +204,13 @@ def initialize_application():
 
     if DEV_VERSION not in VERSION:
         initialize_sentry()
+        initialize_posthog()
 
     wm.app_start_time = time.perf_counter()
 
     shared_memory, is_first_instance = check_single_instance()
+
+    time.sleep(PROCESS_EXIT_WAIT_SECONDS)
 
     return program_dir, shared_memory, is_first_instance
 
@@ -546,7 +507,6 @@ def main():
         sys.exit(1)
 
     initialize_app_components(window_manager)
-    schedule_deferred_startup_tasks(window_manager)
 
     if VERSION == DEV_VERSION:
         setup_dev_hints(app)

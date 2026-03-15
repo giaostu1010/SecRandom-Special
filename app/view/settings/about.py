@@ -24,10 +24,7 @@ from app.common.safety.secure_store import (
     read_behind_scenes_settings,
     write_behind_scenes_settings,
 )
-from app.core.usage_counters import (
-    get_stored_draw_counts,
-    recompute_and_persist_draw_counts,
-)
+from app.core.app_init import calculate_total_draw_counts
 from app.view.components.center_flow_layout import CenterFlowLayout
 import app.core.window_manager as wm
 
@@ -280,24 +277,16 @@ class about_info(GroupHeaderCardWidget):
 
 
 class user_info_card(HeaderCardWidget):
-    usageStatsReady = Signal(int, int, int)
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setTitle(get_content_name_async("about", "user_info"))
-        self._usage_stats_refresh_running = False
-        self.usageStatsReady.connect(self._apply_usage_stats)
 
         user_id = get_or_create_user_id()
         user_name = self._get_user_name()
         first_use_time = self._get_or_create_first_use_time()
-        stored_usage_stats = get_stored_draw_counts()
-        if stored_usage_stats is None:
-            total_draw_count, roll_call_total_count, lottery_total_count = (0, 0, 0)
-        else:
-            total_draw_count, roll_call_total_count, lottery_total_count = (
-                stored_usage_stats
-            )
+        total_draw_count, roll_call_total_count, lottery_total_count = (
+            self._ensure_usage_stats()
+        )
 
         self.user_name_label = BodyLabel(
             self._format_label_text(
@@ -374,12 +363,6 @@ class user_info_card(HeaderCardWidget):
         self.runtime_timer.setInterval(1000)
         self.runtime_timer.timeout.connect(self._update_runtime_label)
         self.runtime_timer.start()
-        app = QApplication.instance()
-        if app is not None:
-            app.aboutToQuit.connect(self._persist_runtime_value)
-
-        if stored_usage_stats is None:
-            self._refresh_usage_stats_async()
 
     def _get_user_name(self):
         try:
@@ -438,25 +421,12 @@ class user_info_card(HeaderCardWidget):
                 get_content_name_async("about", "runtime"), runtime_text
             )
         )
-        current_minute = int(max(0, total_seconds) // 60)
-        if current_minute > self._runtime_last_persist_minute:
-            self._persist_runtime_value(total_seconds)
+        # 每秒持久化一次运行时长
+        update_settings("user_info", "total_runtime_seconds", int(total_seconds))
 
     def _get_total_runtime_seconds(self):
         session_seconds = self._get_runtime_seconds()
         return self._runtime_base_seconds + session_seconds
-
-    def _persist_runtime_value(self, total_seconds=None):
-        if total_seconds is None:
-            total_seconds = self._get_total_runtime_seconds()
-
-        normalized_seconds = int(max(0, total_seconds))
-        current_minute = int(normalized_seconds // 60)
-        if current_minute < self._runtime_last_persist_minute:
-            current_minute = self._runtime_last_persist_minute
-
-        update_settings("user_info", "total_runtime_seconds", normalized_seconds)
-        self._runtime_last_persist_minute = current_minute
 
     def _copy_user_info(self):
         text = "\n".join(
@@ -472,46 +442,31 @@ class user_info_card(HeaderCardWidget):
         )
         QApplication.clipboard().setText(text)
 
-    def _apply_usage_stats(
-        self,
-        total_draw_count: int,
-        roll_call_total_count: int,
-        lottery_total_count: int,
-    ):
-        self.total_draw_label.setText(
-            self._format_label_text(
-                get_content_name_async("about", "total_draw_count"), total_draw_count
-            )
+    def _ensure_usage_stats(self):
+        total_draw_count, roll_call_total_count, lottery_total_count = (
+            self._calculate_usage_stats()
         )
-        self.roll_call_total_label.setText(
-            self._format_label_text(
-                get_content_name_async("about", "roll_call_total_count"),
-                roll_call_total_count,
-            )
+        stored_total = self._normalize_count(
+            readme_settings_async("user_info", "total_draw_count")
         )
-        self.lottery_total_label.setText(
-            self._format_label_text(
-                get_content_name_async("about", "lottery_total_count"),
-                lottery_total_count,
-            )
+        stored_roll_call = self._normalize_count(
+            readme_settings_async("user_info", "roll_call_total_count")
         )
+        stored_lottery = self._normalize_count(
+            readme_settings_async("user_info", "lottery_total_count")
+        )
+        if (
+            stored_total != total_draw_count
+            or stored_roll_call != roll_call_total_count
+            or stored_lottery != lottery_total_count
+        ):
+            update_settings("user_info", "total_draw_count", total_draw_count)
+            update_settings("user_info", "roll_call_total_count", roll_call_total_count)
+            update_settings("user_info", "lottery_total_count", lottery_total_count)
+        return total_draw_count, roll_call_total_count, lottery_total_count
 
-    def _refresh_usage_stats_async(self):
-        if self._usage_stats_refresh_running:
-            return
-
-        self._usage_stats_refresh_running = True
-
-        def task():
-            try:
-                totals = recompute_and_persist_draw_counts()
-                self.usageStatsReady.emit(*totals)
-            except Exception as e:
-                logger.exception(f"后台刷新抽取统计失败: {e}")
-            finally:
-                self._usage_stats_refresh_running = False
-
-        QThreadPool.globalInstance().start(QRunnable.create(task))
+    def _calculate_usage_stats(self):
+        return calculate_total_draw_counts()
 
     def _normalize_count(self, value):
         if value is None:

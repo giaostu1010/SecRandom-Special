@@ -42,7 +42,6 @@ from app.view.floating_window.levitation import LevitationWindow
 from app.common.IPC_URL.url_command_handler import URLCommandHandler
 from app.page_building.window_template import BackgroundLayer
 from app.page_building.another_window import create_countdown_timer_window
-from app.tools.settings_access import get_settings_snapshot
 
 
 # ==================================================
@@ -155,10 +154,9 @@ class MainWindow(FluentWindow):
         self.setWindowIcon(
             QIcon(str(get_data_path("assets/icon", "secrandom-icon-paper.png")))
         )
-        settings_snapshot = get_settings_snapshot()
-        self._position_window(settings_snapshot)
+        self._position_window()
         self._setup_general_settings_listener()
-        self._apply_topmost_mode(snapshot=settings_snapshot)
+        self._apply_topmost_mode()
         self._setup_background_layer()
 
     def _setup_general_settings_listener(self):
@@ -196,20 +194,12 @@ class MainWindow(FluentWindow):
         except Exception:
             pass
 
-    def _apply_topmost_mode(self, mode=None, snapshot=None):
+    def _apply_topmost_mode(self, mode=None):
         """应用主窗口置顶模式"""
         if mode is None:
-            basic_settings = (
-                snapshot.get("basic_settings", {}) if isinstance(snapshot, dict) else {}
+            mode = (
+                readme_settings_async("basic_settings", "main_window_topmost_mode") or 0
             )
-            if not isinstance(basic_settings, dict):
-                basic_settings = {}
-            mode = basic_settings.get("main_window_topmost_mode")
-            if mode is None:
-                mode = (
-                    readme_settings_async("basic_settings", "main_window_topmost_mode")
-                    or 0
-                )
 
         mode = int(mode)
         flags = self.windowFlags()
@@ -317,41 +307,23 @@ class MainWindow(FluentWindow):
     # 窗口定位与大小管理
     # ==================================================
 
-    def _position_window(self, snapshot=None):
+    def _position_window(self):
         """窗口定位
         根据屏幕尺寸和用户设置自动计算最佳位置"""
         if self.resize_timer is not None:
             self.resize_timer.stop()
 
-        window_settings = (
-            snapshot.get("window", {}) if isinstance(snapshot, dict) else {}
-        )
-        if not isinstance(window_settings, dict):
-            window_settings = {}
-
-        is_maximized = window_settings.get("is_maximized")
-        if is_maximized is None:
-            is_maximized = readme_settings_async("window", "is_maximized")
+        is_maximized = readme_settings_async("window", "is_maximized")
         if is_maximized:
-            pre_maximized_width = window_settings.get("pre_maximized_width")
-            if pre_maximized_width is None:
-                pre_maximized_width = readme_settings_async(
-                    "window", "pre_maximized_width"
-                )
-            pre_maximized_height = window_settings.get("pre_maximized_height")
-            if pre_maximized_height is None:
-                pre_maximized_height = readme_settings_async(
-                    "window", "pre_maximized_height"
-                )
+            pre_maximized_width = readme_settings_async("window", "pre_maximized_width")
+            pre_maximized_height = readme_settings_async(
+                "window", "pre_maximized_height"
+            )
             self.resize(pre_maximized_width, pre_maximized_height)
             self._center_window()
         else:
-            window_width = window_settings.get("width")
-            if window_width is None:
-                window_width = readme_settings_async("window", "width")
-            window_height = window_settings.get("height")
-            if window_height is None:
-                window_height = readme_settings_async("window", "height")
+            window_width = readme_settings_async("window", "width")
+            window_height = readme_settings_async("window", "height")
             self.resize(window_width, window_height)
             self._center_window()
 

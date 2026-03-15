@@ -1,5 +1,4 @@
 import os
-import time
 from typing import Optional, Callable, TYPE_CHECKING
 from loguru import logger
 from PySide6.QtCore import QTimer
@@ -25,8 +24,6 @@ class WindowManager:
         self.float_window: Optional["QWidget"] = None
         self.guide_window: Optional["QWidget"] = None
         self.url_handler: Optional = None
-        self._after_first_window_shown_callbacks: list[Callable[[], None]] = []
-        self._after_first_window_shown_ran = False
 
     def set_url_handler(self, url_handler) -> None:
         """设置URL处理器
@@ -35,20 +32,6 @@ class WindowManager:
             url_handler: URL处理器实例
         """
         self.url_handler = url_handler
-
-    def register_after_first_window_shown(self, callback: Callable[[], None]) -> None:
-        """注册首次可见窗口之后执行的回调。"""
-        if not callable(callback):
-            return
-
-        if self._after_first_window_shown_ran:
-            try:
-                QTimer.singleShot(0, callback)
-            except Exception:
-                pass
-            return
-
-        self._after_first_window_shown_callbacks.append(callback)
 
     def create_main_window(self) -> None:
         """创建主窗口实例"""
@@ -199,8 +182,6 @@ class WindowManager:
                 self.create_float_window()
             if self.float_window is not None and not self.float_window.isVisible():
                 self.float_window.show()
-                if not show_startup_window:
-                    self._schedule_main_window_shown_tasks()
 
     def _schedule_main_window_shown_tasks(self) -> None:
         try:
@@ -213,10 +194,8 @@ class WindowManager:
         global _pending_uiaccess_restart_consumed
 
         if not bool(pending_uiaccess_restart_after_show):
-            self._run_after_first_window_shown_callbacks()
             return
         if bool(_pending_uiaccess_restart_consumed):
-            self._run_after_first_window_shown_callbacks()
             return
         _pending_uiaccess_restart_consumed = True
 
@@ -224,10 +203,8 @@ class WindowManager:
             import platform
 
             if platform.system() != "Windows":
-                self._run_after_first_window_shown_callbacks()
                 return
         except Exception:
-            self._run_after_first_window_shown_callbacks()
             return
 
         try:
@@ -239,35 +216,11 @@ class WindowManager:
             )
 
             if bool(is_uiaccess_process()):
-                self._run_after_first_window_shown_callbacks()
                 return
             os.environ[str(UIACCESS_RESTART_ENV)] = "1"
             QApplication.exit(EXIT_CODE_RESTART)
         except Exception as e:
             logger.debug("主窗口显示后触发 UIAccess 重启失败（已忽略）: {}", e)
-            self._run_after_first_window_shown_callbacks()
-            return
-
-        self._run_after_first_window_shown_callbacks()
-
-    def _run_after_first_window_shown_callbacks(self) -> None:
-        if self._after_first_window_shown_ran:
-            return
-
-        self._after_first_window_shown_ran = True
-        try:
-            elapsed = time.perf_counter() - app_start_time
-            logger.debug(f"首个窗口已可见，耗时: {elapsed:.3f}s")
-        except Exception:
-            pass
-        callbacks = list(self._after_first_window_shown_callbacks)
-        self._after_first_window_shown_callbacks.clear()
-
-        for callback in callbacks:
-            try:
-                QTimer.singleShot(0, callback)
-            except Exception as e:
-                logger.debug("执行首次窗口显示回调失败（已忽略）: {}", e)
 
     def _connect_url_handler_signals(self) -> None:
         """连接URL处理器信号"""

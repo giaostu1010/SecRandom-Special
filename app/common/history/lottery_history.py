@@ -8,7 +8,6 @@ from loguru import logger
 
 from app.common.extraction.extract import _get_current_class_info
 from app.common.history.file_utils import load_history_data, save_history_data
-from app.core.usage_counters import increment_usage_counters
 
 
 # ==================================================
@@ -91,10 +90,7 @@ def save_lottery_history(
         history_data["gender_stats"] = gender_stats
         history_data["total_stats"] = total_stats
 
-        saved = save_history_data("lottery", pool_name, history_data)
-        if saved:
-            increment_usage_counters(lottery_increment=1)
-        return saved
+        return save_history_data("lottery", pool_name, history_data)
     except Exception as e:
         logger.exception(f"保存抽奖历史失败: {e}")
         return False

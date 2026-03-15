@@ -12,6 +12,43 @@ from app.core.font_manager import (
 )
 from app.core.window_manager import WindowManager
 from app.core.utils import safe_execute
+from app.common.history.file_utils import load_history_data, get_all_history_names
+
+
+def calculate_total_draw_counts():
+    """计算总抽取次数
+
+    Returns:
+        tuple: (总抽取次数, 点名总次数, 抽奖总次数)
+    """
+    roll_call_total = 0
+    for class_name in get_all_history_names("roll_call"):
+        data = load_history_data("roll_call", class_name)
+        roll_call_total += int(data.get("total_rounds", 0) or 0)
+
+    lottery_total = 0
+    for pool_name in get_all_history_names("lottery"):
+        data = load_history_data("lottery", pool_name)
+        lotterys = data.get("lotterys", {})
+        if not isinstance(lotterys, dict):
+            continue
+        draw_times = set()
+        for entry in lotterys.values():
+            if not isinstance(entry, dict):
+                continue
+            hist = entry.get("history", [])
+            if not isinstance(hist, list):
+                continue
+            for record in hist:
+                if not isinstance(record, dict):
+                    continue
+                draw_time = record.get("draw_time")
+                if draw_time:
+                    draw_times.add(draw_time)
+        lottery_total += len(draw_times)
+
+    total_draw_count = roll_call_total + lottery_total
+    return total_draw_count, roll_call_total, lottery_total
 
 
 class AppInitializer:
@@ -41,28 +78,9 @@ class AppInitializer:
         self._load_theme()
         self._load_theme_color()
         self._clear_restart_record()
-        self._register_post_show_tasks()
+        self._check_updates()
+        self._warmup_face_detector_devices()
         self._create_main_window()
-
-    def _register_post_show_tasks(self) -> None:
-        self.window_manager.register_after_first_window_shown(
-            lambda: QTimer.singleShot(
-                APP_INIT_DELAY,
-                lambda: safe_execute(
-                    lambda: check_for_updates_on_startup(None),
-                    error_message="检查更新失败",
-                ),
-            )
-        )
-        self.window_manager.register_after_first_window_shown(
-            lambda: QTimer.singleShot(
-                APP_INIT_DELAY + 1500,
-                lambda: safe_execute(
-                    self._do_warmup_face_detector_devices,
-                    error_message="预热摄像头设备失败",
-                ),
-            )
-        )
 
     def _load_theme(self) -> None:
         """加载主题设置"""
@@ -108,6 +126,15 @@ class AppInitializer:
             ),
         )
 
+    def _check_updates(self) -> None:
+        """检查是否需要安装更新"""
+        QTimer.singleShot(
+            APP_INIT_DELAY,
+            lambda: safe_execute(
+                lambda: check_for_updates_on_startup(None), error_message="检查更新失败"
+            ),
+        )
+
     def _create_main_window(self) -> None:
         """创建主窗口实例（但不自动显示）"""
         guide_completed = readme_settings_async("basic_settings", "guide_completed")
@@ -126,6 +153,17 @@ class AppInitializer:
         QTimer.singleShot(
             init_delay,
             lambda: safe_execute(apply_font_settings, error_message="应用字体设置失败"),
+        )
+
+    def _warmup_face_detector_devices(self) -> None:
+        guide_completed = readme_settings_async("basic_settings", "guide_completed")
+        init_delay = 1500 if not guide_completed else APP_INIT_DELAY + 1500
+        QTimer.singleShot(
+            init_delay,
+            lambda: safe_execute(
+                self._do_warmup_face_detector_devices,
+                error_message="预热摄像头设备失败",
+            ),
         )
 
     def _do_warmup_face_detector_devices(self) -> None:

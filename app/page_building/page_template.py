@@ -41,7 +41,7 @@ class PageTemplate(QFrame):
         self._content_kwargs = kwargs  # 存储传递给内容组件的额外参数
 
         self.__connectSignalToSlot()
-        QTimer.singleShot(0, self.create_ui_components)
+        self.create_ui_components()
 
     @property
     def is_preview_mode(self):
@@ -85,9 +85,7 @@ class PageTemplate(QFrame):
         self.ui_created = True
 
         if self.content_widget_class:
-            self._ensure_scroll_area()
-            self._show_loading_placeholder()
-            QTimer.singleShot(0, self.create_content)
+            self.create_content()
 
     def _ensure_scroll_area(self):
         """确保滚动区域已创建 - 延迟创建以减少内存使用"""
@@ -151,7 +149,6 @@ class PageTemplate(QFrame):
 
             # 如果内容组件尚未创建，创建并添加到布局
             if not self.content_created:
-                self._clear_inner_layout()
                 # 实例化并添加到延迟创建的布局
                 # 传递额外参数给内容组件构造函数
                 self.contentWidget = content_cls(self, **self._content_kwargs)
@@ -178,24 +175,6 @@ class PageTemplate(QFrame):
             from loguru import logger
 
             logger.exception(f"创建内容组件失败 ({elapsed:.3f}s): {e}")
-
-    def _show_loading_placeholder(self, text: str = "正在加载..."):
-        self._ensure_scroll_area()
-        self._clear_inner_layout()
-        label = BodyLabel(text)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._inner_layout_lazy.addWidget(label)
-
-    def _clear_inner_layout(self):
-        if self._inner_layout_lazy is None:
-            return
-        while self._inner_layout_lazy.count() > 0:
-            item = self._inner_layout_lazy.takeAt(0)
-            if not item:
-                break
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
 
     def create_empty_content(self, message="该页面正在开发中，敬请期待！"):
         """创建空页面内容"""
@@ -319,7 +298,6 @@ class PivotPageTemplate(QFrame):
         self.current_page = None  # 当前页面
         self.base_path = "app.view.settings.list_management"  # 默认基础路径
         self._page_load_order = []  # 页面加载顺序，用于LRU卸载
-        self._pending_page_loads = set()
         self.MAX_CACHED_PAGES = MAX_CACHED_PAGES  # 最大同时保留在内存中的页面数量
         self._is_preview_mode = is_preview_mode
 
@@ -388,6 +366,16 @@ class PivotPageTemplate(QFrame):
         # 如果有页面，设置第一个页面为当前页面并仅加载第一个页面的内容
         if self.page_infos:
             first_page_name = next(iter(self.page_infos))
+            # 延迟一点点创建第一个页面的内容，避免阻塞
+            QTimer.singleShot(
+                0,
+                lambda n=first_page_name: self._load_page_content(
+                    n,
+                    self.page_infos[n]["display"],
+                    self.page_infos[n]["scroll"],
+                    self.page_infos[n]["layout"],
+                ),
+            )
             self.switch_to_page(first_page_name)
 
     def add_page(self, page_name: str, display_name: str):
@@ -449,25 +437,7 @@ class PivotPageTemplate(QFrame):
             "scroll": scroll_area,
             "layout": inner_layout,
             "loaded": False,
-            "loading": False,
         }
-
-    def _show_page_loading_placeholder(
-        self, inner_layout: QVBoxLayout, display_name: str = ""
-    ):
-        try:
-            while inner_layout.count() > 0:
-                item = inner_layout.takeAt(0)
-                if not item:
-                    break
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
-        except RuntimeError:
-            pass
-        label = BodyLabel(f"正在加载 {display_name or '页面'}...")
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        inner_layout.addWidget(label)
 
     def _load_page_content(
         self,
@@ -485,9 +455,6 @@ class PivotPageTemplate(QFrame):
             scroll_area: 滑动区域
             inner_layout: 内部布局
         """
-        info = self.page_infos.get(page_name)
-        if info is not None:
-            info["loading"] = True
         try:
             # 动态导入页面组件
             start = time.perf_counter()
@@ -522,8 +489,6 @@ class PivotPageTemplate(QFrame):
             if page_name in self.page_infos:
                 self.page_infos[page_name]["loaded"] = True
                 self.page_infos[page_name]["widget"] = widget
-                self.page_infos[page_name]["loading"] = False
-            self._pending_page_loads.discard(page_name)
 
             elapsed = time.perf_counter() - start
             logger.debug(f"加载页面组件 {page_name} 耗时: {elapsed:.3f}s")
@@ -534,9 +499,6 @@ class PivotPageTemplate(QFrame):
 
         except (ImportError, AttributeError) as e:
             logger.exception(f"无法导入页面组件 {page_name}: {e}")
-            self._pending_page_loads.discard(page_name)
-            if info is not None:
-                info["loading"] = False
 
             # 清除加载提示（安全地移除所有子项）
             try:
@@ -587,6 +549,12 @@ class PivotPageTemplate(QFrame):
 
             # 按需加载：如果尚未加载该页面的实际内容，则先加载
             info = self.page_infos.get(page_name)
+            if info and not info.get("loaded"):
+                # 调用加载函数（同步执行），传入存储的 inner_layout
+                self._load_page_content(
+                    page_name, info["display"], info["scroll"], info["layout"]
+                )
+
             # 更新加载顺序（LRU）
             if page_name in self._page_load_order:
                 self._page_load_order.remove(page_name)
@@ -595,23 +563,6 @@ class PivotPageTemplate(QFrame):
             self.stacked_widget.setCurrentWidget(self.pages[page_name])
             self.pivot.setCurrentItem(page_name)
             self.current_page = page_name
-            if (
-                info
-                and not info.get("loaded")
-                and not info.get("loading")
-                and page_name not in self._pending_page_loads
-            ):
-                self._pending_page_loads.add(page_name)
-                self._show_page_loading_placeholder(info["layout"], info["display"])
-                QTimer.singleShot(
-                    0,
-                    lambda n=page_name, i=info: self._load_page_content(
-                        n,
-                        i["display"],
-                        i["scroll"],
-                        i["layout"],
-                    ),
-                )
 
     def _unload_excess_pages(self, exclude_page: str = None):
         """卸载超出缓存限制的页面以释放内存
