@@ -156,8 +156,8 @@ jobs:
           echo "开始 Windows 打包操作..."
 
           # 检查构建是否成功
-          if (!(Test-Path "dist/SecRandom" -PathType Container)) {
-            echo "错误：dist/SecRandom 目录不存在，构建可能失败了"
+          if (!(Test-Path "dist/易抽取" -PathType Container)) {
+            echo "错误：dist/易抽取 目录不存在，构建可能失败了"
             echo "可用的dist目录内容："
             if (Test-Path "dist") {
               Get-ChildItem -Path "dist" -Recurse
@@ -167,25 +167,25 @@ jobs:
             exit 1
           }
 
-          # 创建zip_dist/SecRandom目录
-          mkdir -p zip_dist/SecRandom
+          # 创建zip_dist/易抽取目录
+          mkdir -p zip_dist/易抽取
 
-          # 复制dist/SecRandom目录内容
-          Copy-Item -Recurse -Force dist/SecRandom/* zip_dist/SecRandom/
+          # 复制dist/易抽取目录内容
+          Copy-Item -Recurse -Force dist/易抽取/* zip_dist/易抽取/
 
           # 创建app目录
-          mkdir -p zip_dist/SecRandom/data
+          mkdir -p zip_dist/易抽取/data
 
-          # 复制data文件夹到zip_dist/SecRandom目录下
-          Copy-Item -Recurse -Force data/* zip_dist/SecRandom/data/
+          # 复制data文件夹到zip_dist/易抽取目录下
+          Copy-Item -Recurse -Force data/* zip_dist/易抽取/data/
 
-          # 复制 LICENSE 文件到zip_dist/SecRandom/data目录下
-          Copy-Item LICENSE zip_dist/SecRandom/data/
+          # 复制 LICENSE 文件到zip_dist/易抽取/data目录下
+          Copy-Item LICENSE zip_dist/易抽取/data/
 
           # 使用 zip 压缩文件
           mkdir zip -Force
-          $outputZip = "zip/SecRandom-Windows-Portable-${{ github.ref_name }}-${{ matrix.arch }}.zip"
-          Compress-Archive -Path zip_dist/SecRandom/* -DestinationPath $outputZip -Force
+          $outputZip = "zip/易抽取-Windows-Portable-${{ github.ref_name }}-${{ matrix.arch }}.zip"
+          Compress-Archive -Path zip_dist/易抽取/* -DestinationPath $outputZip -Force
           echo "目录模式打包完成: $outputZip"
 
       - name: 安装 Inno Setup 中文语言文件
@@ -219,10 +219,10 @@ jobs:
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" SRsetup.iss
 
           # 检查安装程序是否生成并移动到 zip 目录
-          if (Test-Path "build/SecRandom setup x64.exe") {
+          if (Test-Path "build/易抽取 setup x64.exe") {
             # 修改文件名以包含版本号，方便识别
-            $setupName = "SecRandom-Windows-Setup-${{ github.ref_name }}-${{ matrix.arch }}.exe"
-            Move-Item "build/SecRandom setup x64.exe" "zip/$setupName"
+            $setupName = "易抽取-Windows-Setup-${{ github.ref_name }}-${{ matrix.arch }}.exe"
+            Move-Item "build/易抽取 setup x64.exe" "zip/$setupName"
             echo "Inno Setup 打包完成: zip/$setupName"
           } else {
             echo "错误：Inno Setup 安装程序未生成"
@@ -262,28 +262,28 @@ jobs:
           mkdir -p "$APPDIR/usr/share"
           mkdir -p "$APPDIR/usr/bin"
 
-          cp -r "dist/SecRandom" "$APPDIR/usr/share/SecRandom"
+          cp -r "dist/易抽取" "$APPDIR/usr/share/易抽取"
 
           cat > "$APPDIR/AppRun" << 'EOF'
           #!/bin/sh
           set -e
           HERE="$(dirname "$(readlink -f "$0")")"
-          exec "$HERE/usr/share/SecRandom/SecRandom.bin" "$@"
+          exec "$HERE/usr/share/易抽取/易抽取.bin" "$@"
           EOF
           chmod +x "$APPDIR/AppRun"
 
-          cat > "$APPDIR/SecRandom.desktop" << 'EOF'
+          cat > "$APPDIR/易抽取.desktop" << 'EOF'
           [Desktop Entry]
           Type=Application
-          Name=SecRandom
-          Exec=SecRandom
-          Icon=SecRandom
+          Name=易抽取
+          Exec=易抽取
+          Icon=易抽取
           Categories=Education;Utility;
           Terminal=false
           EOF
 
-          cp "data/assets/icon/secrandom-icon-paper.png" "$APPDIR/SecRandom.png"
-          ln -sf "../share/SecRandom/SecRandom.bin" "$APPDIR/usr/bin/SecRandom"
+          cp "data/assets/icon/secrandom-icon-paper.png" "$APPDIR/易抽取.png"
+          ln -sf "../share/易抽取/易抽取.bin" "$APPDIR/usr/bin/易抽取"
 
           if [ "${{ matrix.arch }}" = "amd64" ]; then
             TOOL_URL="https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
@@ -295,7 +295,7 @@ jobs:
           chmod +x appimage/tools/appimagetool.AppImage
           (cd appimage/tools && ./appimagetool.AppImage --appimage-extract >/dev/null 2>&1)
 
-          OUT="zip/SecRandom-Linux-AppImage-${{ github.ref_name }}-${{ matrix.arch }}.AppImage"
+          OUT="zip/易抽取-Linux-AppImage-${{ github.ref_name }}-${{ matrix.arch }}.AppImage"
           ARCH="$TOOL_ARCH" appimage/tools/squashfs-root/AppRun "$APPDIR" "$OUT"
           chmod +x "$OUT" || true
 
@@ -394,12 +394,12 @@ jobs:
           echo "**Github 镜像 下载链接**" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           echo "| 镜像源 | 平台 | 支持架构 | 便携版 | 安装程序 |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           echo "| --- | --- | --- | --- | --- |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| ghproxy.sectl.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| ghproxy.sectl.top | Linux | amd64 | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| ghfast.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| ghfast.top | Linux | amd64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| gh-proxy.com | Windows | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
-          echo "| gh-proxy.com | Linux | amd64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghproxy.sectl.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghproxy.sectl.top | Linux | amd64 | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://ghproxy.sectl.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghfast.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghfast.top | Linux | amd64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| gh-proxy.com | Windows | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Portable-${{ github.ref_name }}-x64.zip) | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Windows-Setup-${{ github.ref_name }}-x64.exe) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| gh-proxy.com | Linux | amd64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-Linux-AppImage-${{ github.ref_name }}-amd64.AppImage) | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/易抽取/releases/download/${{ github.ref_name }}/易抽取-linux-Setup-$version_no_v-amd64.deb) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           echo "" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           echo "**SHA256 校验值-请核对下载的文件的SHA256值是否正确**" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           echo "| 文件名 | SHA256 值 |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
@@ -430,7 +430,7 @@ jobs:
           draft: false
           prerelease: ${{ env.is_beta == 'true' }}
           tag_name: ${{ github.ref_name }}
-          name: SecRandom 新版本 - ${{ github.ref_name }}
+          name: 易抽取 新版本 - ${{ github.ref_name }}
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
