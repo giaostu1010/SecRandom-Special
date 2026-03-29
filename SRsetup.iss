@@ -2,11 +2,11 @@
 ; 有关创建 Inno Setup 脚本文件的详细信息，请参阅帮助文档！
 ; 仅供非商业使用
 
-#define MyAppName "SecRandom"
+#define MyAppName "易抽取"
 #define MyAppVersion "2.2.0"
 #define MyAppPublisher "SECTL"
 #define MyAppURL "https://secrandom.sectl.top/"
-#define MyAppExeName "SecRandom.exe"
+#define MyAppExeName "易抽取.exe"
 
 [Setup]
 ; 注意：AppId 的值唯一标识此应用程序。不要在其他应用程序的安装程序中使用相同的 AppId 值。
@@ -35,7 +35,7 @@ AllowNoIcons=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=build
-OutputBaseFilename=SecRandom setup x64
+OutputBaseFilename=易抽取 setup x64
 SetupIconFile=resources\secrandom-icon-paper.ico
 SolidCompression=yes
 WizardStyle=modern dynamic windows11
@@ -47,8 +47,8 @@ Name: "chinesesimp"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "dist\SecRandom\SecRandom.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\SecRandom\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\易抽取\易抽取.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\易抽取\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; 注意：不要在任何共享系统文件上使用 "Flags: ignoreversion"
 

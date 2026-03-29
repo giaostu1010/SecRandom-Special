@@ -45,7 +45,7 @@ def generate_secret():
 
 
 def set_totp(
-    secret: str | None, issuer: str = "SecRandom", account: str = "user"
+    secret: str | None, issuer: str = "易抽取", account: str = "user"
 ) -> str:
     if not secret:
         secret = generate_secret()

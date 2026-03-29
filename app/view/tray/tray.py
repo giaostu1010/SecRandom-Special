@@ -161,9 +161,9 @@ class Tray(QSystemTrayIcon):
             self.tray_menu.deleteLater()
 
     def _add_about_action(self):
-        """添加关于SecRandom菜单项"""
+        """添加关于易抽取菜单项"""
         self.about_action = Action(
-            "SecRandom", triggered=lambda: self.showSettingsRequestedAbout.emit()
+            "易抽取", triggered=lambda: self.showSettingsRequestedAbout.emit()
         )
         self.tray_menu.addAction(self.about_action)
 

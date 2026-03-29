@@ -28,7 +28,7 @@ class URLHandler(QObject):
         str, object
     )  # 窗口显示隐藏请求（主窗口/设置窗口/浮窗）
 
-    def __init__(self, app_name: str = "SecRandom", protocol_name: str = "secrandom"):
+    def __init__(self, app_name: str = "易抽取", protocol_name: str = "secrandom"):
         """
         初始化URL处理器
 

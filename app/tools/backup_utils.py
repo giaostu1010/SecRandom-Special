@@ -86,7 +86,7 @@ def _dirs_to_backup() -> list[tuple[str, Path]]:
 
 
 def _write_version_info(zipf: zipfile.ZipFile) -> None:
-    version_info = {"software_name": "SecRandom", "version": SPECIAL_VERSION}
+    version_info = {"software_name": "易抽取", "version": SPECIAL_VERSION}
     zipf.writestr(
         "version.json", json.dumps(version_info, ensure_ascii=False, indent=2)
     )
@@ -117,7 +117,7 @@ def export_all_data_to_zip(target_zip_path: Path) -> int:
 def create_backup_filename(kind: str) -> str:
     ts = datetime.now().strftime(BACKUP_FILENAME_TIME_FORMAT)
     safe_kind = (kind or "backup").strip().lower()
-    return f"SecRandom_{SPECIAL_VERSION}_{safe_kind}_{ts}.zip"
+    return f"易抽取_{SPECIAL_VERSION}_{safe_kind}_{ts}.zip"
 
 
 def create_backup(

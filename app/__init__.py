@@ -1,1 +1,1 @@
-"""SecRandom application package."""
+"""易抽取 application package."""

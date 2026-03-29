@@ -15,7 +15,7 @@ def check_single_instance() -> Tuple[Optional[QSharedMemory], bool]:
     """
     shared_memory = QSharedMemory(SHARED_MEMORY_KEY)
     if not shared_memory.create(1):
-        logger.info("检测到已有 SecRandom 实例正在运行，尝试激活已有实例")
+        logger.info("检测到已有 易抽取 实例正在运行，尝试激活已有实例")
         if shared_memory.attach():
             _activate_existing_instance()
             return shared_memory, False

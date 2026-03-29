@@ -31,7 +31,7 @@ if sys.platform == "win32":
         import clr
 
         clr.AddReference("ClassIsland.Shared.IPC")
-        clr.AddReference("SecRandom4Ci.Interface")
+        clr.AddReference("易抽取4Ci.Interface")
 
         from System import Action, DateTime, Version
         from ClassIsland.Shared.Enums import TimeState
@@ -40,14 +40,14 @@ if sys.platform == "win32":
         from dotnetCampus.Ipc.CompilerServices.GeneratedProxies import (
             GeneratedIpcFactory,
         )
-        from SecRandom4Ci.Interface.Enums import ResultType
-        from SecRandom4Ci.Interface.Models import (
+        from 易抽取4Ci.Interface.Enums import ResultType
+        from 易抽取4Ci.Interface.Models import (
             CallResult,
             Student,
             NotificationData,
             NotificationItem,
         )
-        from SecRandom4Ci.Interface.Services import ISecRandomService
+        from 易抽取4Ci.Interface.Services import I易抽取Service
 
         CSHARP_AVAILABLE = True
     except Exception as e:
@@ -161,7 +161,7 @@ if CSHARP_AVAILABLE:
                 f"发送通知到 ClassIsland: 班级={class_name}, 选中学生={selected_students}, 抽取数量={draw_count}, 显示时长={display_duration}, 设置组={settings_group}, 是否动画={is_animating}"
             )
 
-            randomService = GeneratedIpcFactory.CreateIpcProxy[ISecRandomService](
+            randomService = GeneratedIpcFactory.CreateIpcProxy[I易抽取Service](
                 self.ipc_client.Provider, self.ipc_client.PeerProxy
             )
 
@@ -437,7 +437,7 @@ if CSHARP_AVAILABLE:
                             self.is_connected = True
                             logger.debug("C# IPC 连接成功！")
                         elif not self._no_plugin_logged:
-                            logger.debug("未安装 SecRandom-Ci 插件。")
+                            logger.debug("未安装 易抽取-Ci 插件。")
                             self._no_plugin_logged = True
                     else:
                         self._no_plugin_logged = False
@@ -470,9 +470,9 @@ if CSHARP_AVAILABLE:
                 return False
 
         def check_plugin_alive(self) -> bool:
-            """SecRandom-Ci 插件是否正常连接"""
+            """易抽取-Ci 插件是否正常连接"""
             try:
-                randomService = GeneratedIpcFactory.CreateIpcProxy[ISecRandomService](
+                randomService = GeneratedIpcFactory.CreateIpcProxy[I易抽取Service](
                     self.ipc_client.Provider, self.ipc_client.PeerProxy
                 )
                 return randomService.IsAlive() == "Yes"
@@ -635,5 +635,5 @@ else:
             return False
 
         def check_plugin_alive(self) -> bool:
-            """SecRandom-Ci 插件是否正常连接"""
+            """易抽取-Ci 插件是否正常连接"""
             return False

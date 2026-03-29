@@ -68,10 +68,6 @@ class basic_settings(QWidget):
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
         self.vBoxLayout.setSpacing(10)
 
-        # 添加版本通知卡片
-        self.version_notice_widget = VersionNoticeCard(self)
-        self.vBoxLayout.addWidget(self.version_notice_widget)
-
         # 添加基本功能设置组件
         self.basic_function_widget = basic_settings_function(self)
         self.vBoxLayout.addWidget(self.basic_function_widget)
@@ -232,7 +228,7 @@ class basic_settings_function(GroupHeaderCardWidget):
         )
 
         # 初始化URL IPC处理器
-        self.url_ipc_handler = URLIPCHandler("SecRandom", "secrandom")
+        self.url_ipc_handler = URLIPCHandler("易抽取", "secrandom")
 
         # 检查协议是否已注册
         is_protocol_registered = self.url_ipc_handler.is_protocol_registered()

@@ -1,4 +1,4 @@
-# COMMON MODULES - SecRandom
+# COMMON MODULES - 易抽取
 
 **Domain:** Shared business logic across features
 **Parent:** `app/`

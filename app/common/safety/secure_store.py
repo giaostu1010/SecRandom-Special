@@ -67,7 +67,7 @@ def _get_machine_guid() -> str:
     try:
         return str(uuid.getnode())
     except Exception:
-        return "SecRandom"
+        return "易抽取"
 
 
 def _platform_key() -> bytes:

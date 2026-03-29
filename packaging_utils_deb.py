@@ -124,7 +124,7 @@ class DebBuilder:
             # 创建可执行文件的符号链接
             bin_path = self.deb_root / "usr" / "bin" / self.app_name
             with open(bin_path, "w") as f:
-                f.write(f"#!/bin/sh\n/usr/share/{self.app_name}/SecRandom.bin\n")
+                f.write(f"#!/bin/sh\n/usr/share/{self.app_name}/易抽取.bin\n")
             os.chmod(bin_path, 0o755)
 
         # 复制图标文件
@@ -298,7 +298,7 @@ echo "正在卸载 {self.app_name}..."
         builder = DebBuilder(
             project_root, app_name, version, description, author, website
         )
-        pyinstaller_dist = project_root / "dist" / "SecRandom"
+        pyinstaller_dist = project_root / "dist" / "易抽取"
         return builder.build(pyinstaller_dist, is_single_file=False)
 
     @staticmethod

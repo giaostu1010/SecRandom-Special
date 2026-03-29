@@ -1067,7 +1067,7 @@ class TestPage(QWidget):
             handler = CSharpIPCHandler.instance()
             if handler.is_connected:
                 handler.send_notification(
-                    "SecRandom Test",
+                    "易抽取 Test",
                     [
                         {
                             "student_id": 0,

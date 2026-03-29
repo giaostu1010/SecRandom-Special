@@ -171,7 +171,7 @@ _GEOIP_ISP_KEY = "$geoip_isp"
 
 
 def get_geoip_properties_zh_cn(timeout_seconds: float = 1.5) -> dict:
-    headers = {"User-Agent": f"SecRandom/{SPECIAL_VERSION}"}
+    headers = {"User-Agent": f"易抽取/{SPECIAL_VERSION}"}
     timeout_seconds = max(0.2, float(timeout_seconds or 0))
 
     try:
@@ -709,7 +709,7 @@ def _set_windows_autostart(enabled: bool) -> bool:
     except FileNotFoundError:
         key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
 
-    name = "SecRandom"
+    name = "易抽取"
     if enabled:
         if getattr(sys, "frozen", False):
             cmd = f'"{sys.executable}"'
@@ -741,7 +741,7 @@ def _set_linux_autostart(enabled: bool) -> bool:
             root = Path(__file__).resolve().parents[2]
             main_py = root / "main.py"
             exec_cmd = f'{sys.executable} "{str(main_py)}"'
-        content = f"[Desktop Entry]\nType=Application\nName=SecRandom\nExec={exec_cmd}\nX-GNOME-Autostart-enabled=true\n"
+        content = f"[Desktop Entry]\nType=Application\nName=易抽取\nExec={exec_cmd}\nX-GNOME-Autostart-enabled=true\n"
         desktop.write_text(content, encoding="utf-8")
     else:
         if desktop.exists():
@@ -1012,7 +1012,7 @@ def export_diagnostic_data(parent: Optional[QWidget] = None) -> None:
             get_content_pushbutton_name_async(
                 "basic_settings", "export_diagnostic_data"
             ),
-            f"SecRandom_{version_text}_diagnostic_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+            f"易抽取_{version_text}_diagnostic_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
             "ZIP Files (*.zip);;All Files (*)",
         )
 
@@ -1135,7 +1135,7 @@ def _collect_system_info(
 
     system_info = {
         "export_metadata": {
-            "software": "SecRandom",
+            "software": "易抽取",
             "export_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "export_timestamp": datetime.now().isoformat(),
             "version": version_text,
@@ -1419,7 +1419,7 @@ def export_all_data(parent: Optional[QWidget] = None) -> None:
         file_path, _ = QFileDialog.getSaveFileName(
             parent,
             get_content_pushbutton_name_async("basic_settings", "export_all_data"),
-            f"SecRandom_{SPECIAL_VERSION}_all_data.zip",
+            f"易抽取_{SPECIAL_VERSION}_all_data.zip",
             "ZIP Files (*.zip);;All Files (*)",
         )
 
@@ -1442,7 +1442,7 @@ def export_all_data(parent: Optional[QWidget] = None) -> None:
 
         with zipfile.ZipFile(file_path, "w", zipfile.ZIP_DEFLATED) as zipf:
             version_info = {
-                "software_name": "SecRandom",
+                "software_name": "易抽取",
                 "version": SPECIAL_VERSION,
             }
             zipf.writestr(
@@ -1670,7 +1670,7 @@ def _start_import_all_data_flow(
             return
         _perform_import_all_data_from_file(file_path, parent, on_success)
 
-    if version_info and (software_name != "SecRandom" or version != current_version):
+    if version_info and (software_name != "易抽取" or version != current_version):
         _request_import_version_mismatch_confirmation(
             parent,
             software_name,

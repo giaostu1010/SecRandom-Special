@@ -1,6 +1,6 @@
 """
 PyInstaller 打包脚本
-用于构建 SecRandom 的独立可执行文件
+用于构建 易抽取 的独立可执行文件
 """
 
 import subprocess
@@ -81,7 +81,7 @@ def build_deb() -> None:
 def main():
     """执行 PyInstaller 打包"""
     print("=" * 60)
-    print("开始使用 PyInstaller + uv 打包 SecRandom")
+    print("开始使用 PyInstaller + uv 打包 易抽取")
     print("=" * 60)
 
     if not SPEC_FILE.exists():

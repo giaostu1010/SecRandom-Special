@@ -257,7 +257,7 @@ def create_yunet_face_detector(
         import shutil
         import tempfile
 
-        temp_dir = Path(tempfile.gettempdir()) / "SecRandom" / "cv_models"
+        temp_dir = Path(tempfile.gettempdir()) / "易抽取" / "cv_models"
         try:
             temp_dir.mkdir(parents=True, exist_ok=True)
         except Exception:

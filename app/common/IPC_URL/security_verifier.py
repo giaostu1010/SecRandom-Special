@@ -20,7 +20,7 @@ class KeyDerivation:
 
     # PBKDF2 参数
     PBKDF2_ITERATIONS = 100000  # 迭代次数（遵循 OWASP 最新建议）
-    PBKDF2_SALT = b"SecRandom_KDF_SALT_V1"  # 固定盐值（用于确定性派生）
+    PBKDF2_SALT = b"易抽取_KDF_SALT_V1"  # 固定盐值（用于确定性派生）
     PBKDF2_HASH_NAME = "sha512"
 
     @classmethod
@@ -242,7 +242,7 @@ class SimplePasswordVerifier(SecurityVerifier):
             use_kdf: 是否使用PBKDF2进行密钥强化（针对弱密码）
         """
         super().__init__()
-        original_password = password or "SecRandom2025"
+        original_password = password or "易抽取2025"
         self.use_kdf = use_kdf
 
         # 验证是否为有效的SHA-512哈希（128个十六进制字符）
@@ -315,7 +315,7 @@ class SimplePasswordVerifier(SecurityVerifier):
         自动应用KDF强化（如果已启用）
         """
         # 与 __init__ 保持一致：空值使用默认密码
-        original_password = new_password or "SecRandom2024"
+        original_password = new_password or "易抽取2024"
 
         # 验证是否为有效的SHA-512哈希
         if self._is_valid_sha512_hash(original_password):
@@ -348,7 +348,7 @@ class DynamicPasswordVerifier(SecurityVerifier):
 
     def __init__(self, secret: str = None, time_window: int = 30):
         super().__init__()
-        original_secret = secret or "SecRandomSecretKey"
+        original_secret = secret or "易抽取SecretKey"
         self.time_window = time_window  # 时间窗口（秒）
 
         # 使用PBKDF2进行密钥派生强化

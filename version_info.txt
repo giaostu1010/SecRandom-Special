@@ -1,6 +1,6 @@
 # UTF-8
 #
-# Version info for SecRandom.exe
+# Version info for 易抽取.exe
 
 VSVersionInfo(
   ffi=FixedFileInfo(
@@ -18,13 +18,13 @@ VSVersionInfo(
       [
         StringTable(
           u'080404B0',
-          [StringStruct(u'CompanyName', u'SecRandom'),
-          StringStruct(u'FileDescription', u'SecRandom'),
+          [StringStruct(u'CompanyName', u'易抽取'),
+          StringStruct(u'FileDescription', u'易抽取'),
           StringStruct(u'FileVersion', u'0.0.0.0'),
-          StringStruct(u'InternalName', u'SecRandom'),
-          StringStruct(u'LegalCopyright', u'版权所有 © 2025-2026 SecRandom'),
-          StringStruct(u'OriginalFilename', u'SecRandom.exe'),
-          StringStruct(u'ProductName', u'SecRandom'),
+          StringStruct(u'InternalName', u'易抽取'),
+          StringStruct(u'LegalCopyright', u'版权所有 © 2025-2026 易抽取'),
+          StringStruct(u'OriginalFilename', u'易抽取.exe'),
+          StringStruct(u'ProductName', u'易抽取'),
           StringStruct(u'ProductVersion', u'0.0.0.0')])
       ]),
     VarFileInfo([VarStruct(u'Translation', [2052, 1200])])

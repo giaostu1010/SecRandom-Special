@@ -14,4 +14,4 @@ subchannels:
   arch:
     - x64
 
-name_format: SecRandom-Windows-Setup-[version]-[arch].exe
+name_format: 易抽取-Windows-Setup-[version]-[arch].exe

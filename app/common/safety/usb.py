@@ -438,10 +438,10 @@ def get_serial_volume_label(serial: str) -> str | None:
 def _read_key_file(letter_or_path: str) -> str | None:
     try:
         if platform.system() == "Windows":
-            p = f"{letter_or_path}:\\SecRandom_safety.key"
+            p = f"{letter_or_path}:\\易抽取_safety.key"
         else:  # Linux
             # 在 Linux 上，letter_or_path 是挂载点路径
-            p = os.path.join(letter_or_path, "SecRandom_safety.key")
+            p = os.path.join(letter_or_path, "易抽取_safety.key")
 
         if not os.path.exists(p):
             return None
@@ -477,12 +477,12 @@ def _read_key_file(letter_or_path: str) -> str | None:
 def write_key_file(letter_or_path: str, token: str) -> bool:
     try:
         if platform.system() == "Windows":
-            p = f"{letter_or_path}:\\SecRandom_safety.key"
+            p = f"{letter_or_path}:\\易抽取_safety.key"
             old = f"{letter_or_path}:\\.key"
             drive_letter = letter_or_path
         else:  # Linux
             # 在 Linux 上，letter_or_path 是挂载点路径
-            p = os.path.join(letter_or_path, "SecRandom_safety.key")
+            p = os.path.join(letter_or_path, "易抽取_safety.key")
             old = os.path.join(letter_or_path, ".key")
             drive_letter = letter_or_path
 
@@ -542,12 +542,12 @@ def unbind(volume_serial: str | None = None):
 def remove_key_file(letter_or_path: str) -> bool:
     try:
         if platform.system() == "Windows":
-            p = f"{letter_or_path}:\\SecRandom_safety.key"
+            p = f"{letter_or_path}:\\易抽取_safety.key"
             old = f"{letter_or_path}:\\.key"
             drive_letter = letter_or_path
         else:  # Linux
             # 在 Linux 上，letter_or_path 是挂载点路径
-            p = os.path.join(letter_or_path, "SecRandom_safety.key")
+            p = os.path.join(letter_or_path, "易抽取_safety.key")
             old = os.path.join(letter_or_path, ".key")
             drive_letter = letter_or_path
 
@@ -781,7 +781,7 @@ def _get_machine_guid() -> str:
     try:
         return str(uuid.getnode())
     except Exception:
-        return "SecRandom"
+        return "易抽取"
 
 
 def _platform_key() -> bytes:

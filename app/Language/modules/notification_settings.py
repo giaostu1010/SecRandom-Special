@@ -109,11 +109,11 @@ roll_call_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知服务类型",
-            "description": "选择通知服务类型，SecRandom或ClassIsland",
+            "description": "选择通知服务类型，易抽取或ClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom+ClassIsland",
+                "易抽取+ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -127,15 +127,15 @@ roll_call_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装SecRandom-Ci插件",
+            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "检测到未安装插件，请在ClassIsland中安装SecRandom-Ci插件",
+            "content": "检测到未安装插件，请在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知服务",
-            "content": "检测到ClassIsland和SecRandom-Ci插件正常运行，欢迎使用",
+            "content": "检测到ClassIsland和易抽取-Ci插件正常运行，欢迎使用",
         },
     },
     "EN_US": {
@@ -208,11 +208,11 @@ roll_call_notification_settings = {
         },
         "notification_service_type": {
             "name": "Notification service type",
-            "description": "Select notification service type, SecRandom or ClassIsland",
+            "description": "Select notification service type, 易抽取 or ClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom + ClassIsland",
+                "易抽取 + ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -225,15 +225,15 @@ roll_call_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Please ensure .NET 8 runtime is installed and SecRandom-Ci plugin is installed in ClassIsland",
+            "content": "Please ensure .NET 8 runtime is installed and 易抽取-Ci plugin is installed in ClassIsland",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Plugin not detected, please install SecRandom-Ci plugin in ClassIsland",
+            "content": "Plugin not detected, please install 易抽取-Ci plugin in ClassIsland",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland Notification Service",
-            "content": "Detected ClassIsland and SecRandom-Ci plugin running properly, welcome to use",
+            "content": "Detected ClassIsland and 易抽取-Ci plugin running properly, welcome to use",
         },
     },
     "JA_JP": {
@@ -309,11 +309,11 @@ roll_call_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知サービスタイプ",
-            "description": "通知サービスタイプを選択、SecRandomまたはClassIsland",
+            "description": "通知サービスタイプを選択、易抽取またはClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom+ClassIsland",
+                "易抽取+ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -327,15 +327,15 @@ roll_call_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": ".NET 8ランタイムがインストールされ、ClassIslandにSecRandom-Ciプラグインがインストールされていることを確認してください",
+            "content": ".NET 8ランタイムがインストールされ、ClassIslandに易抽取-Ciプラグインがインストールされていることを確認してください",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": "プラグインがインストールされていないことを検出しました、ClassIslandにSecRandom-Ciプラグインをインストールしてください",
+            "content": "プラグインがインストールされていないことを検出しました、ClassIslandに易抽取-Ciプラグインをインストールしてください",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知サービス",
-            "content": "ClassIslandとSecRandom-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
+            "content": "ClassIslandと易抽取-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
         },
     },
 }
@@ -401,8 +401,8 @@ quick_draw_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知服务类型",
-            "description": "选择通知服务类型，SecRandom或ClassIsland",
-            "combo_items": ["SecRandom", "ClassIsland", "SecRandom+ClassIsland"],
+            "description": "选择通知服务类型，易抽取或ClassIsland",
+            "combo_items": ["易抽取", "ClassIsland", "易抽取+ClassIsland"],
         },
         "notification_display_duration": {
             "name": "通知显示时长",
@@ -410,15 +410,15 @@ quick_draw_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装SecRandom-Ci插件",
+            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "检测到未安装插件，请在ClassIsland中安装SecRandom-Ci插件",
+            "content": "检测到未安装插件，请在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知服务",
-            "content": "检测到ClassIsland和SecRandom-Ci插件正常运行，欢迎使用",
+            "content": "检测到ClassIsland和易抽取-Ci插件正常运行，欢迎使用",
         },
     },
     "EN_US": {
@@ -479,11 +479,11 @@ quick_draw_notification_settings = {
         },
         "notification_service_type": {
             "name": "Notification service type",
-            "description": "Select notification service type, SecRandom or ClassIsland",
+            "description": "Select notification service type, 易抽取 or ClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom + ClassIsland",
+                "易抽取 + ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -492,15 +492,15 @@ quick_draw_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Please ensure .NET 8 runtime is installed and SecRandom-Ci plugin is installed in ClassIsland",
+            "content": "Please ensure .NET 8 runtime is installed and 易抽取-Ci plugin is installed in ClassIsland",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Plugin not detected, please install SecRandom-Ci plugin in ClassIsland",
+            "content": "Plugin not detected, please install 易抽取-Ci plugin in ClassIsland",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland Notification Service",
-            "content": "Detected ClassIsland and SecRandom-Ci plugin running properly, welcome to use",
+            "content": "Detected ClassIsland and 易抽取-Ci plugin running properly, welcome to use",
         },
     },
     "JA_JP": {
@@ -562,11 +562,11 @@ quick_draw_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知サービスタイプ",
-            "description": "通知サービスタイプを選択、SecRandomまたはClassIsland",
+            "description": "通知サービスタイプを選択、易抽取またはClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom+ClassIsland",
+                "易抽取+ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -575,15 +575,15 @@ quick_draw_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": ".NET 8ランタイムがインストールされ、ClassIslandにSecRandom-Ciプラグインがインストールされていることを確認してください",
+            "content": ".NET 8ランタイムがインストールされ、ClassIslandに易抽取-Ciプラグインがインストールされていることを確認してください",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": "プラグインがインストールされていないことを検出しました、ClassIslandにSecRandom-Ciプラグインをインストールしてください",
+            "content": "プラグインがインストールされていないことを検出しました、ClassIslandに易抽取-Ciプラグインをインストールしてください",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知サービス",
-            "content": "ClassIslandとSecRandom-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
+            "content": "ClassIslandと易抽取-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
         },
     },
 }
@@ -663,11 +663,11 @@ lottery_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知服务类型",
-            "description": "选择通知服务类型，SecRandom或ClassIsland",
+            "description": "选择通知服务类型，易抽取或ClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom+ClassIsland",
+                "易抽取+ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -676,15 +676,15 @@ lottery_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装SecRandom-Ci插件",
+            "content": "请确保已安装.NET 8运行时，并在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知服务",
-            "content": "检测到未安装插件，请在ClassIsland中安装SecRandom-Ci插件",
+            "content": "检测到未安装插件，请在ClassIsland中安装易抽取-Ci插件",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知服务",
-            "content": "检测到ClassIsland和SecRandom-Ci插件正常运行，欢迎使用",
+            "content": "检测到ClassIsland和易抽取-Ci插件正常运行，欢迎使用",
         },
     },
     "EN_US": {
@@ -757,11 +757,11 @@ lottery_notification_settings = {
         },
         "notification_service_type": {
             "name": "Notification service type",
-            "description": "Select notification service type, SecRandom or ClassIsland",
+            "description": "Select notification service type, 易抽取 or ClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom + ClassIsland",
+                "易抽取 + ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -770,15 +770,15 @@ lottery_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Please ensure .NET 8 runtime is installed and SecRandom-Ci plugin is installed in ClassIsland",
+            "content": "Please ensure .NET 8 runtime is installed and 易抽取-Ci plugin is installed in ClassIsland",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland Notification Service",
-            "content": "Plugin not detected, please install SecRandom-Ci plugin in ClassIsland",
+            "content": "Plugin not detected, please install 易抽取-Ci plugin in ClassIsland",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland Notification Service",
-            "content": "Detected ClassIsland and SecRandom-Ci plugin running properly, welcome to use",
+            "content": "Detected ClassIsland and 易抽取-Ci plugin running properly, welcome to use",
         },
     },
     "JA_JP": {
@@ -854,11 +854,11 @@ lottery_notification_settings = {
         },
         "notification_service_type": {
             "name": "通知サービスタイプ",
-            "description": "通知サービスタイプを選択、SecRandomまたはClassIsland",
+            "description": "通知サービスタイプを選択、易抽取またはClassIsland",
             "combo_items": [
-                "SecRandom",
+                "易抽取",
                 "ClassIsland",
-                "SecRandom+ClassIsland",
+                "易抽取+ClassIsland",
             ],
         },
         "notification_display_duration": {
@@ -867,15 +867,15 @@ lottery_notification_settings = {
         },
         "classisland_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": ".NET 8ランタイムがインストールされ、ClassIslandにSecRandom-Ciプラグインがインストールされていることを確認してください",
+            "content": ".NET 8ランタイムがインストールされ、ClassIslandに易抽取-Ciプラグインがインストールされていることを確認してください",
         },
         "classisland_plugin_notification_hint": {
             "title": "ClassIsland通知サービス",
-            "content": "プラグインがインストールされていないことを検出しました、ClassIslandにSecRandom-Ciプラグインをインストールしてください",
+            "content": "プラグインがインストールされていないことを検出しました、ClassIslandに易抽取-Ciプラグインをインストールしてください",
         },
         "classisland_configured_successfully": {
             "title": "ClassIsland通知サービス",
-            "content": "ClassIslandとSecRandom-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
+            "content": "ClassIslandと易抽取-Ciプラグインが正常に動作していることを検出しました、ご利用いただきありがとうございます",
         },
     },
 }

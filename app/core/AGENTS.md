@@ -1,4 +1,4 @@
-# CORE MODULES - SecRandom
+# CORE MODULES - 易抽取
 
 **Domain:** Application foundation and lifecycle
 **Parent:** `app/`

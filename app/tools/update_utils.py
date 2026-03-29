@@ -659,7 +659,7 @@ def get_update_download_url(
         repo_url = GITHUB_WEB
 
         # 从 metadata.yaml 获取文件名格式
-        name_format = "SecRandom-[system]-[version]-[arch]-[struct].zip"
+        name_format = "易抽取-[system]-[version]-[arch]-[struct].zip"
 
         # 替换占位符生成实际文件名
         file_name = name_format.replace("[system]", system)
@@ -682,7 +682,7 @@ def get_update_download_url(
     except Exception as e:
         logger.exception(f"生成更新下载 URL 失败: {e}")
         # 返回默认的 GitHub 下载 URL
-        return f"https://github.com/SECTL/SecRandom/releases/download/{version}/SecRandom-{system}-{version}-{arch}-{struct}.zip"
+        return f"https://github.com/SECTL/易抽取/releases/download/{version}/易抽取-{system}-{version}-{arch}-{struct}.zip"
 
 
 async def get_update_download_url_async(
@@ -708,7 +708,7 @@ async def get_update_download_url_async(
         repo_url = GITHUB_WEB
 
         # 从 metadata.yaml 获取文件名格式
-        name_format = "SecRandom-[system]-[version]-[arch]-[struct].zip"
+        name_format = "易抽取-[system]-[version]-[arch]-[struct].zip"
 
         # 替换占位符生成实际文件名
         file_name = name_format.replace("[system]", system)
@@ -731,7 +731,7 @@ async def get_update_download_url_async(
     except Exception as e:
         logger.exception(f"生成更新下载 URL 失败: {e}")
         # 返回默认的 GitHub 下载 URL
-        return f"https://github.com/SECTL/SecRandom/releases/download/{version}/SecRandom-{system}-{version}-{arch}-{struct}.zip"
+        return f"https://github.com/SECTL/易抽取/releases/download/{version}/易抽取-{system}-{version}-{arch}-{struct}.zip"
 
 
 async def download_update_async(
@@ -758,7 +758,7 @@ async def download_update_async(
     if isinstance(metadata, dict):
         name_format = metadata.get("name_format")
     if not isinstance(name_format, str) or not name_format.strip():
-        name_format = "SecRandom-setup-[version]-[arch].exe"
+        name_format = "易抽取-setup-[version]-[arch].exe"
 
     # 替换占位符生成实际文件名
     file_name = _render_update_filename(
@@ -806,7 +806,7 @@ async def download_update_async(
                 async with session.get(
                     download_url,
                     allow_redirects=True,
-                    headers={"User-Agent": "SecRandom Update Client"},
+                    headers={"User-Agent": "易抽取 Update Client"},
                 ) as response:
                     response.raise_for_status()
 

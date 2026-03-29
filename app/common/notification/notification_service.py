@@ -936,7 +936,7 @@ class FloatingNotificationManager:
         if not self._initialized:
             self.notification_windows = {}
             # 初始化IPC处理器
-            self.ipc_handler = URLIPCHandler("SecRandom", "secrandom")
+            self.ipc_handler = URLIPCHandler("易抽取", "secrandom")
             self._initialized = True
 
     def send_to_classisland(
@@ -1087,7 +1087,7 @@ class FloatingNotificationManager:
                 logger.info("成功发送通知到ClassIsland，结果未知")
             else:
                 if fallback_on_error:
-                    logger.info("因错误回退到SecRandom通知服务")
+                    logger.info("因错误回退到易抽取通知服务")
                     self._show_secrandom_notification(
                         class_name,
                         selected_students,
@@ -1100,9 +1100,9 @@ class FloatingNotificationManager:
                     logger.warning("发送通知到ClassIsland失败")
         except Exception as e:
             logger.exception("发送通知到ClassIsland时出错: {}", e)
-            # 如果发生异常，回退到SecRandom通知服务
+            # 如果发生异常，回退到易抽取通知服务
             if fallback_on_error:
-                logger.info("因错误回退到SecRandom通知服务")
+                logger.info("因错误回退到易抽取通知服务")
                 self._show_secrandom_notification(
                     class_name,
                     selected_students,
@@ -1160,7 +1160,7 @@ class FloatingNotificationManager:
         settings_group=None,
         is_animating=False,
     ):
-        """显示SecRandom内置通知（用于回退）
+        """显示易抽取内置通知（用于回退）
 
         Args:
             class_name: 班级名称
@@ -1170,7 +1170,7 @@ class FloatingNotificationManager:
             settings_group: 设置组名称
             is_animating: 是否在动画过程中，如果是则不启动自动关闭定时器
         """
-        # 重新调用SecRandom通知服务，使用原始的show_roll_call_result逻辑
+        # 重新调用易抽取通知服务，使用原始的show_roll_call_result逻辑
         display_settings = self._get_display_settings(settings)
 
         # 使用ResultDisplayUtils创建学生标签（动态导入避免循环依赖）
@@ -1314,7 +1314,7 @@ class FloatingNotificationManager:
                 is_animating=is_animating,
             )
 
-        # 否则使用SecRandom浮窗通知
+        # 否则使用易抽取浮窗通知
         self._show_secrandom_notification(
             class_name,
             selected_students,

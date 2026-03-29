@@ -118,12 +118,12 @@ about = {
             "contributor_role_11": "日志",
         },
         "donation": {"name": "捐赠支持", "description": "支持项目发展，感谢您的捐赠"},
-        "website": {"name": "SecRandom 官网", "description": "访问SecRandom软件官网"},
+        "website": {"name": "易抽取 官网", "description": "访问易抽取软件官网"},
         "organization_website": {
             "name": "SECTL 组织主站",
             "description": "访问 SECTL 组织官网",
         },
-        "copyright": {"name": "版权", "description": "SecRandom遵循GPL-3.0协议"},
+        "copyright": {"name": "版权", "description": "易抽取遵循GPL-3.0协议"},
         "version": {"name": "版本", "description": "显示当前软件版本号"},
         "user_id": {"name": "用户ID", "description": "用于错误追踪的离线唯一标识"},
         "user_info": {"name": "用户信息", "description": "显示本机与使用信息"},
@@ -163,8 +163,8 @@ about = {
             "description": "Check for updates",
         },
         "website": {
-            "name": "SecRandom Website",
-            "description": "Visit SecRandom's official website",
+            "name": "易抽取 Website",
+            "description": "Visit 易抽取's official website",
         },
         "organization_website": {
             "name": "SECTL Organization Website",
@@ -172,10 +172,10 @@ about = {
         },
         "channel": {
             "name": "Update channel",
-            "description": "Select SecRandom software update channel",
+            "description": "Select 易抽取 software update channel",
             "combo_items": {"0": "Official version", "1": "Beta version"},
         },
-        "copyright": {"name": "Copyright", "description": "SecRandom follows GPL-3.0"},
+        "copyright": {"name": "Copyright", "description": "易抽取 follows GPL-3.0"},
         "version": {"name": "Version", "description": "Show current version"},
         "user_id": {
             "name": "User ID",
@@ -220,8 +220,8 @@ about = {
             "description": "プロジェクトの発展をサポート、ご寄付ありがとうございます",
         },
         "website": {
-            "name": "SecRandom 公式サイト",
-            "description": "SecRandomソフト公式サイトにアクセス",
+            "name": "易抽取 公式サイト",
+            "description": "易抽取ソフト公式サイトにアクセス",
         },
         "organization_website": {
             "name": "SECTL 組織メインサイト",
@@ -229,7 +229,7 @@ about = {
         },
         "copyright": {
             "name": "著作権",
-            "description": "SecRandomはGPL-3.0プロトコルに従います",
+            "description": "易抽取はGPL-3.0プロトコルに従います",
         },
         "version": {
             "name": "バージョン",

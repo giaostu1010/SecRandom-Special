@@ -120,7 +120,7 @@ class SetTotpWindow(QWidget):
     def __generate(self):
         try:
             sec = generate_secret()
-            issuer = "SecRandom"
+            issuer = "易抽取"
             account = "user"
             import pyotp
 

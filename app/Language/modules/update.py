@@ -2,7 +2,7 @@
 update = {
     "ZH_CN": {
         "title": {"name": "更新设置", "description": "检查并安装软件更新"},
-        "secrandom_update_text": {"name": "SecRandom 更新"},
+        "secrandom_update_text": {"name": "易抽取 更新"},
         "current_version": {"name": "当前版本"},
         "latest_version_label": {"name": "最新版本"},
         "latest_version": {"name": "已是最新版本"},
@@ -13,7 +13,7 @@ update = {
         "check_for_updates": {"name": "检查更新"},
         "never_checked": {"name": "从未检查"},
         "checking_update": {"name": "正在检查更新..."},
-        "update_notification_title": {"name": "SecRandom 更新通知"},
+        "update_notification_title": {"name": "易抽取 更新通知"},
         "update_notification_content": {"name": "发现新版本: {version}\n点击查看详情"},
         "check_update_failed": {"name": "检查更新失败"},
         "failed_to_get_version_info": {"name": "获取版本信息失败"},
@@ -69,7 +69,7 @@ update = {
             "name": "Update settings",
             "description": "Check and install software updates",
         },
-        "secrandom_update_text": {"name": "SecRandom update"},
+        "secrandom_update_text": {"name": "易抽取 update"},
         "check_update": {"name": "Check for updates"},
         "latest_version": {"name": "is up to date"},
         "new_version_available": {"name": "New version found"},
@@ -136,7 +136,7 @@ update = {
         "yes_update_now": {"name": "Update Now"},
         "no_update_later": {"name": "Update Later"},
         "update_cancelled_by_user": {"name": "Update cancelled"},
-        "update_notification_title": {"name": "SecRandom update notification"},
+        "update_notification_title": {"name": "易抽取 update notification"},
         "update_notification_content": {
             "name": "New version available:{version}\nClick to see details "
         },
@@ -146,7 +146,7 @@ update = {
             "name": "更新設定",
             "description": "ソフトウェアの更新を確認・インストール",
         },
-        "secrandom_update_text": {"name": "SecRandom 更新"},
+        "secrandom_update_text": {"name": "易抽取 更新"},
         "current_version": {"name": "現在のバージョン"},
         "latest_version_label": {"name": "最新バージョン"},
         "latest_version": {"name": "最新バージョンです"},
@@ -157,7 +157,7 @@ update = {
         "check_for_updates": {"name": "更新を確認"},
         "never_checked": {"name": "未確認"},
         "checking_update": {"name": "更新を確認中..."},
-        "update_notification_title": {"name": "SecRandom 更新通知"},
+        "update_notification_title": {"name": "易抽取 更新通知"},
         "update_notification_content": {
             "name": "新しいバージョンが見つかりました: {version}\nクリックして詳細を表示"
         },

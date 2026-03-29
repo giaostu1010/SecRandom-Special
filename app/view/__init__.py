@@ -1,1 +1,1 @@
-"""View layer package for SecRandom."""
+"""View layer package for 易抽取."""

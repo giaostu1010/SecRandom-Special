@@ -150,7 +150,7 @@ class MainWindow(FluentWindow):
     def _setup_window_properties(self):
         """设置窗口属性"""
         self.setMinimumSize(MINIMUM_WINDOW_SIZE[0], MINIMUM_WINDOW_SIZE[1])
-        self.setWindowTitle("SecRandom")
+        self.setWindowTitle("易抽取")
         self.setWindowIcon(
             QIcon(str(get_data_path("assets/icon", "secrandom-icon-paper.png")))
         )

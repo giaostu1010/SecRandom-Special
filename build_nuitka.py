@@ -1,6 +1,6 @@
 """
 Nuitka 打包脚本
-用于构建 SecRandom 的独立可执行文件
+用于构建 易抽取 的独立可执行文件
 """
 
 import subprocess
@@ -129,7 +129,7 @@ def get_nuitka_command() -> list[str]:
         "--enable-plugin=pyside6",
         "--assume-yes-for-downloads",
         "--output-dir=dist",
-        "--product-name=SecRandom",
+        "--product-name=易抽取",
         "--file-description=公平随机抽取系统",
         f"--product-version={clean_version}",
         f"--file-version={clean_version}",
@@ -232,7 +232,7 @@ def build_deb() -> None:
 def main():
     """执行 Nuitka 打包"""
     print("=" * 60)
-    print("开始使用 Nuitka + uv 打包 SecRandom")
+    print("开始使用 Nuitka + uv 打包 易抽取")
     print("=" * 60)
 
     if sys.platform == "win32" and not check_compiler_env():

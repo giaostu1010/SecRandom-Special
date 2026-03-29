@@ -28,7 +28,7 @@ class DevHintWidget(QWidget):
         self.main_layout.setSpacing(2)
 
         hint_text = get_content_name_async("dev_hint", "hint_text")
-        version_text = f"SecRandom {NEXT_VERSION} Dev | {CODENAME} ({SYSTEM}-{ARCH})"
+        version_text = f"易抽取 {NEXT_VERSION} Dev | {CODENAME} ({SYSTEM}-{ARCH})"
         self.hint_text = hint_text
         self.version_text = version_text
 
@@ -63,7 +63,7 @@ class DevHintWidget(QWidget):
     def update_date(self):
         date_text = datetime.now().strftime("%Y-%m-%d")
         self.version_text = (
-            f"SecRandom {NEXT_VERSION} Dev | {CODENAME} ({SYSTEM}-{ARCH}) | {date_text}"
+            f"易抽取 {NEXT_VERSION} Dev | {CODENAME} ({SYSTEM}-{ARCH}) | {date_text}"
         )
         self.hint_label.setText(self._build_hint_text())
 

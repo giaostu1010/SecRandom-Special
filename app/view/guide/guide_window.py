@@ -35,7 +35,7 @@ class GuideWindow(FramelessWindow):
         self.setWindowIcon(
             QIcon(str(get_data_path("assets/icon", "secrandom-icon-paper.png")))
         )
-        self.setWindowTitle("SecRandom")
+        self.setWindowTitle("易抽取")
         self.resize(800, 600)
         self.setWindowModality(Qt.WindowModality.NonModal)
 

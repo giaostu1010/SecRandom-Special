@@ -66,10 +66,10 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 import sys
 
 # 根据平台设置不同的EXE名称
-exename = "SecRandom"
+exename = "易抽取"
 if sys.platform == "linux":
     # 在Linux上，EXE会创建一个无扩展名的文件，为避免与COLLECT目录冲突，添加.bin扩展名
-    exename = "SecRandom.bin"
+    exename = "易抽取.bin"
 
 exe = EXE(
     pyz,
@@ -99,5 +99,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name="SecRandom",
+    name="易抽取",
 )

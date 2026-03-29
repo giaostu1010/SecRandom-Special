@@ -44,7 +44,7 @@ from .security_verifier import (
 )
 
 __version__ = "1.0.0"
-__author__ = "SecRandom Team"
+__author__ = "易抽取 Team"
 __description__ = "跨平台URL协议注册和IPC通信处理器"
 
 __all__ = [

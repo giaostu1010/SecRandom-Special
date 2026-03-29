@@ -346,7 +346,7 @@ class roll_call_list(GroupHeaderCardWidget):
                 "caption",
                 "name",
             ),
-            f"{class_name}_学生名单-SecRandom",
+            f"{class_name}_学生名单-易抽取",
             get_any_position_value_async(
                 "qfiledialog",
                 "roll_call",
@@ -880,7 +880,7 @@ class lottery_list(GroupHeaderCardWidget):
                 "caption",
                 "name",
             ),
-            f"{pool_name}_奖品名单-SecRandom",
+            f"{pool_name}_奖品名单-易抽取",
             get_any_position_value_async(
                 "qfiledialog",
                 "lottery",

@@ -8,8 +8,8 @@ from datetime import datetime
 # ==================================================
 
 # -------------------- 软件基本信息 --------------------
-APPLY_NAME = "SecRandom"  # 软件名称
-VERSION = "v0.0.0"  # 软件当前版本
+APPLY_NAME = "易抽取"  # 软件名称
+VERSION = "v2.3.6"  # 软件当前版本
 NEXT_VERSION = "v2.3.6"  # 软件下一个版本
 CODENAME = "Shiroko"  # 软件代号
 SPECIAL_VERSION = VERSION if VERSION != "v0.0.0" else NEXT_VERSION
@@ -82,7 +82,7 @@ APP_LICENSE = "GPL-3.0 License"  # 软件许可证
 APP_EMAIL = "lzy98276@sectl.com"  # 软件作者邮箱
 
 # -------------------- 联系与链接信息 --------------------
-GITHUB_WEB = "https://github.com/SECTL/SecRandom"  # 软件GitHub仓库
+GITHUB_WEB = "https://github.com/SECTL/易抽取"  # 软件GitHub仓库
 BILIBILI_WEB = "https://space.bilibili.com/520571577"  # 软件作者Bilibili空间
 WEBSITE = "https://secrandom.sectl.top"  # 软件官方网站
 SECTL_WEBDITE = "https://sectl.top"  # 软件所属组织网站
@@ -101,7 +101,7 @@ DEFAULT_FILE_ENCODING = "utf-8"  # 默认文件编码
 # 日志路径
 LOG_DIR = "logs"  # 日志目录名
 LOG_FILENAME_FORMAT = (
-    f"SecRandom_{NEXT_VERSION}_{{time:YYYY-MM-DD}}.log"  # 日志文件名格式
+    f"易抽取_{NEXT_VERSION}_{{time:YYYY-MM-DD}}.log"  # 日志文件名格式
 )
 
 # 资源文件夹路径
@@ -169,7 +169,7 @@ BUTTON_INDICATOR_Y_OFFSET_PRESSED = 3  # 按下时指示条Y轴偏移
 # ==================================================
 
 # -------------------- 托盘图标基础配置 --------------------
-TRAY_TOOLTIP_TEXT = "SecRandom"  # 托盘图标工具提示文本
+TRAY_TOOLTIP_TEXT = "易抽取"  # 托盘图标工具提示文本
 TRAY_ICON_FILENAME = "secrandom-icon-paper.png"  # 托盘图标文件名
 
 # -------------------- 托盘菜单配置 --------------------
@@ -213,7 +213,7 @@ UPDATE_SOURCES = [
 ]
 
 DEFAULT_NAME_FORMAT = (
-    "SecRandom-Windows-[version]-[arch]-[struct].zip"  # 默认更新文件名格式
+    "易抽取-Windows-[version]-[arch]-[struct].zip"  # 默认更新文件名格式
 )
 
 # -------------------- 日志模块配置 --------------------
@@ -227,7 +227,7 @@ DEFAULT_LANGUAGE = LANGUAGE_ZH_CN  # 默认语言为中文
 LANGUAGE_MODULE_DIR = "app/Language/modules"  # 模块化语言文件路径
 
 # -------------------- 共享内存配置 --------------------
-SHARED_MEMORY_KEY = "SecRandomSharedMemory"  # 共享内存键名
+SHARED_MEMORY_KEY = "易抽取SharedMemory"  # 共享内存键名
 
 
 # ==================================================

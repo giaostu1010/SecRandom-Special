@@ -149,7 +149,7 @@ class CSESParser:
     def get_non_class_times(self) -> Dict[str, str]:
         """获取非上课时间段配置
 
-        将CSES格式的时间段转换为SecRandom使用的非上课时间段格式
+        将CSES格式的时间段转换为易抽取使用的非上课时间段格式
 
         Returns:
             Dict[str, str]: 非上课时间段字典，格式为 {"name": "HH:MM:SS-HH:MM:SS"}
@@ -416,7 +416,7 @@ class CSESParser:
             raise ValueError(f"无法解析时间字符串: {time_val}") from None
 
     def _format_time_for_secrandom(self, time_val: str | int) -> str:
-        """将时间字符串或秒数格式化为SecRandom需要的格式 (HH:MM:SS)
+        """将时间字符串或秒数格式化为易抽取需要的格式 (HH:MM:SS)
 
         Args:
             time_val: 原始时间字符串 (HH:MM 或 HH:MM:SS) 或秒数 (int)

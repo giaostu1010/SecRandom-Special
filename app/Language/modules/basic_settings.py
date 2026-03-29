@@ -366,7 +366,7 @@ basic_settings = {
             },
             "version_mismatch_title": {"name": "版本不匹配"},
             "version_mismatch_content": {
-                "name": "导出数据的软件版本与当前版本不一致:\n\n导出数据的软件: {software_name} {version}\n当前软件: SecRandom {current_version}\n\n是否继续导入？"
+                "name": "导出数据的软件版本与当前版本不一致:\n\n导出数据的软件: {software_name} {version}\n当前软件: 易抽取 {current_version}\n\n是否继续导入？"
             },
             "export_warning_title": {"name": "导出所有数据"},
             "export_warning_content": {
@@ -762,7 +762,7 @@ basic_settings = {
             },
             "version_mismatch_title": {"name": "Version mismatch"},
             "version_mismatch_content": {
-                "name": "The version from imported data mismatches with current version:\n\nImported data is from: {software_name} {version}\nCurrent software is: SecRandom {current_version}\n\nContinue importing?"
+                "name": "The version from imported data mismatches with current version:\n\nImported data is from: {software_name} {version}\nCurrent software is: 易抽取 {current_version}\n\nContinue importing?"
             },
             "export_warning_title": {"name": "Export all data"},
             "export_warning_content": {
@@ -1199,7 +1199,7 @@ basic_settings = {
             },
             "version_mismatch_title": {"name": "バージョン不一致"},
             "version_mismatch_content": {
-                "name": "インポートデータのソフトウェアバージョンと現在のバージョンが一致しません:\n\nインポートデータのソフトウェア: {software_name} {version}\n現在のソフトウェア: SecRandom {current_version}\n\nインポートを続行しますか？"
+                "name": "インポートデータのソフトウェアバージョンと現在のバージョンが一致しません:\n\nインポートデータのソフトウェア: {software_name} {version}\n現在のソフトウェア: 易抽取 {current_version}\n\nインポートを続行しますか？"
             },
             "export_warning_title": {"name": "すべてのデータをエクスポート"},
             "export_warning_content": {

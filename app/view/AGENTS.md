@@ -1,4 +1,4 @@
-# VIEW LAYER - SecRandom
+# VIEW LAYER - 易抽取
 
 **Domain:** UI components and windows
 **Parent:** `app/`
