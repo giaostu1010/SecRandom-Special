@@ -12,17 +12,17 @@ from app.core.utils import safe_execute
 from app.tools.path_utils import get_data_path
 
 
-FONT_FAMILY_DEFAULT = "HarmonyOS Sans SC"
+FONT_FAMILY_DEFAULT = "MiSans"
 FONT_WEIGHT_MAP = {
-    0: (QFont.Weight.Thin, "HarmonyOS_Sans_SC_Light.ttf"),
-    1: (QFont.Weight.ExtraLight, "HarmonyOS_Sans_SC_Light.ttf"),
-    2: (QFont.Weight.Light, "HarmonyOS_Sans_SC_Light.ttf"),
-    3: (QFont.Weight.Normal, "HarmonyOS_Sans_SC_Medium.ttf"),
-    4: (QFont.Weight.Medium, "HarmonyOS_Sans_SC_Medium.ttf"),
-    5: (QFont.Weight.DemiBold, "HarmonyOS_Sans_SC_Medium.ttf"),
-    6: (QFont.Weight.Bold, "HarmonyOS_Sans_SC_Bold.ttf"),
-    7: (QFont.Weight.ExtraBold, "HarmonyOS_Sans_SC_Bold.ttf"),
-    8: (QFont.Weight.Black, "HarmonyOS_Sans_SC_Bold.ttf"),
+    0: (QFont.Weight.Thin, "MiSans-Light.ttf"),
+    1: (QFont.Weight.ExtraLight, "MiSans-Light.ttf"),
+    2: (QFont.Weight.Light, "MiSans-Light.ttf"),
+    3: (QFont.Weight.Normal, "MiSans-Medium.ttf"),
+    4: (QFont.Weight.Medium, "MiSans-Medium.ttf"),
+    5: (QFont.Weight.DemiBold, "MiSans-Medium.ttf"),
+    6: (QFont.Weight.Bold, "MiSans-Bold.ttf"),
+    7: (QFont.Weight.ExtraBold, "MiSans-Bold.ttf"),
+    8: (QFont.Weight.Black, "MiSans-Bold.ttf"),
 }
 
 
@@ -36,7 +36,7 @@ def get_font_weight_file(weight_value: int) -> str:
         str: 对应的字体文件名
     """
     return FONT_WEIGHT_MAP.get(
-        weight_value, (QFont.Weight.Normal, "HarmonyOS_Sans_SC_Medium.ttf")
+        weight_value, (QFont.Weight.Normal, "MiSans-Medium.ttf")
     )[1]
 
 
@@ -50,7 +50,7 @@ def get_font_weight_value(weight_value: int) -> QFont.Weight:
         QFont.Weight: 对应的字体粗细枚举值
     """
     return FONT_WEIGHT_MAP.get(
-        weight_value, (QFont.Weight.Normal, "HarmonyOS_Sans_SC_Medium.ttf")
+        weight_value, (QFont.Weight.Normal, "MiSans-Medium.ttf")
     )[0]
 
 
@@ -65,13 +65,13 @@ def load_font_by_weight(font_family: str, font_weight: int) -> str:
         str: 加载成功的字体家族名称
     """
     if font_family == FONT_FAMILY_DEFAULT:
-        return _load_harmonyos_font(font_weight)
+        return _load_misans_font(font_weight)
 
     return _apply_system_font(font_family, font_weight)
 
 
-def _load_harmonyos_font(font_weight: int) -> str:
-    """加载 HarmonyOS Sans SC 字体
+def _load_misans_font(font_weight: int) -> str:
+    """加载 MiSans 字体
 
     Args:
         font_weight: 字体粗细数值 (0-8)
@@ -81,7 +81,7 @@ def _load_harmonyos_font(font_weight: int) -> str:
     """
     font_file = get_font_weight_file(font_weight)
     logger.debug(f"根据粗细 {font_weight} 加载字体文件: {font_file}")
-    font_path = get_data_path("font/HarmonyOS_Sans_SC", font_file)
+    font_path = get_data_path("font/MiSans", font_file)
     font_id = QFontDatabase.addApplicationFont(str(font_path))
 
     if font_id < 0:

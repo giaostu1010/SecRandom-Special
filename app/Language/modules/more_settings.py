@@ -123,6 +123,10 @@ about = {
             "name": "SECTL 组织主站",
             "description": "访问 SECTL 组织官网",
         },
+        "xw_website": {
+            "name": "潇网文化官网",
+            "description": "访问潇网文化官方网站",
+        },
         "copyright": {"name": "版权", "description": "SecRandom遵循GPL-3.0协议"},
         "version": {"name": "版本", "description": "显示当前软件版本号"},
         "online_count": {"name": "当前在线", "description": "当前在线用户数量"},
@@ -170,6 +174,10 @@ about = {
         "organization_website": {
             "name": "SECTL Organization Website",
             "description": "Visit SECTL's official website",
+        },
+        "xw_website": {
+            "name": "XiaoWang Culture Website",
+            "description": "Visit XiaoWang Culture's official website",
         },
         "channel": {
             "name": "Update channel",
@@ -228,6 +236,10 @@ about = {
         "organization_website": {
             "name": "SECTL 組織メインサイト",
             "description": "SECTL組織公式サイトにアクセス",
+        },
+        "xw_website": {
+            "name": "潇网文化公式サイト",
+            "description": "潇网文化公式サイトにアクセス",
         },
         "copyright": {
             "name": "著作権",

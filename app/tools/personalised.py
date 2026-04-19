@@ -109,7 +109,7 @@ def _load_default_font() -> Optional[str]:
     font_weight_int = int(font_weight_value) if font_weight_value else 3
 
     font_file = get_font_weight_file(font_weight_int)
-    font_path = get_data_path("font/HarmonyOS_Sans_SC", font_file)
+    font_path = get_data_path("font/MiSans", font_file)
     font_id = QFontDatabase.addApplicationFont(str(font_path))
 
     if font_id < 0:

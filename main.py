@@ -99,8 +99,8 @@ def add_dev_hint_to_window(window):
 
     allowed_window_classes = {
         "GuideWindow",
-        "MainWindow",
-        "SettingsWindow",
+        # "MainWindow",
+        # "SettingsWindow",
         "SimpleWindowTemplate",
     }
     window_class_name = window.__class__.__name__

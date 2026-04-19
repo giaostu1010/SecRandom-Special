@@ -114,6 +114,16 @@ class about_info(GroupHeaderCardWidget):
         self.setTitle(get_content_name_async("about", "title"))
         self.setBorderRadius(8)
 
+        # 打开潇网文化官网按钮
+        self.about_xw_Button = HyperlinkButton(
+            get_theme_icon("ic_fluent_globe_arrow_forward_20_filled"),
+            XW_WEB,
+            get_content_name_async("about", "xw_website"),
+        )
+        xw_widget = self._create_button_with_icon(
+            self.about_xw_Button, "assets/icon", "xfzcc.png"
+        )
+
         # 打开GitHub按钮
         self.about_github_Button = HyperlinkButton(
             FIF.GITHUB, GITHUB_WEB, get_content_name_async("about", "github")
@@ -152,7 +162,7 @@ class about_info(GroupHeaderCardWidget):
         )
 
         # 查看当前软件版本号
-        version_text = f"{SPECIAL_VERSION} | {CODENAME} ({SYSTEM}-{ARCH})"
+        version_text = f"{SPECIAL_VERSION} | {CODENAME} ({SYSTEM}-{ARCH}) | 潇网文化特供版"
         self.about_version_label = BodyLabel(version_text)
 
         # 查看当前软件版权所属
@@ -183,6 +193,12 @@ class about_info(GroupHeaderCardWidget):
         )
         self.donation_button.clicked.connect(self.open_donation_url)
 
+        self.addGroup(
+            get_theme_icon("ic_fluent_globe_arrow_forward_20_filled"),
+            get_content_name_async("about", "xw_website"),
+            get_content_description_async("about", "xw_website"),
+            xw_widget,
+        )
         self.addGroup(
             get_theme_icon("ic_fluent_branch_fork_link_20_filled"),
             get_content_name_async("about", "bilibili"),

@@ -327,7 +327,7 @@ def get_update_check_url() -> str:
         str: 更新检查 URL
     """
     source_url = get_update_source_url()
-    repo_url = GITHUB_WEB
+    repo_url = UPDATE_URL
 
     # 构建完整的 GitHub URL
     github_raw_url = f"{repo_url}/raw/master/metadata.yaml"
@@ -351,7 +351,7 @@ async def get_update_check_url_async() -> str:
         str: 更新检查 URL
     """
     source_url = await get_update_source_url_async()
-    repo_url = GITHUB_WEB
+    repo_url = UPDATE_URL
 
     # 构建完整的 GitHub URL
     github_raw_url = f"{repo_url}/raw/master/metadata.yaml"
@@ -374,7 +374,7 @@ async def get_metadata_info_async() -> dict | None:
     Returns:
         dict: metadata.yaml 文件的内容，如果读取失败则返回 None
     """
-    repo_url = GITHUB_WEB
+    repo_url = UPDATE_URL
     github_raw_url = f"{repo_url}/raw/master/metadata.yaml"
 
     # 读取更新源设置
@@ -656,7 +656,7 @@ def get_update_download_url(
         source_url = get_update_source_url()
 
         # 获取 GitHub 仓库 URL
-        repo_url = GITHUB_WEB
+        repo_url = UPDATE_URL
 
         # 从 metadata.yaml 获取文件名格式
         name_format = "SecRandom-[system]-[version]-[arch]-[struct].zip"
@@ -705,7 +705,7 @@ async def get_update_download_url_async(
         source_url = await get_update_source_url_async()
 
         # 获取 GitHub 仓库 URL
-        repo_url = GITHUB_WEB
+        repo_url = UPDATE_URL
 
         # 从 metadata.yaml 获取文件名格式
         name_format = "SecRandom-[system]-[version]-[arch]-[struct].zip"
@@ -776,7 +776,7 @@ async def download_update_async(
 
     # 按优先级排序的镜像源列表
     sources = sorted(UPDATE_SOURCES, key=lambda x: x["priority"])
-    repo_url = GITHUB_WEB
+    repo_url = UPDATE_URL
     github_download_url = f"{repo_url}/releases/download/{version}/{file_name}"
 
     # 依次尝试每个镜像源

@@ -35,6 +35,8 @@ try:
 except Exception as e:
     sf = None
     logger.warning(f"soundfile 不可用: {e}")
+
+
 from PySide6.QtCore import *
 from PySide6.QtWidgets import *
 
@@ -44,6 +46,64 @@ from edge_tts.exceptions import NoAudioReceived, WebSocketError
 from app.tools.path_utils import ensure_dir, get_audio_path
 from app.tools.settings_access import readme_settings_async
 from app.tools.config import restore_volume
+
+
+def _ola_time_stretch(audio: np.ndarray, rate: float, win_size: int = 1024, hop: int = 256) -> np.ndarray:
+    """
+    基于 OLA（Overlap-Add）的变速不变调。
+    纯 numpy 实现，无频域处理，无相位污染。
+    :param audio:    1D float32 单通道音频
+    :param rate:     速度因子，>1 加速，<1 减速
+    :param win_size: 窗口大小（样本数）
+    :param hop:      合成跳步（样本数）
+    :return:         变速后的 1D float32 音频
+    """
+    if rate == 1.0:
+        return audio
+
+    n = len(audio)
+    # 汉宁窗，平滑拼接边界
+    window = np.hanning(win_size).astype(np.float32)
+
+    # 合成跳步（输出侧）固定为 hop
+    # 分析跳步（输入侧）= hop * rate
+    analysis_hop = hop * rate
+
+    # 预估输出长度
+    n_frames = max(1, int((n - win_size) / analysis_hop) + 1)
+    out_len = (n_frames - 1) * hop + win_size
+    out = np.zeros(out_len, dtype=np.float32)
+    norm = np.zeros(out_len, dtype=np.float32)
+
+    for i in range(n_frames):
+        # 输入侧位置（浮点，需插值）
+        src_pos = i * analysis_hop
+        src_start = int(src_pos)
+        src_end = src_start + win_size
+
+        if src_end > n:
+            # 末尾补零
+            chunk = np.zeros(win_size, dtype=np.float32)
+            valid = n - src_start
+            if valid > 0:
+                chunk[:valid] = audio[src_start:src_start + valid]
+        else:
+            chunk = audio[src_start:src_end].copy()
+
+        # 加窗
+        chunk *= window
+
+        # 写入输出
+        dst_start = i * hop
+        dst_end = dst_start + win_size
+        out[dst_start:dst_end] += chunk
+        norm[dst_start:dst_end] += window
+
+    # 归一化，避免重叠区域幅度叠加
+    norm = np.where(norm > 1e-8, norm, 1.0)
+    out /= norm
+
+    return out
 
 
 # 权限检查装饰器
@@ -144,35 +204,38 @@ class VoicePlaybackSystem:
                 time.sleep(0.5)
 
     def _safe_play_file(self, file_path: str) -> None:
-        """流式播放音频文件（低内存占用）"""
+        """播放音频文件（变速不变调）"""
         stream = None
-        sf_file = None
         if sd is None or sf is None:
             logger.warning("音频播放依赖不可用，无法播放音频")
             return
         try:
-            # 打开音频文件
-            sf_file = sf.SoundFile(file_path)
-            fs = sf_file.samplerate
-            channels = sf_file.channels
+            # 读取完整音频数据
+            data, fs = sf.read(file_path, dtype="float32", always_2d=True)
+            channels = data.shape[1]
 
-            # 计算语速调整因子，1.0表示正常语速
+            # 计算语速调整因子，1.0 表示正常语速
             speed_factor: float = self._speed / 100.0
 
-            # 根据语速调整采样率
-            adjusted_fs: int = int(fs * speed_factor)
-            logger.debug(
-                f"准备播放文件：{file_path}，原始采样率={fs}，调整后采样率={adjusted_fs}，音量={self._volume}"
-            )
+            # 变速不变调：OLA（Overlap-Add），纯时域处理，无相位污染
+            if speed_factor != 1.0:
+                if channels > 1:
+                    stretched_channels = [
+                        _ola_time_stretch(data[:, ch], rate=speed_factor)
+                        for ch in range(channels)
+                    ]
+                    data = np.stack(stretched_channels, axis=1)
+                else:
+                    data = _ola_time_stretch(data[:, 0], rate=speed_factor)
+                    data = data[:, np.newaxis]
+                logger.debug(f"OLA time_stretch 完成，speed_factor={speed_factor:.2f}")
 
-            # 确保音频数据是单通道（如果多通道，SoundFile可以读取时自动转换，但这里我们简单处理，假设SoundDevice能处理）
-            # SoundDevice可以处理多通道，但如果需要混音，最好自己处理。
-            # 为了简单和性能，我们直接读取。如果通道数不匹配，SoundDevice会报错。
-            # 我们强制单通道播放，如果源文件是多通道，sd.OutputStream(channels=channels)即可。
+            # 应用音量
+            data = (data * self._volume).astype(np.float32)
 
-            # 初始化音频流
+            # 以原始采样率播放（音调不变）
             stream = sd.OutputStream(
-                samplerate=adjusted_fs,
+                samplerate=fs,
                 channels=channels,
                 dtype="float32",
                 blocksize=2048,
@@ -181,22 +244,15 @@ class VoicePlaybackSystem:
 
             with self._is_playing_lock:
                 self._is_playing = True
-            logger.info(f"开始播放音频文件: {os.path.basename(file_path)}")
+            logger.info(f"开始播放音频文件: {os.path.basename(file_path)}，速度因子={speed_factor:.2f}")
 
-            # 分块读取并播放
-            block_size = 4096
-            for block in sf_file.blocks(
-                blocksize=block_size, dtype="float32", always_2d=True
-            ):
+            # 分块写入
+            chunk_size = 4096
+            for i in range(0, len(data), chunk_size):
                 if self._stop_flag.is_set():
                     logger.info("收到停止信号，中断播放")
                     break
-
-                # 应用音量
-                block = block * self._volume
-
-                # 写入音频流
-                stream.write(block)
+                stream.write(data[i : i + chunk_size])
 
             logger.info("音频播放完毕")
             with self._is_playing_lock:
@@ -213,11 +269,9 @@ class VoicePlaybackSystem:
                     stream.close()
                 except Exception:
                     pass
-            if sf_file:
-                sf_file.close()
 
     def _safe_play_memory(self, data: np.ndarray, fs: int) -> None:
-        """安全播放内存数据实现"""
+        """安全播放内存数据实现（变速不变调）"""
         stream = None
         if sd is None:
             logger.warning("sounddevice 不可用，无法播放音频")
@@ -226,38 +280,53 @@ class VoicePlaybackSystem:
             # 计算语速调整因子，1.0表示正常语速
             speed_factor: float = self._speed / 100.0
 
-            # 根据语速调整采样率
-            adjusted_fs: int = int(fs * speed_factor)
             logger.debug(
-                f"准备播放：原始采样率={fs}，调整后采样率={adjusted_fs}，音量={self._volume}"
+                f"准备播放：采样率={fs}，语速因子={speed_factor}，音量={self._volume}"
             )
 
             # 限制音频数据大小，防止内存溢出（最多1分钟音频）
-            max_samples = int(fs * 60)  # 1分钟音频
+            max_samples = int(fs * 60)
             if len(data) > max_samples:
                 logger.warning("音频数据过长，已截断至1分钟")
                 data = data[:max_samples]
+
             logger.debug(
                 f"音频数据：长度={len(data)}，类型={data.dtype}，通道数={data.shape[1] if len(data.shape) > 1 else 1}"
             )
 
             # 确保音频数据是单通道
+            channels = 1
             if len(data.shape) > 1 and data.shape[1] > 1:
                 logger.info("将多通道音频转换为单通道")
                 data = np.mean(data, axis=1)
+            elif len(data.shape) > 1:
+                data = data[:, 0]
 
-            # 初始化音频流，添加设备验证逻辑
+            # 变速不变调：OLA（Overlap-Add），纯时域处理，无相位污染
+            if speed_factor != 1.0:
+                data = _ola_time_stretch(data.astype(np.float32), rate=speed_factor)
+                logger.debug(f"OLA time_stretch 完成，speed_factor={speed_factor:.2f}")
+
+            # 确保 2D [samples, channels] 格式
+            data = data.astype(np.float32)
+            if len(data.shape) == 1:
+                data = data[:, np.newaxis]
+
+            # 应用音量
+            data = (data * self._volume).astype(np.float32)
+
+            # 以原始采样率播放（音调不变）
             stream = sd.OutputStream(
-                samplerate=adjusted_fs,
-                channels=1,
+                samplerate=fs,
+                channels=channels,
                 dtype="float32",
-                blocksize=2048,  # 优化实时性
+                blocksize=2048,
             )
             stream.start()
             logger.debug("音频流已启动")
 
             with self._is_playing_lock:
-                self._is_playing = True  # 开始播放
+                self._is_playing = True
             logger.info("开始播放音频")
 
             # 分块写入避免卡顿
@@ -266,19 +335,11 @@ class VoicePlaybackSystem:
                 if self._stop_flag.is_set():
                     logger.info("收到停止信号，中断播放")
                     break
-
-                chunk = data[i : i + chunk_size]
-                # 应用音量控制，将数据乘以音量系数
-                chunk = chunk * self._volume
-                # 数据类型转换中，float64→float32，完美适配
-                chunk = chunk.astype(np.float32)
-
-                # 写入音频流
-                stream.write(chunk)
+                stream.write(data[i : i + chunk_size])
 
             logger.info("音频播放完毕")
             with self._is_playing_lock:
-                self._is_playing = False  # 播放结束
+                self._is_playing = False
 
         except sd.PortAudioError as e:
             logger.exception(f"PortAudio错误：{e}", exc_info=True)

@@ -87,6 +87,8 @@ BILIBILI_WEB = "https://space.bilibili.com/520571577"  # 软件作者Bilibili空
 WEBSITE = "https://secrandom.sectl.top"  # 软件官方网站
 SECTL_WEBDITE = "https://sectl.top"  # 软件所属组织网站
 DONATION_URL = "https://afdian.com/a/lzy0983"  # 捐赠链接
+XW_WEB = "https://321260.xyz"  # 潇网文化官网
+UPDATE_URL = "https://github.com/giaostu1010/SecRandom-Special"  # 软件更新服务器URL
 
 
 # ==================================================
